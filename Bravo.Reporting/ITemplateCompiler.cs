@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Bravo.Reporting
 {
-    public abstract class TemplateCompiler
+    public interface ITemplateCompiler
     {
+
+        OdfArchive Compile(OdfArchive inputOdf);
+
     }
 }
