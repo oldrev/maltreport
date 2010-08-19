@@ -7,9 +7,9 @@ using Antlr3.ST;
 
 namespace Bravo.Reporting
 {
-    public static class TemplateProcessor
+    public static class TemplateRenderer
     {
-        public static OdfArchive Process(OdfArchive odfTemplate, IDictionary<string, object> data)
+        public static OdfArchive Render(OdfArchive odfTemplate, IDictionary<string, object> data)
         {
             var odfResult = new OdfArchive();
             odfTemplate.CopyTo(odfResult);
@@ -22,6 +22,7 @@ namespace Bravo.Reporting
             }
 
             var st = new StringTemplate(content);
+            st.RegisterRenderer(typeof(string), new SafeStringRenderer());
 
             foreach (var item in data)
             {

@@ -5,6 +5,9 @@ using System.IO;
 
 namespace Bravo.Reporting
 {
+    /// <summary>
+    ///  只写的内存字节流
+    /// </summary>
     internal class OutputMemoryStream : MemoryStream
     {
         private string name;
@@ -21,6 +24,24 @@ namespace Bravo.Reporting
             base.Dispose(disposing);
 
             this.odfEntries[this.name] = this.ToArray();
+        }
+
+        public override bool CanRead
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override int ReadByte()
+        {
+            throw new NotSupportedException();
         }
     }
 }
