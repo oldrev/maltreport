@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-using Antlr3.ST;
+using Antlr.StringTemplate;
 
 namespace Bravo.Reporting
 {
@@ -22,20 +22,18 @@ namespace Bravo.Reporting
             }
 
             var st = new StringTemplate(content);
-            st.RegisterRenderer(typeof(string), new SafeStringRenderer());
+            st.RegisterAttributeRenderer(typeof(string), new SafeStringRenderer());
 
             foreach (var item in data)
             {
                 st.SetAttribute(item.Key, item.Value);
             }
 
-            //执行转换
-            var renderedContent = st.ToString();
-
             using (var ws = odfResult.GetContentOutputStream(OdfArchive.ENTRY_CONTENT))
             using (var writer = new StreamWriter(ws))
             {
-                writer.Write(renderedContent);
+                st.Write(new NoIndentWriter(writer));
+                writer.Flush();
             }
 
             return odfResult;
