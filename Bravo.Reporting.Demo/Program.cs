@@ -45,7 +45,7 @@ namespace Bravo.Reporting.Demo
             try
             {
 
-                var odf = new OdfArchive("template1.odt");
+                var odf = new OdfArchive("template2.ods");
 
                 //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
                 //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用

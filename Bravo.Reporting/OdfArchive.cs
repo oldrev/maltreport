@@ -9,6 +9,7 @@ namespace Bravo.Reporting
 {
     public class OdfArchive
     {
+        public const string ENTRY_MIMETYPE = "mimetype";
         public const string ENTRY_CONTENT = "content.xml";
         public const string ENTRY_MANIFEST = "META-INF/manifest.xml";
         public const string ENTRY_SETTINGS = "settings.xml";
@@ -73,23 +74,26 @@ namespace Bravo.Reporting
         public void Save(Stream outStream)
         {
             //ODF 格式约定 mimetype 必须为第一个文件
+            if (!this.odfEntries.ContainsKey(ENTRY_MIMETYPE))
+            {
+                throw new InvalidDataException("Missing entry 'mimetype'");
+            }
 
             using (var zos = new ZipOutputStream(outStream))
             {
                 zos.SetLevel(9);
                 zos.UseZip64 = UseZip64.Off;
 
-                this.WriteZipEntry(zos, "mimetype");
+                this.WriteZipEntry(zos, ENTRY_MIMETYPE);
 
                 foreach (var item in this.odfEntries)
                 {
-                    if (item.Key == "mimetype")
+                    if (item.Key == ENTRY_MIMETYPE)
                     {
                         continue;
                     }
 
                     this.WriteZipEntry(zos, item.Key);
-
                 }
             }
         }

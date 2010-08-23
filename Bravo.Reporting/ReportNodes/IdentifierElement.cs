@@ -8,7 +8,7 @@ namespace Bravo.Reporting.ReportNodes
     internal class IdentifierElement : XmlElement
     {
         public IdentifierElement(XmlDocument doc, string identifier)
-            : base(string.Empty, "IdentifierElement", "Bravo-Reporting", doc)
+            : base(string.Empty, "identifier", "urn:bravo:reporting", doc)
         {
             this.InnerText = identifier;
         }
