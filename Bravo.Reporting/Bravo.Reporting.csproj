@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="antlr.runtime, Version=2.7.7.3, Culture=neutral, PublicKeyToken=d7701e059243744f">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\antlr.runtime.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -51,9 +47,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="StringTemplate, Version=3.0.1.6846, Culture=neutral, PublicKeyToken=beee492b52c41e85, processorArchitecture=MSIL">
+    <Reference Include="NVelocity, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\StringTemplate.dll</HintPath>
+      <HintPath>..\Lib\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -62,14 +58,14 @@
   <ItemGroup>
     <Compile Include="OdfArchive.cs" />
     <Compile Include="OdtTemplateCompiler.cs" />
+    <Compile Include="OpeningTag.cs" />
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITemplateCompiler.cs" />
-    <Compile Include="ReportNodes\PlaceHolderElement.cs" />
-    <Compile Include="ReportNodes\ForeachStartElement.cs" />
-    <Compile Include="ReportNodes\ForeachEndElement.cs" />
-    <Compile Include="SafeStringRenderer.cs" />
+    <Compile Include="ReportNodes\IdentifierElement.cs" />
+    <Compile Include="ReportNodes\StatementElement.cs" />
     <Compile Include="SyntaxErrorException.cs" />
+    <Compile Include="TemplateException.cs" />
     <Compile Include="TemplateRenderer.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Collections;
 
-using Antlr.StringTemplate;
+using NVelocity.Runtime;
+using NVelocity.App;
+using NVelocity;
+using NVelocity.Context;
 
 namespace Bravo.Reporting
 {
@@ -14,25 +18,26 @@ namespace Bravo.Reporting
             var odfResult = new OdfArchive();
             odfTemplate.CopyTo(odfResult);
 
-            string content;
+            var ctx = new VelocityContext();
+            foreach (var pair in data)
+            {
+                ctx.Put(pair.Key, pair.Value);
+            }
+
+            var ve = new VelocityEngine();
+            ve.Init();
+
             using (var inStream = odfResult.GetContentInputStream(OdfArchive.ENTRY_CONTENT))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            {
-                content = reader.ReadToEnd();
-            }
-
-            var st = new StringTemplate(content);
-            st.RegisterAttributeRenderer(typeof(string), new SafeStringRenderer());
-
-            foreach (var item in data)
-            {
-                st.SetAttribute(item.Key, item.Value);
-            }
-
             using (var ws = odfResult.GetContentOutputStream(OdfArchive.ENTRY_CONTENT))
             using (var writer = new StreamWriter(ws))
             {
-                st.Write(new NoIndentWriter(writer));
+                //执行渲染
+                var successed = ve.Evaluate(ctx, writer, "OdfTemplateRender", reader);
+                if (!successed)
+                {
+                    throw new TemplateException();
+                }
                 writer.Flush();
             }
 

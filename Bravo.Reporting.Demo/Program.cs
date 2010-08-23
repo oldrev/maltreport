@@ -12,7 +12,7 @@ namespace Bravo.Reporting.Demo
     {
         static void Main(string[] args)
         {
-            var dt = new DataTable("T_NET_SYS_BANK");
+            var dt = new DataTable("T_BIZ_CATEGORY");
 
             var connectionString =
                 @"Data Source=.\SQLEXPRESS;Initial Catalog=VoucherDev;Integrated Security=True;";
@@ -20,7 +20,7 @@ namespace Bravo.Reporting.Demo
             {
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 adapter.SelectCommand = new SqlCommand(
-                    "SELECT * FROM T_NET_SYS_BANK", connection);
+                    "SELECT * FROM T_BIZ_CATEGORY", connection);
                 adapter.FillSchema(dt, SchemaType.Source);
                 adapter.Fill(dt);
             }
@@ -39,7 +39,7 @@ namespace Bravo.Reporting.Demo
                         new Employee("小明", "小明的地址", 19),
                     }
                 },
-                {"banks", dt},
+                {"categories", dt},
             };
 
             try
@@ -72,7 +72,7 @@ namespace Bravo.Reporting.Demo
                 Console.WriteLine("错误：" + ex.Message);
             }
 
-            Console.ReadLine();
+            Console.ReadKey();
         }
     }
 }
