@@ -25,7 +25,7 @@ namespace Bravo.Reporting.Demo
                 adapter.Fill(dt);
             }
 
-            var data = new Dictionary<string, object>()
+            var context = new Dictionary<string, object>()
             {
                 {"title", "公司雇员一览表"},
                 {"property1", "属性1"},
@@ -40,28 +40,41 @@ namespace Bravo.Reporting.Demo
                     }
                 },
                 {"categories", dt},
+                {"now", DateTime.Now},
             };
 
             try
             {
 
-                var odf = new OdfArchive("template2.ods");
+                var odt = new OdfArchive("template1.odt");
+                var ods = new OdfArchive("template2.ods");
 
                 //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
                 //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
-                var compiler = new OdtTemplateCompiler();
-                var template = compiler.Compile(odf);
+                var compiler = new OdfTemplateCompiler();
+                var template1 = compiler.Compile(odt);
+                var template2 = compiler.Compile(ods);
 
                 using (var stFile = File.Open("template1.odt.st", FileMode.Create, FileAccess.ReadWrite))
                 {
-                    template.Save(stFile);
+                    template1.Save(stFile);
                 }
 
-                var result = TemplateRenderer.Render(template, data);
+                var result1 = TemplateRenderer.Render(template1, context);
+                var result2 = TemplateRenderer.Render(template2, context);
 
-                using (var resultFile = File.Open("result1.odt", FileMode.Create, FileAccess.ReadWrite))
+                Console.WriteLine("正在生成 ODT 模板...");
+                using (var resultFile = File.Open(
+                    "result1.odt", FileMode.Create, FileAccess.ReadWrite))
                 {
-                    result.Save(resultFile);
+                    result1.Save(resultFile);
+                }
+
+                Console.WriteLine("正在生成 ODS 模板...");
+                using (var resultFile2 = File.Open(
+                    "result2.ods", FileMode.Create, FileAccess.ReadWrite))
+                {
+                    result2.Save(resultFile2);
                 }
 
                 Console.WriteLine("成功完成模板渲染");

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//作者：李维
+//创建时间：2010-08-20
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -81,7 +83,7 @@ namespace Bravo.Reporting
 
             using (var zos = new ZipOutputStream(outStream))
             {
-                zos.SetLevel(9);
+                //zos.SetLevel(9);
                 zos.UseZip64 = UseZip64.Off;
 
                 this.WriteZipEntry(zos, ENTRY_MIMETYPE);

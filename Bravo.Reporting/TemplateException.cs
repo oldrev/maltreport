@@ -1,4 +1,7 @@
-﻿using System;
+﻿//作者：李维
+//创建时间：2010-08-23
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 

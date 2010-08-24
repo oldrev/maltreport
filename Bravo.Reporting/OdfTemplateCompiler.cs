@@ -1,4 +1,8 @@
-﻿using System;
+﻿//作者：李维
+//创建时间：2010-08-20
+
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -23,9 +27,9 @@ namespace Bravo.Reporting
      * 
      * */
 
-    public class OdtTemplateCompiler : ITemplateCompiler
+    public class OdfTemplateCompiler : ITemplateCompiler
     {
-        public const string PlaceHolderPattern = "//text:placeholder | //text:a[starts-with(@xlink:href, 'placeholder://')]";
+        public const string PlaceHolderPattern = "//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
         #region ITemplateCompiler 成员
 
@@ -48,12 +52,6 @@ namespace Bravo.Reporting
             ProcessRowNodes(xml, nsmanager);
 
             SaveXml(odfTemplate, xml);
-
-            using (var w = new XmlTextWriter("d:\\text.xml", Encoding.UTF8))
-            {
-                w.Formatting = Formatting.Indented;
-                xml.WriteTo(w);
-            }
 
             return odfTemplate;
         }
@@ -81,7 +79,7 @@ namespace Bravo.Reporting
         private static void ClearTags(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
             var placeHolderPattern = new Regex(@"<\s*(([\$#]\w+).*)\s*>$");
-            var linkPattern = new Regex(@"^placeholder://(([\$#]\w+).*)\s*$");
+            var linkPattern = new Regex(@"^rtl://(([\$#]\w+).*)\s*$");
             var placeholders = xml.SelectNodes(PlaceHolderPattern, nsmanager);
             foreach (XmlNode placeholder in placeholders)
             {
