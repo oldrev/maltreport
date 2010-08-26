@@ -4,14 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace Bravo.Reporting
 {
-    public class OdfArchive
+    public class OdfDocument
     {
-        public const string ENTRY_MIMETYPE = "mimetype";
+        private const string ENTRY_MIMETYPE = "mimetype";
         public const string ENTRY_CONTENT = "content.xml";
         public const string ENTRY_MANIFEST = "META-INF/manifest.xml";
         public const string ENTRY_SETTINGS = "settings.xml";
@@ -21,12 +22,12 @@ namespace Bravo.Reporting
         /// </summary>
         protected IDictionary<string, byte[]> odfEntries = new Dictionary<string, byte[]>();
 
-        public OdfArchive()
+        public OdfDocument()
         {
             this.OdfPath = null;
         }
 
-        public OdfArchive(string odfPath)
+        public OdfDocument(string odfPath)
         {
             if (string.IsNullOrEmpty(odfPath))
             {
@@ -38,18 +39,20 @@ namespace Bravo.Reporting
             this.LoadContents(odfPath);
         }
 
-        public OdfArchive(Stream odfStream)
+        public OdfDocument(Stream documentStream)
         {
-            if (odfStream == null)
+            if (documentStream == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("documentStream");
             }
 
-            this.LoadContents(odfStream);
+            this.LoadContents(documentStream);
         }
 
         private void LoadContents(string path)
         {
+            Debug.Assert(!string.IsNullOrEmpty(path));
+
             using (var fs = File.OpenRead(path))
             {
                 this.LoadContents(fs);
@@ -58,6 +61,8 @@ namespace Bravo.Reporting
 
         private void LoadContents(Stream stream)
         {
+            Debug.Assert(stream != null);
+
             //把 zip 的内容加载到内存
             using (var zf = new ZipFile(this.OdfPath))
             {
@@ -65,7 +70,7 @@ namespace Bravo.Reporting
                 {
                     var zis = zf.GetInputStream(ze.ZipFileIndex);
 
-                    using (var ws = this.GetContentOutputStream(ze.Name))
+                    using (var ws = this.GetEntryOutputStream(ze.Name))
                     {
                         CopyStream(zis, ws);
                     }
@@ -75,6 +80,11 @@ namespace Bravo.Reporting
 
         public void Save(Stream outStream)
         {
+            if (outStream == null || !outStream.CanWrite)
+            {
+                throw new ArgumentException("outStream");
+            }
+
             //ODF 格式约定 mimetype 必须为第一个文件
             if (!this.odfEntries.ContainsKey(ENTRY_MIMETYPE))
             {
@@ -100,8 +110,25 @@ namespace Bravo.Reporting
             }
         }
 
+        public void Save(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            using (var fs = File.Open(path, FileMode.CreateNew, FileAccess.Write))
+            {
+                this.Save(fs);
+            }
+        }
+
         private void WriteZipEntry(ZipOutputStream zipStream, string name)
         {
+            Debug.Assert(zipStream != null);
+            Debug.Assert(!string.IsNullOrEmpty(name));
+            Debug.Assert(this.odfEntries.ContainsKey(name));
+
             var data = this.odfEntries[name];
             var ze = new ZipEntry(name);
             zipStream.PutNextEntry(ze);
@@ -116,45 +143,69 @@ namespace Bravo.Reporting
             get { return this.odfEntries.Keys; }
         }
 
-        public Stream GetContentInputStream(string name)
+        public Stream GetEntryInputStream(string name)
         {
             var data = this.odfEntries[name];
             return new MemoryStream(data);
         }
 
-        public StreamReader GetContentReader(string name)
+        public TextReader GetEntryReader(string name)
         {
-            return new StreamReader(this.GetContentInputStream(name));
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            return new StreamReader(this.GetEntryInputStream(name));
         }
 
-        public Stream GetContentOutputStream(string name)
+        /// <summary>
+        /// 千万要记得关闭
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Stream GetEntryOutputStream(string name)
         {
-            var ms = new OutputMemoryStream(name, this.odfEntries);
-            this.odfEntries[name] = ms.GetBuffer();
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
 
-            return ms;
+            var oms = new OutputMemoryStream(name, this.odfEntries);
+            this.odfEntries[name] = oms.GetBuffer();
+
+            return oms;
         }
 
-        public StreamWriter GetContentWriter(string name)
+        public TextWriter GetEntryWriter(string name)
         {
-            return new StreamWriter(this.GetContentOutputStream(name));
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            return new StreamWriter(this.GetEntryOutputStream(name));
         }
 
         public bool Exists(string name)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
             return this.odfEntries.ContainsKey(name);
         }
 
-        public void CopyTo(OdfArchive arc)
+        public void CopyTo(OdfDocument destDoc)
         {
-            if (arc == null)
+            if (destDoc == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("destDoc");
             }
 
             foreach (var item in this.odfEntries)
             {
-                using (var outStream = arc.GetContentOutputStream(item.Key))
+                using (var outStream = destDoc.GetEntryOutputStream(item.Key))
                 {
                     outStream.Write(item.Value, 0, item.Value.Length);
                 }
@@ -163,6 +214,16 @@ namespace Bravo.Reporting
 
         protected static void CopyStream(Stream src, Stream dest)
         {
+            if (src == null)
+            {
+                throw new ArgumentNullException("src");
+            }
+
+            if (dest == null)
+            {
+                throw new ArgumentNullException("dest");
+            }
+
             var bufSize = 2048;
             var buf = new byte[bufSize];
             int nRead = 0;

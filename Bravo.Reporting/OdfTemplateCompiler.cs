@@ -12,68 +12,100 @@ using Bravo.Reporting.ReportNodes;
 
 namespace Bravo.Reporting
 {
-    /* 支持一下几个语法
-     * 
-     * placeholder
-     * 
-     * foreach item in items
-     * end
-     * 
-     * if xxxxx then
-     * elseif xxxxxxxx
-     * else
-     * end
-     * 
-     * 
-     * */
-
+    /// <summary>
+    /// ODF 编译器
+    /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
+    /// </summary>
     public class OdfTemplateCompiler : ITemplateCompiler
     {
         public const string PlaceHolderPattern = "//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
         #region ITemplateCompiler 成员
 
-        public OdfArchive Compile(OdfArchive inputOdf)
+        public OdfDocument Compile(OdfDocument inputOdf)
         {
-            var odfTemplate = new OdfArchive();
+            var odfTemplate = new OdfDocument();
             inputOdf.CopyTo(odfTemplate);
 
             var xml = LoadXml(odfTemplate);
-            var nsmanager = new XmlNamespaceManager(xml.NameTable);
-            nsmanager.AddNamespace("text", @"urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-            nsmanager.AddNamespace("table", @"urn:oasis:names:tc:opendocument:xmlns:table:1.0");
-            nsmanager.AddNamespace("xlink", @"http://www.w3.org/1999/xlink");
-            nsmanager.AddNamespace("bravo", @"urn:bravo:reporting");
+            var nsmanager = CreateContentNamespaceManager(xml);
 
             //第一遍，先处理简单的Tag 替换
             ClearTags(xml, nsmanager);
 
             //第二遍，处理表格循环
-            ProcessRowNodes(xml, nsmanager);
+            ProcessTableRowNodes(xml, nsmanager);
 
             SaveXml(odfTemplate, xml);
 
             return odfTemplate;
         }
 
-        private static void ProcessRowNodes(XmlDocument xml, XmlNamespaceManager nsmanager)
+        private static XmlNamespaceManager CreateContentNamespaceManager(XmlDocument xml)
         {
-            var statementNodes = xml.SelectNodes("//bravo:statement", nsmanager);
-            foreach (XmlNode node in statementNodes)
-            {
-                var statementNode = node as StatementElement;
-                var parent = node.ParentNode;
+            var nsmanager = new XmlNamespaceManager(xml.NameTable);
+            nsmanager.AddNamespace("text", @"urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+            nsmanager.AddNamespace("table", @"urn:oasis:names:tc:opendocument:xmlns:table:1.0");
+            nsmanager.AddNamespace("xlink", @"http://www.w3.org/1999/xlink");
 
-                //如果一行里面有一个单元格只有 opening_tag 一个元素，那么可以认为该行是一个
-                //指令行，可以替换掉
-                if (parent.Name == "table:table-cell" &&
-                    parent.ChildNodes.Count == 1 &&
-                    statementNode.IsOpeningOrClosingTag)
+            //注册编译器用到的命名空间
+            nsmanager.AddNamespace("bravo", @"urn:bravo:reporting");
+            return nsmanager;
+        }
+
+        private static void ProcessTableRowNodes(XmlDocument xml, XmlNamespaceManager nsmanager)
+        {
+            var rowNodes = xml.SelectNodes("//table:table-row", nsmanager);
+            foreach (XmlNode row in rowNodes)
+            {
+                var rowStatementNodes = new List<XmlNode>();
+
+                //检测一个行中的 table-cell 是否只包含 table:table-cell 和 bravo:statement 元素
+                if (IsStatementRow(row))
                 {
-                    var rowNode = parent.ParentNode;
-                    rowNode.ParentNode.ReplaceChild(node, rowNode);
+                    //把其中的 cell 都去掉
+                    foreach (XmlNode subnode in row.ChildNodes)
+                    {
+                        if (subnode is StatementElement)
+                        {
+                            rowStatementNodes.Add(subnode);
+                        }
+                    }
+
+                    if (row.ParentNode == null || row.ParentNode.Name != "table:table")
+                    {
+                        throw new TemplateException("Invalid template");
+                    }
+
+                    foreach (var sn in rowStatementNodes)
+                    {
+                        row.ParentNode.InsertAfter(sn, row);
+                    }
+
+                    row.ParentNode.RemoveChild(row);
                 }
             }
+        }
+
+        /// <summary>
+        /// 确定一个 table-row 下面只包含 table-cell 和 bravo-statement 元素
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        private static bool IsStatementRow(XmlNode row)
+        {
+            foreach (XmlNode node in row.ChildNodes)
+            {
+                //一个 row 下面的子节点都必须是 bravo:statement 和 空的 celltable 而且必须是 #if #foreach #end 等
+                if (!(
+                    node is StatementElement ||
+                    (node.InnerText == null || node.InnerText.Length <= 0)))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static void ClearTags(XmlDocument xml, XmlNamespaceManager nsmanager)
@@ -145,8 +177,7 @@ namespace Bravo.Reporting
             //以此类推，直到上级节点包含其他类型的节点或者上级节点是单元格为止
 
             XmlNode ancestor = placeholder;
-            while (ancestor.ParentNode.ChildNodes.Count == 1 &&
-                ancestor.ParentNode.Name != "table:table-cell")
+            while (ancestor.ParentNode.ChildNodes.Count == 1)
             {
                 ancestor = ancestor.ParentNode;
             }
@@ -154,19 +185,19 @@ namespace Bravo.Reporting
             ancestor.ParentNode.ReplaceChild(newNode, ancestor);
         }
 
-        private static void SaveXml(OdfArchive odfTemplate, XmlDocument xml)
+        private static void SaveXml(OdfDocument odfTemplate, XmlDocument xml)
         {
-            using (var cos = odfTemplate.GetContentOutputStream(OdfArchive.ENTRY_CONTENT))
+            using (var cos = odfTemplate.GetEntryOutputStream(OdfDocument.ENTRY_CONTENT))
             using (var writer = new XmlTextWriter(cos, Encoding.UTF8))
             {
                 xml.WriteTo(writer);
             }
         }
 
-        private static XmlDocument LoadXml(OdfArchive odfTemplate)
+        private static XmlDocument LoadXml(OdfDocument odfTemplate)
         {
             var xml = new XmlDocument();
-            using (var contentStream = odfTemplate.GetContentInputStream(OdfArchive.ENTRY_CONTENT))
+            using (var contentStream = odfTemplate.GetEntryInputStream(OdfDocument.ENTRY_CONTENT))
             {
                 xml.Load(contentStream);
             }

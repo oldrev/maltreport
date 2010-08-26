@@ -52,11 +52,10 @@
       <HintPath>..\Lib\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OdfArchive.cs" />
+    <Compile Include="OdfDocument.cs" />
     <Compile Include="OdfTemplateCompiler.cs" />
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,7 +10,7 @@ namespace Bravo.Reporting
     public interface ITemplateCompiler
     {
 
-        OdfArchive Compile(OdfArchive inputOdf);
+        OdfDocument Compile(OdfDocument inputOdf);
 
     }
 }

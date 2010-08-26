@@ -5,28 +5,32 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Bravo.Reporting
 {
     /// <summary>
     ///  只写的内存字节流
     /// </summary>
-    internal class OutputMemoryStream : MemoryStream
+    internal sealed class OutputMemoryStream : MemoryStream
     {
         private string name;
         private IDictionary<string, byte[]> odfEntries;
 
-        internal OutputMemoryStream(string name, IDictionary<string, byte[]> odfEntries)
+        public OutputMemoryStream(string name, IDictionary<string, byte[]> odfEntries)
         {
+            Debug.Assert(odfEntries != null);
+            Debug.Assert(!string.IsNullOrEmpty(name));
+
             this.name = name;
             this.odfEntries = odfEntries;
         }
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             this.odfEntries[this.name] = this.ToArray();
+
+            base.Dispose(disposing);
         }
 
         public override bool CanRead
@@ -43,6 +47,23 @@ namespace Bravo.Reporting
         }
 
         public override int ReadByte()
+        {
+            throw new NotSupportedException();
+        }
+
+        public override long Position
+        {
+            get
+            {
+                return base.Position;
+            }
+            set
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        public override long Seek(long offset, SeekOrigin loc)
         {
             throw new NotSupportedException();
         }

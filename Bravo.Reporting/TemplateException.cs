@@ -12,5 +12,9 @@ namespace Bravo.Reporting
     /// </summary>
     public class TemplateException : Exception
     {
+        public TemplateException(string msg)
+            : base(msg)
+        {
+        }
     }
 }
