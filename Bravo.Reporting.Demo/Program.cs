@@ -43,47 +43,44 @@ namespace Bravo.Reporting.Demo
                 {"now", DateTime.Now},
             };
 
-            try
+
+            var odt = new OdfDocument("template1.odt");
+            var ods = new OdfDocument("template2.ods");
+
+            //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
+            //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
+            var compiler = new OdfTemplateCompiler();
+            var template1 = compiler.Compile(odt);
+            var template2 = compiler.Compile(ods);
+
+            using (var stFile = File.Open("template1.odt.st", FileMode.Create, FileAccess.ReadWrite))
             {
-
-                var odt = new OdfDocument("template1.odt");
-                var ods = new OdfDocument("template2.ods");
-
-                //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
-                //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
-                var compiler = new OdfTemplateCompiler();
-                var template1 = compiler.Compile(odt);
-                var template2 = compiler.Compile(ods);
-
-                using (var stFile = File.Open("template1.odt.st", FileMode.Create, FileAccess.ReadWrite))
-                {
-                    template1.Save(stFile);
-                }
-
-                var result1 = TemplateRenderer.Render(template1, context);
-                var result2 = TemplateRenderer.Render(template2, context);
-
-                Console.WriteLine("正在生成 ODT 模板...");
-                using (var resultFile = File.Open(
-                    "result1.odt", FileMode.Create, FileAccess.ReadWrite))
-                {
-                    result1.Save(resultFile);
-                }
-
-                Console.WriteLine("正在生成 ODS 模板...");
-                using (var resultFile2 = File.Open(
-                    "result2.ods", FileMode.Create, FileAccess.ReadWrite))
-                {
-                    result2.Save(resultFile2);
-                }
-
-                Console.WriteLine("成功完成模板渲染");
-
+                template1.Save(stFile);
             }
-            catch (Exception ex)
+
+            using (var stFile = File.Open("template2.ods.st", FileMode.Create, FileAccess.Write))
             {
-                Console.WriteLine("错误：" + ex.Message);
+                template2.Save(stFile);
             }
+
+            var result1 = TemplateRenderer.Render(template1, context);
+
+            Console.WriteLine("正在生成 ODT 模板...");
+            using (var resultFile = File.Open(
+                "result1.odt", FileMode.Create, FileAccess.ReadWrite))
+            {
+                result1.Save(resultFile);
+            }
+
+            Console.WriteLine("正在生成 ODS 模板...");
+            var result2 = TemplateRenderer.Render(template2, context);
+            using (var resultFile2 = File.Open(
+                "result2.ods", FileMode.Create, FileAccess.ReadWrite))
+            {
+                result2.Save(resultFile2);
+            }
+
+            Console.WriteLine("成功完成模板渲染");
 
             Console.ReadKey();
         }

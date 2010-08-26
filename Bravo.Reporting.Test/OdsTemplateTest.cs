@@ -40,7 +40,8 @@ namespace Bravo.Reporting.Test
             Assert.AreEqual(row.ChildNodes.Count, 6);
 
             var row2 = rows[2];
-            Assert.AreEqual(row.ChildNodes.Count, 3);
+            Assert.AreEqual(row2.ChildNodes.Count, 3);
+
         }
     }
 }

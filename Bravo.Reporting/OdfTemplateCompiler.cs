@@ -56,56 +56,27 @@ namespace Bravo.Reporting
         private static void ProcessTableRowNodes(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
             var rowNodes = xml.SelectNodes("//table:table-row", nsmanager);
+            var rowStatementNodes = new List<StatementElement>(5);
             foreach (XmlNode row in rowNodes)
             {
-                var rowStatementNodes = new List<XmlNode>();
+                rowStatementNodes.Clear();
 
                 //检测一个行中的 table-cell 是否只包含 table:table-cell 和 bravo:statement 元素
-                if (IsStatementRow(row))
+                //把其中的 cell 都去掉
+                foreach (XmlNode subnode in row.ChildNodes)
                 {
-                    //把其中的 cell 都去掉
-                    foreach (XmlNode subnode in row.ChildNodes)
+                    var se = subnode as StatementElement;
+                    if (se != null)
                     {
-                        if (subnode is StatementElement)
-                        {
-                            rowStatementNodes.Add(subnode);
-                        }
+                        rowStatementNodes.Add(se);
                     }
+                }
 
-                    if (row.ParentNode == null || row.ParentNode.Name != "table:table")
-                    {
-                        throw new TemplateException("Invalid template");
-                    }
-
-                    foreach (var sn in rowStatementNodes)
-                    {
-                        row.ParentNode.InsertAfter(sn, row);
-                    }
-
-                    row.ParentNode.RemoveChild(row);
+                if (rowStatementNodes.Count == 1)
+                {
+                    row.ParentNode.ReplaceChild(rowStatementNodes[0], row);
                 }
             }
-        }
-
-        /// <summary>
-        /// 确定一个 table-row 下面只包含 table-cell 和 bravo-statement 元素
-        /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
-        private static bool IsStatementRow(XmlNode row)
-        {
-            foreach (XmlNode node in row.ChildNodes)
-            {
-                //一个 row 下面的子节点都必须是 bravo:statement 和 空的 celltable 而且必须是 #if #foreach #end 等
-                if (!(
-                    node is StatementElement ||
-                    (node.InnerText == null || node.InnerText.Length <= 0)))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         private static void ClearTags(XmlDocument xml, XmlNamespaceManager nsmanager)
