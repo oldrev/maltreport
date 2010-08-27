@@ -2,4 +2,4 @@
 0.1 版：
 	* 支持加载图像（to be done）
 	* 表格水平循环（done）
-	* XML 内容的转义（partly done）
+	* XML 内容的转义（done）
