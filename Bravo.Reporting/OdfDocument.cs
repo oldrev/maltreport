@@ -233,5 +233,19 @@ namespace Bravo.Reporting
             }
         }
 
+        public byte[] GetBuffer()
+        {
+            using (var ms = new MemoryStream())
+            {
+                this.Save(ms);
+                return ms.GetBuffer();
+            }
+        }
+
+        public string ToBase64String()
+        {
+            return Convert.ToBase64String(this.GetBuffer());
+        }
+
     }
 }
