@@ -8,10 +8,9 @@ using NUnit.Framework;
 
 namespace Bravo.Reporting.Test
 {
-    [TestFixture]
+    [TestFixture(Description = "ODT 格式模板的测试")]
     public sealed class OdtTemplateTest
     {
-
         [Test(Description = "测试简单的变量替换")]
         public void TestIdsReplacement()
         {
@@ -26,9 +25,9 @@ namespace Bravo.Reporting.Test
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
             var paras = xmldoc.GetElementsByTagName("text:p");
 
-            Assert.GreaterOrEqual(paras.Count, 1);
+            Assert.GreaterOrEqual(1, paras.Count);
             var p = paras[0];
-            Assert.IsTrue(p.InnerText == "HELLO John Doe WORLD");
+            Assert.AreEqual("HELLO John Doe WORLD", p.InnerText);
         }
 
         [Test(Description = "测试表格行进行循环填充")]
@@ -46,12 +45,61 @@ namespace Bravo.Reporting.Test
 
             var rows = xmldoc.GetElementsByTagName("table:table-row");
 
-            Assert.AreEqual(rows.Count, 6);
+            Assert.AreEqual(6, rows.Count);
             var row0Col0 = rows[0].ChildNodes[0].InnerText;
             var row5Col0 = rows[5].ChildNodes[0].InnerText;
 
-            Assert.IsTrue(row0Col0 == "A");
-            Assert.IsTrue(row5Col0 == "F");
+            Assert.AreEqual("A", row0Col0);
+            Assert.AreEqual("F", row5Col0);
+        }
+
+        [Test(Description = "测试对内容进行转义处理")]
+        public void TestEscape()
+        {
+            var ctx = new Dictionary<string, object>()
+            {
+                { "gt", ">" },
+                { "lt", "<" },
+            };
+
+            var result = OdfTemplateTestHelper.RenderTemplate(
+                @"odf_docs/template_escape.odt", ctx);
+
+            var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
+
+            var paras = xmldoc.GetElementsByTagName("text:p");
+
+            Assert.GreaterOrEqual(paras.Count, 1);
+            var p = paras[0];
+            Assert.AreEqual("X > Y < Z &; &", p.InnerText);
+        }
+
+        [Test(Description = "测试模板中的 VTL 语句")]
+        public void TestStatements()
+        {
+            var ctx = new Dictionary<string, object>()
+            {
+                { "chars", new char[] {'A', 'B', 'C', 'D'} },
+                { "cond1", true },
+                { "n", 123 },
+            };
+
+            var result = OdfTemplateTestHelper.RenderTemplate(
+                @"odf_docs/template_statement.odt", ctx);
+
+            var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
+
+            var paras = xmldoc.GetElementsByTagName("text:p");
+
+            Assert.GreaterOrEqual(paras.Count, 1);
+            var p = paras[0];
+            Assert.AreEqual("AABBCCDD", p.InnerText);
+
+            p = paras[1];
+            Assert.AreEqual("TRUE", p.InnerText);
+
+            p = paras[2];
+            Assert.AreEqual("TRUE", p.InnerText);
         }
 
     }

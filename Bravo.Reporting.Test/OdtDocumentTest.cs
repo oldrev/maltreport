@@ -10,7 +10,7 @@ namespace Bravo.Reporting.Test
     public class OdtDocumentTest
     {
 
-        [Test]
+        [Test(Description = "测试读写 ODT 文档的内容")]
         public void TestReadWriteDocumentEntry()
         {
             var doc = new OdfDocument();

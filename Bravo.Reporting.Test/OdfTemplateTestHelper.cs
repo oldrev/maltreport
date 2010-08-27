@@ -22,7 +22,7 @@ namespace Bravo.Reporting.Test
 
         public static XmlDocument GetContentDocument(OdfDocument odfDoc)
         {
-            var inputStream = odfDoc.GetEntryInputStream(OdfDocument.ENTRY_CONTENT);
+            var inputStream = odfDoc.GetEntryInputStream(OdfDocument.ContentEntry);
             var xmldoc = new XmlDocument();
             xmldoc.Load(inputStream);
             return xmldoc;

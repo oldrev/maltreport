@@ -158,7 +158,7 @@ namespace Bravo.Reporting
 
         private static void SaveXml(OdfDocument odfTemplate, XmlDocument xml)
         {
-            using (var cos = odfTemplate.GetEntryOutputStream(OdfDocument.ENTRY_CONTENT))
+            using (var cos = odfTemplate.GetEntryOutputStream(OdfDocument.ContentEntry))
             using (var writer = new XmlTextWriter(cos, Encoding.UTF8))
             {
                 xml.WriteTo(writer);
@@ -168,7 +168,7 @@ namespace Bravo.Reporting
         private static XmlDocument LoadXml(OdfDocument odfTemplate)
         {
             var xml = new XmlDocument();
-            using (var contentStream = odfTemplate.GetEntryInputStream(OdfDocument.ENTRY_CONTENT))
+            using (var contentStream = odfTemplate.GetEntryInputStream(OdfDocument.ContentEntry))
             {
                 xml.Load(contentStream);
             }

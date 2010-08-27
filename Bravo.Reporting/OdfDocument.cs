@@ -12,15 +12,15 @@ namespace Bravo.Reporting
 {
     public class OdfDocument
     {
-        private const string ENTRY_MIMETYPE = "mimetype";
-        public const string ENTRY_CONTENT = "content.xml";
-        public const string ENTRY_MANIFEST = "META-INF/manifest.xml";
-        public const string ENTRY_SETTINGS = "settings.xml";
+        public const string MimeTypeEntry = "mimetype";
+        public const string ContentEntry = "content.xml";
+        public const string ManifestEntry = "META-INF/manifest.xml";
+        public const string SettingsEntry = "settings.xml";
 
         /// <summary>
         /// 加载到内存的 ODF 的文件内容
         /// </summary>
-        protected IDictionary<string, byte[]> odfEntries = new Dictionary<string, byte[]>();
+        private IDictionary<string, byte[]> odfEntries = new Dictionary<string, byte[]>();
 
         public OdfDocument()
         {
@@ -31,7 +31,7 @@ namespace Bravo.Reporting
         {
             if (string.IsNullOrEmpty(odfPath))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("odfPath");
             }
 
             this.OdfPath = odfPath;
@@ -82,11 +82,11 @@ namespace Bravo.Reporting
         {
             if (outStream == null || !outStream.CanWrite)
             {
-                throw new ArgumentException("outStream");
+                throw new ArgumentNullException("outStream");
             }
 
             //ODF 格式约定 mimetype 必须为第一个文件
-            if (!this.odfEntries.ContainsKey(ENTRY_MIMETYPE))
+            if (!this.odfEntries.ContainsKey(MimeTypeEntry))
             {
                 throw new InvalidDataException("Missing entry 'mimetype'");
             }
@@ -96,11 +96,11 @@ namespace Bravo.Reporting
                 //zos.SetLevel(9);
                 zos.UseZip64 = UseZip64.Off;
 
-                this.WriteZipEntry(zos, ENTRY_MIMETYPE);
+                this.WriteZipEntry(zos, MimeTypeEntry);
 
                 foreach (var item in this.odfEntries)
                 {
-                    if (item.Key == ENTRY_MIMETYPE)
+                    if (item.Key == MimeTypeEntry)
                     {
                         continue;
                     }

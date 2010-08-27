@@ -10,15 +10,11 @@ using System.Text.RegularExpressions;
 
 namespace Bravo.Reporting.ReportNodes
 {
+    /// <summary>
+    /// VTL Statement XML Element
+    /// </summary>
     internal class StatementElement : XmlElement
     {
-        private static readonly List<string> OpeningOrClosingTags = new List<string>()
-        {
-            "#foreach",
-            "#if",
-            "#end",
-        };
-
         public StatementElement(XmlDocument doc, string exp, string directive)
             : base(string.Empty, "statement", "urn:bravo:reporting", doc)
         {
@@ -26,19 +22,15 @@ namespace Bravo.Reporting.ReportNodes
             this.Directive = directive;
         }
 
+        /// <summary>
+        /// Write to writer
+        /// </summary>
+        /// <param name="w"></param>
         public override void WriteTo(XmlWriter w)
         {
-            w.WriteRaw("\n" + this.InnerText + "\n");
+            w.WriteRaw(this.InnerText);
         }
 
         public string Directive { get; private set; }
-
-        public bool IsOpeningOrClosingTag
-        {
-            get
-            {
-                return OpeningOrClosingTags.Contains(this.Directive);
-            }
-        }
     }
 }

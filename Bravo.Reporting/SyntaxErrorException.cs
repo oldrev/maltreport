@@ -4,9 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
 
 namespace Bravo.Reporting
 {
+    [Serializable]
     public class SyntaxErrorException : Exception
     {
         public SyntaxErrorException()
@@ -18,5 +20,16 @@ namespace Bravo.Reporting
             : base(msg)
         {
         }
+
+        protected SyntaxErrorException(SerializationInfo si, StreamingContext sc)
+            : base(si, sc)
+        {
+        }
+
+        public SyntaxErrorException(string msg, Exception ex)
+            : base(msg, ex)
+        {
+        }
+
     }
 }
