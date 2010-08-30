@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.IO;
 
 using NUnit.Framework;
 
@@ -100,6 +101,32 @@ namespace Bravo.Reporting.Test
 
             p = paras[2];
             Assert.AreEqual("TRUE", p.InnerText);
+        }
+
+        [Test(Description = "测试图像标记替换")]
+        public void TestImage()
+        {
+            var ctx = new Dictionary<string, object>()
+            {
+                { "image1", new Image("odf_docs/go-home.PNG") },
+            };
+
+            var result = OdfTemplateTestHelper.RenderTemplate(
+                @"odf_docs/template_image.odt", ctx);
+
+            var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
+
+            using (var xtw = new System.Xml.XmlTextWriter(Console.Out))
+            {
+                xtw.Formatting = System.Xml.Formatting.Indented;
+                xmldoc.Save(xtw);
+            }
+
+            if (File.Exists("d:\\image.odt"))
+            {
+                File.Delete("d:\\image.odt");
+            }
+            result.Save("d:\\image.odt");
         }
 
     }

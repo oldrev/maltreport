@@ -7,6 +7,8 @@ using System.Text;
 using System.IO;
 using System.Collections;
 using System.Security;
+using System.Xml;
+using System.Diagnostics;
 
 using NVelocity.Runtime;
 using NVelocity.App;
@@ -16,21 +18,53 @@ using NVelocity.Context;
 
 namespace Bravo.Reporting
 {
-    public static class TemplateRenderer
+    public class TemplateRenderer
     {
-        public static OdfDocument Render(OdfDocument odfTemplate, IDictionary<string, object> data)
+
+        private IDictionary<Image, string> images
+            = new Dictionary<Image, string>();
+
+        private OdfDocument templateDocument;
+        private OdfDocument resultDocument;
+
+        public TemplateRenderer(OdfDocument template)
         {
-            var odfResult = new OdfDocument();
-            odfTemplate.CopyTo(odfResult);
+            if (template == null)
+            {
+                throw new ArgumentNullException("template");
+            }
+
+            this.templateDocument = template;
+
+        }
+
+        public OdfDocument Render(IDictionary<string, object> data)
+        {
+            this.resultDocument = new OdfDocument();
+            this.templateDocument.CopyTo(this.resultDocument);
 
             var ctx = CreateVelocityContext(data);
 
             var ve = new VelocityEngine();
             ve.Init();
 
-            using (var inStream = odfResult.GetEntryInputStream(OdfDocument.ContentEntry))
+            //执行主渲染过程
+            this.MainRender(ctx, ve);
+
+            //处理 Manifest.xml 文件
+            if (this.images.Count > 0)
+            {
+                this.ProcessManifest();
+            }
+
+            return this.resultDocument;
+        }
+
+        private void MainRender(VelocityContext ctx, VelocityEngine ve)
+        {
+            using (var inStream = this.resultDocument.GetEntryInputStream(OdfDocument.ContentEntry))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = odfResult.GetEntryOutputStream(OdfDocument.ContentEntry))
+            using (var ws = this.resultDocument.GetEntryOutputStream(OdfDocument.ContentEntry))
             using (var writer = new StreamWriter(ws))
             {
                 //执行渲染
@@ -41,11 +75,36 @@ namespace Bravo.Reporting
                 }
                 writer.Flush();
             }
-
-            return odfResult;
         }
 
-        private static VelocityContext CreateVelocityContext(IDictionary<string, object> data)
+        private void ProcessManifest()
+        {
+            OdfManifestDocument manifestEntry = null;
+
+            using (var manifestStream = this.templateDocument.GetEntryInputStream(OdfDocument.ManifestEntry))
+            {
+                manifestEntry = new OdfManifestDocument(manifestStream);
+            }
+
+            if (this.images.Count > 0)
+            {
+                manifestEntry.CreatePicturesEntryElement();
+            }
+
+            foreach (var item in this.images)
+            {
+                manifestEntry.AppendFileEntry(item.Key.ExtensionName, item.Value);
+            }
+
+            //处理 manifest.xml
+            using (var manifestStream = this.resultDocument.GetEntryOutputStream(OdfDocument.ManifestEntry))
+            {
+                manifestEntry.Save(manifestStream);
+            }
+        }
+
+
+        private VelocityContext CreateVelocityContext(IDictionary<string, object> data)
         {
             var ctx = new VelocityContext();
             foreach (var pair in data)
@@ -54,8 +113,8 @@ namespace Bravo.Reporting
             }
 
             EventCartridge eventCart = new EventCartridge();
-            eventCart.ReferenceInsertion +=
-                new EventHandler<ReferenceInsertionEventArgs>(OnReferenceInsertion);
+            eventCart.ReferenceInsertion += this.OnStringReferenceInsertion;
+            eventCart.ReferenceInsertion += this.OnImageReferenceInsertion;
             ctx.AttachEventCartridge(eventCart);
             return ctx;
         }
@@ -65,13 +124,57 @@ namespace Bravo.Reporting
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        static void OnReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
+        void OnStringReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
         {
             var originalStr = e.OriginalValue as string;
             if (originalStr != null)
             {
                 e.NewValue = SecurityElement.Escape(originalStr);
             }
+        }
+
+        /// <summary>
+        /// 此事件处理 Image 数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnImageReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
+        {
+            var image = e.OriginalValue as Image;
+            if (image != null)
+            {
+                string filename = null;
+
+                if (this.images.ContainsKey(image))
+                {
+                    filename = this.images[image];
+                }
+                else
+                {
+                    filename = string.Format(@"Pictures/{0}", image.DocumentFileName);
+                    using (var outStream = this.resultDocument.GetEntryOutputStream(filename))
+                    {
+                        outStream.Write(image.Data, 0, image.Data.Length);
+                    }
+                    this.images.Add(image, filename);
+                }
+
+                using (var ws = new StringWriter())
+                using (var xw = new XmlTextWriter(ws))
+                {
+                    xw.WriteStartElement("draw:image");
+                    xw.WriteAttributeString("xlink:href", filename);
+                    xw.WriteAttributeString("xlink:type", "simple");
+                    xw.WriteAttributeString("xlink:show", "embed");
+                    xw.WriteAttributeString("xlink:actuate", "onLoad");
+                    xw.WriteEndElement();
+                    xw.Flush();
+
+                    e.NewValue = ws.ToString();
+                }
+
+            }
+
         }
 
     }
