@@ -7,9 +7,11 @@ using System.Globalization;
 
 namespace Bravo.Reporting
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Image
     {
-
         private byte[] data;
         private string documentFileName;
 
