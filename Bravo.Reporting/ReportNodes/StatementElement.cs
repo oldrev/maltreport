@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Bravo.Reporting.ReportNodes
 {
@@ -15,11 +16,16 @@ namespace Bravo.Reporting.ReportNodes
     /// </summary>
     internal class StatementElement : XmlElement
     {
+        private string statement;
         public StatementElement(XmlDocument doc, string exp, string directive)
             : base(string.Empty, "statement", "urn:bravo:reporting", doc)
         {
-            this.InnerText = exp;
+            Debug.Assert(doc != null);
+            Debug.Assert(exp != null);
+            Debug.Assert(directive != null);
+
             this.Directive = directive;
+            this.statement = exp;
         }
 
         /// <summary>
@@ -28,7 +34,10 @@ namespace Bravo.Reporting.ReportNodes
         /// <param name="w"></param>
         public override void WriteTo(XmlWriter w)
         {
-            w.WriteRaw(this.InnerText);
+            Debug.Assert(statement != null);
+            Debug.Assert(w != null);
+            
+            w.WriteRaw(this.statement);
         }
 
         public string Directive { get; private set; }

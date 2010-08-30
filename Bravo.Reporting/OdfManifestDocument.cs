@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Globalization;
 
 namespace Bravo.Reporting
 {
@@ -17,9 +18,39 @@ namespace Bravo.Reporting
         private XmlNamespaceManager nsmanager;
         private XmlElement manifestElement;
 
-        public OdfManifestDocument(Stream inStream)
+        public override void Load(Stream inStream)
         {
-            this.Load(inStream);
+            base.Load(inStream);
+            this.Init();
+        }
+
+
+        public override void Load(TextReader txtReader)
+        {
+            base.Load(txtReader);
+            this.Init();
+        }
+
+        public override void Load(string filename)
+        {
+            base.Load(filename);
+            this.Init();
+        }
+
+        public override void Load(XmlReader reader)
+        {
+            base.Load(reader);
+            this.Init();
+        }
+
+        public override void LoadXml(string xml)
+        {
+            base.LoadXml(xml);
+            this.Init();
+        }
+
+        private void Init()
+        {
             this.nsmanager = new XmlNamespaceManager(this.NameTable);
             nsmanager.AddNamespace("manifest", ManifestNamespace);
             this.manifestElement = (XmlElement)this.SelectSingleNode(@"/manifest:manifest", nsmanager);
@@ -38,6 +69,7 @@ namespace Bravo.Reporting
 
             //看看是否有 "Pictures/" 这一项
             var xpath = string.Format(
+                CultureInfo.InvariantCulture,
                 @"/manifest:manifest/manifest:file-entry[@manifest:full-path=""{0}""]", PicturesFullPath);
             var picturesEntryNode = this.SelectSingleNode(xpath, nsmanager);
 
@@ -60,7 +92,7 @@ namespace Bravo.Reporting
         {
             var fileEntryElement = this.CreateElement(
              "manifest", "file-entry", ManifestNamespace);
-            var mediaType = string.Format("image/{0}", extensionName.ToLower());
+            var mediaType = @"image/" + extensionName.ToLowerInvariant();
             fileEntryElement.SetAttribute("media-type", ManifestNamespace, mediaType);
             fileEntryElement.SetAttribute("full-path", ManifestNamespace, fullPath);
 

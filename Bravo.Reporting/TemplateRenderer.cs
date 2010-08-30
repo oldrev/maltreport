@@ -9,6 +9,7 @@ using System.Collections;
 using System.Security;
 using System.Xml;
 using System.Diagnostics;
+using System.Globalization;
 
 using NVelocity.Runtime;
 using NVelocity.App;
@@ -79,27 +80,28 @@ namespace Bravo.Reporting
 
         private void ProcessManifest()
         {
-            OdfManifestDocument manifestEntry = null;
+            OdfManifestDocument manifestDoc = null;
 
             using (var manifestStream = this.templateDocument.GetEntryInputStream(OdfDocument.ManifestEntry))
             {
-                manifestEntry = new OdfManifestDocument(manifestStream);
+                manifestDoc = new OdfManifestDocument();
+                manifestDoc.Load(manifestStream);
             }
 
             if (this.images.Count > 0)
             {
-                manifestEntry.CreatePicturesEntryElement();
+                manifestDoc.CreatePicturesEntryElement();
             }
 
             foreach (var item in this.images)
             {
-                manifestEntry.AppendFileEntry(item.Key.ExtensionName, item.Value);
+                manifestDoc.AppendFileEntry(item.Key.ExtensionName, item.Value);
             }
 
             //处理 manifest.xml
             using (var manifestStream = this.resultDocument.GetEntryOutputStream(OdfDocument.ManifestEntry))
             {
-                manifestEntry.Save(manifestStream);
+                manifestDoc.Save(manifestStream);
             }
         }
 
@@ -151,15 +153,15 @@ namespace Bravo.Reporting
                 }
                 else
                 {
-                    filename = string.Format(@"Pictures/{0}", image.DocumentFileName);
+                    filename = "Pictures/" + '+' + image.DocumentFileName;
                     using (var outStream = this.resultDocument.GetEntryOutputStream(filename))
                     {
-                        outStream.Write(image.Data, 0, image.Data.Length);
+                        outStream.Write(image.GetData(), 0, image.DataSize);
                     }
                     this.images.Add(image, filename);
                 }
 
-                using (var ws = new StringWriter())
+                using (var ws = new StringWriter(CultureInfo.InvariantCulture))
                 using (var xw = new XmlTextWriter(ws))
                 {
                     xw.WriteStartElement("draw:image");

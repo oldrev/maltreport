@@ -6,20 +6,30 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.Diagnostics;
 
 namespace Bravo.Reporting.ReportNodes
 {
     internal class IdentifierElement : XmlElement
     {
-        public IdentifierElement(XmlDocument doc, string identifier)
+
+        private string expression = null;
+
+        public IdentifierElement(XmlDocument doc, string exp)
             : base(string.Empty, "identifier", "urn:bravo:reporting", doc)
         {
-            this.InnerText = identifier;
+            Debug.Assert(doc != null);
+            Debug.Assert(exp != null);
+
+            this.expression = exp;
         }
 
         public override void WriteTo(XmlWriter w)
         {
-            w.WriteRaw(this.InnerText);
+            Debug.Assert(this.expression != null);
+            Debug.Assert(w != null);
+
+            w.WriteRaw(this.expression);
         }
     }
 }

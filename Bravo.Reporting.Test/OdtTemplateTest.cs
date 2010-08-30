@@ -116,12 +116,6 @@ namespace Bravo.Reporting.Test
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
-            using (var xtw = new System.Xml.XmlTextWriter(Console.Out))
-            {
-                xtw.Formatting = System.Xml.Formatting.Indented;
-                xmldoc.Save(xtw);
-            }
-
             if (File.Exists("d:\\image.odt"))
             {
                 File.Delete("d:\\image.odt");
