@@ -153,7 +153,7 @@ namespace Bravo.Reporting
                 }
                 else
                 {
-                    filename = "Pictures/" + '+' + image.DocumentFileName;
+                    filename = "Pictures/" + image.DocumentFileName;
                     using (var outStream = this.resultDocument.GetEntryOutputStream(filename))
                     {
                         outStream.Write(image.GetData(), 0, image.DataSize);

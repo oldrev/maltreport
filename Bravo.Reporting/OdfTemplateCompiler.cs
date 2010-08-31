@@ -18,7 +18,8 @@ namespace Bravo.Reporting
     /// </summary>
     public class OdfTemplateCompiler : ITemplateCompiler
     {
-        public const string PlaceHolderPattern = "//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
+        public const string PlaceHolderPattern =
+            @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
         #region ITemplateCompiler 成员
 
@@ -30,10 +31,10 @@ namespace Bravo.Reporting
             var xml = LoadXml(odfTemplate);
             var nsmanager = CreateContentNamespaceManager(xml);
 
-            //第一遍，先处理简单的Tag 替换
-            ClearTags(xml, nsmanager);
+            //第1遍，先处理简单的Tag 替换
+            ClearTextTags(xml, nsmanager);
 
-            //第二遍，处理表格循环
+            //第2遍，处理表格循环
             ProcessTableRowNodes(xml, nsmanager);
 
             SaveXml(odfTemplate, xml);
@@ -79,7 +80,7 @@ namespace Bravo.Reporting
             }
         }
 
-        private static void ClearTags(XmlDocument xml, XmlNamespaceManager nsmanager)
+        private static void ClearTextTags(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
             var placeHolderPattern = new Regex(@"<\s*(([\$#]\w+).*)\s*>$");
             var linkPattern = new Regex(@"^rtl://(([\$#]\w+).*)\s*$");
@@ -122,7 +123,7 @@ namespace Bravo.Reporting
                 else if (value[0] == '#')
                 {
                     var statementNode = new StatementElement(xml, value, directive);
-                    ReduceStatementTag(statementNode, placeholder);
+                    ReduceTag(statementNode, placeholder);
                 }
                 else
                 {
@@ -133,16 +134,44 @@ namespace Bravo.Reporting
 
         private static void ProcessIdentifierTag(XmlDocument xml, XmlNode placeholder, string value)
         {
-            placeholder.ParentNode.ReplaceChild(
-                new IdentifierElement(xml, value), placeholder);
+            var ie = new IdentifierElement(xml, value);
+            var placeholderType = placeholder.Attributes["text:placeholder-type"]
+                .InnerText.Trim().ToLowerInvariant(); ;
+            //处理图像占位符
+
+            switch (placeholderType)
+            {
+                case "image":
+                    ProcessImageTag(placeholder, ie);
+                    break;
+
+                case "text":
+                    placeholder.ParentNode.ReplaceChild(ie, placeholder);
+                    break;
+
+                default:
+                    throw new SyntaxErrorException("不支持的占位符类型：" + placeholderType);
+            }
+        }
+
+        private static void ProcessImageTag(XmlNode placeholder, IdentifierElement ie)
+        {
+            //向上查找 drawbox
+            var drawboxNode = LookupAncestor(placeholder, "draw:text-box");
+            if (drawboxNode.Name != "draw:text-box")
+            {
+                throw new SyntaxErrorException("图像类型的占位符必须放在图文框中");
+            }
+
+            drawboxNode.ParentNode.ReplaceChild(ie, drawboxNode);
         }
 
         /// <summary>
-        /// 化简语句 Tag
+        /// 化简 Tag
         /// </summary>
         /// <param name="newNode"></param>
         /// <param name="placeholder"></param>
-        private static void ReduceStatementTag(XmlNode newNode, XmlNode placeholder)
+        private static void ReduceTag(XmlNode newNode, XmlNode placeholder)
         {
             //如果上级节点只包含 placeholder 这个节点的话，那么上级也是没用的
             //以此类推，直到上级节点包含其他类型的节点或者上级节点是单元格为止
@@ -155,6 +184,24 @@ namespace Bravo.Reporting
 
             ancestor.ParentNode.ReplaceChild(newNode, ancestor);
         }
+
+        /// <summary>
+        /// 查找祖先元素
+        /// </summary>
+        /// <param name="ancestorName"></param>
+        /// <param name="node"></param>
+        private static XmlNode LookupAncestor(XmlNode node, string ancestorName)
+        {
+            XmlNode ancestor = node;
+            while (ancestor.ParentNode.ChildNodes.Count == 1 &&
+                ancestor.Name != ancestorName)
+            {
+                ancestor = ancestor.ParentNode;
+            }
+
+            return ancestor;
+        }
+
 
         private static void SaveXml(OdfDocument odfTemplate, XmlDocument xml)
         {
