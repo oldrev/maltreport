@@ -58,10 +58,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image.cs" />
-    <Compile Include="NVelocity\ImageDirective.cs" />
-    <Compile Include="OdfDocument.cs" />
-    <Compile Include="OdfTemplateCompiler.cs" />
-    <Compile Include="OdfManifestDocument.cs" />
+    <Compile Include="OpenDocument\OdfDocument.cs" />
+    <Compile Include="OpenDocument\OdfNamespaceManager.cs" />
+    <Compile Include="OpenDocument\OdfTemplateCompiler.cs" />
+    <Compile Include="OpenDocument\OdfManifestDocument.cs" />
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ITemplateCompiler.cs" />

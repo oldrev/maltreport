@@ -4,6 +4,8 @@ using System.Text;
 
 using NUnit.Framework;
 
+using Bravo.Reporting.OpenDocument;
+
 namespace Bravo.Reporting.Test
 {
     [TestFixture]

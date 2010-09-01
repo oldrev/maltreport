@@ -6,6 +6,8 @@ using System.Xml;
 using System.Data;
 using System.Data.SqlClient;
 
+using Bravo.Reporting.OpenDocument;
+
 namespace Bravo.Reporting.Demo
 {
     class Program

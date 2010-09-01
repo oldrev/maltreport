@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Bravo.Reporting.OpenDocument;
+
 namespace Bravo.Reporting
 {
     public interface ITemplateCompiler

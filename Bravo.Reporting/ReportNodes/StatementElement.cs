@@ -18,7 +18,7 @@ namespace Bravo.Reporting.ReportNodes
     {
         private string statement;
         public StatementElement(XmlDocument doc, string exp, string directive)
-            : base(string.Empty, "statement", "urn:bravo:reporting", doc)
+            : base(string.Empty, "report-statement", string.Empty, doc)
         {
             Debug.Assert(doc != null);
             Debug.Assert(exp != null);

@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Bravo.Reporting.ReportNodes;
 
-namespace Bravo.Reporting
+namespace Bravo.Reporting.OpenDocument
 {
     /// <summary>
     /// ODF 编译器
@@ -29,7 +29,7 @@ namespace Bravo.Reporting
             inputOdf.CopyTo(odfTemplate);
 
             var xml = LoadXml(odfTemplate);
-            var nsmanager = CreateContentNamespaceManager(xml);
+            var nsmanager = new OdfNamespaceManager(xml.NameTable);
 
             //第1遍，先处理简单的Tag 替换
             ClearTextTags(xml, nsmanager);
@@ -42,29 +42,17 @@ namespace Bravo.Reporting
             return odfTemplate;
         }
 
-        private static XmlNamespaceManager CreateContentNamespaceManager(XmlDocument xml)
-        {
-            var nsmanager = new XmlNamespaceManager(xml.NameTable);
-            nsmanager.AddNamespace("text", @"urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-            nsmanager.AddNamespace("table", @"urn:oasis:names:tc:opendocument:xmlns:table:1.0");
-            nsmanager.AddNamespace("xlink", @"http://www.w3.org/1999/xlink");
-
-            //注册编译器用到的命名空间
-            nsmanager.AddNamespace("bravo", @"urn:bravo:reporting");
-            return nsmanager;
-        }
-
         private static void ProcessTableRowNodes(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
             var rowNodes = xml.SelectNodes("//table:table-row", nsmanager);
             var rowStatementNodes = new List<StatementElement>(5);
-            foreach (XmlNode row in rowNodes)
+            foreach (XmlElement row in rowNodes)
             {
                 rowStatementNodes.Clear();
 
-                //检测一个行中的 table-cell 是否只包含 table:table-cell 和 bravo:statement 元素
+                //检测一个行中的 table-cell 是否只包含 table:table-cell 和 report-statement 元素
                 //把其中的 cell 都去掉
-                foreach (XmlNode subnode in row.ChildNodes)
+                foreach (XmlElement subnode in row.ChildNodes)
                 {
                     var se = subnode as StatementElement;
                     if (se != null)

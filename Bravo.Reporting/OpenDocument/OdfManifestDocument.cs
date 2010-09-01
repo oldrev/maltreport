@@ -5,17 +5,12 @@ using System.Xml;
 using System.IO;
 using System.Globalization;
 
-namespace Bravo.Reporting
+namespace Bravo.Reporting.OpenDocument
 {
-    /// <summary>
-    /// 
-    /// </summary>
     internal class OdfManifestDocument : XmlDocument
     {
         public const string PicturesFullPath = @"Pictures/";
-        public const string ManifestNamespace = @"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
-
-        private XmlNamespaceManager nsmanager;
+        private OdfNamespaceManager nsmanager;
         private XmlElement manifestElement;
 
         public override void Load(Stream inStream)
@@ -51,8 +46,8 @@ namespace Bravo.Reporting
 
         private void Init()
         {
-            this.nsmanager = new XmlNamespaceManager(this.NameTable);
-            nsmanager.AddNamespace("manifest", ManifestNamespace);
+            this.nsmanager = new OdfNamespaceManager(this.NameTable);
+
             this.manifestElement = (XmlElement)this.SelectSingleNode(@"/manifest:manifest", nsmanager);
 
             if (this.manifestElement == null)
@@ -76,9 +71,9 @@ namespace Bravo.Reporting
             if (picturesEntryNode == null)
             {
                 var picturesEntryElement = this.CreateElement(
-                    "manifest", "file-entry", ManifestNamespace);
-                picturesEntryElement.SetAttribute("media-type", ManifestNamespace, string.Empty);
-                picturesEntryElement.SetAttribute("full-path", ManifestNamespace, PicturesFullPath);
+                    "manifest", "file-entry", OdfNamespaceManager.ManifestNamespace);
+                picturesEntryElement.SetAttribute("media-type", OdfNamespaceManager.ManifestNamespace, string.Empty);
+                picturesEntryElement.SetAttribute("full-path", OdfNamespaceManager.ManifestNamespace, PicturesFullPath);
                 manifestElement.AppendChild(picturesEntryElement);
             }
         }
@@ -88,15 +83,35 @@ namespace Bravo.Reporting
         /// </summary>
         /// <param name="extensionName"></param>
         /// <param name="fullPath"></param>
-        public void AppendFileEntry(string extensionName, string fullPath)
+        public void AppendFileEntry(string mediaType, string fullPath)
         {
+            if (string.IsNullOrEmpty(mediaType))
+            {
+                throw new ArgumentNullException("mediaType");
+            }
+
+            if (string.IsNullOrEmpty(fullPath))
+            {
+                throw new ArgumentNullException("fullPath");
+            }
+
             var fileEntryElement = this.CreateElement(
-             "manifest", "file-entry", ManifestNamespace);
-            var mediaType = @"image/" + extensionName.ToLowerInvariant();
-            fileEntryElement.SetAttribute("media-type", ManifestNamespace, mediaType);
-            fileEntryElement.SetAttribute("full-path", ManifestNamespace, fullPath);
+             "manifest", "file-entry", OdfNamespaceManager.ManifestNamespace);
+            fileEntryElement.SetAttribute("media-type", OdfNamespaceManager.ManifestNamespace, mediaType);
+            fileEntryElement.SetAttribute("full-path", OdfNamespaceManager.ManifestNamespace, fullPath);
 
             manifestElement.AppendChild(fileEntryElement);
+        }
+
+        /// <summary>
+        /// 添加一个图片文件条目
+        /// </summary>
+        /// <param name="extensionName"></param>
+        /// <param name="fullPath"></param>
+        public void AppendImageFileEntry(string extensionName, string fullPath)
+        {
+            var mediaType = @"image/" + extensionName.ToLowerInvariant();
+            this.AppendFileEntry(mediaType, fullPath);
         }
     }
 }

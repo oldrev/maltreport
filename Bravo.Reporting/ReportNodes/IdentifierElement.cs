@@ -12,11 +12,10 @@ namespace Bravo.Reporting.ReportNodes
 {
     internal class IdentifierElement : XmlElement
     {
-
         private string expression = null;
 
         public IdentifierElement(XmlDocument doc, string exp)
-            : base(string.Empty, "identifier", "urn:bravo:reporting", doc)
+            : base(string.Empty, "report-identifier", string.Empty, doc)
         {
             Debug.Assert(doc != null);
             Debug.Assert(exp != null);

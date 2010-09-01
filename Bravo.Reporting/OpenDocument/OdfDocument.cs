@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace Bravo.Reporting
+namespace Bravo.Reporting.OpenDocument
 {
     public class OdfDocument
     {
@@ -88,12 +88,12 @@ namespace Bravo.Reporting
             //ODF 格式约定 mimetype 必须为第一个文件
             if (!this.odfEntries.ContainsKey(MimeTypeEntry))
             {
-                throw new InvalidDataException("Missing entry 'mimetype'");
+                throw new InvalidDataException("Can not found entry: 'mimetype'");
             }
 
             using (var zos = new ZipOutputStream(outStream))
             {
-                //zos.SetLevel(9);
+                //zos.SetLevel(0);
                 zos.UseZip64 = UseZip64.Off;
 
                 this.WriteZipEntry(zos, MimeTypeEntry);
@@ -138,7 +138,7 @@ namespace Bravo.Reporting
 
         public string OdfPath { get; set; }
 
-        public IEnumerable<string> OdfEntryNames
+        public ICollection<string> OdfEntryNames
         {
             get { return this.odfEntries.Keys; }
         }
@@ -187,7 +187,7 @@ namespace Bravo.Reporting
             return new StreamWriter(this.GetEntryOutputStream(name));
         }
 
-        public bool Exists(string name)
+        public bool EntryExists(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -249,12 +249,27 @@ namespace Bravo.Reporting
 
         public string AddImage(Image img)
         {
-            var filename = "Pictures/" + img.DocumentFileName;
-            using (var outStream = this.GetEntryOutputStream(filename))
+            var fullPath = "Pictures/" + img.DocumentFileName;
+            using (var outStream = this.GetEntryOutputStream(fullPath))
             {
                 outStream.Write(img.GetData(), 0, img.DataSize);
             }
-            return filename;
+
+            var manifestDoc = new OdfManifestDocument();
+            using (var manifestInStream = this.GetEntryInputStream(OdfDocument.ManifestEntry))
+            {
+                manifestDoc.Load(manifestInStream);
+            }
+
+            manifestDoc.AppendImageFileEntry(img.ExtensionName, fullPath);
+            manifestDoc.CreatePicturesEntryElement();
+
+            using (var manifestOutStream = this.GetEntryOutputStream(OdfDocument.ManifestEntry))
+            {
+                manifestDoc.Save(manifestOutStream);
+            }
+
+            return fullPath;
         }
 
     }

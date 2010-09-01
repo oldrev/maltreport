@@ -17,11 +17,12 @@ using NVelocity.App.Events;
 using NVelocity;
 using NVelocity.Context;
 
+using Bravo.Reporting.OpenDocument;
+
 namespace Bravo.Reporting
 {
     public class TemplateRenderer
     {
-
         private IDictionary<Image, string> userImages
             = new Dictionary<Image, string>();
 
@@ -52,12 +53,6 @@ namespace Bravo.Reporting
             //执行主渲染过程
             this.MainRender(ctx, ve);
 
-            //处理 Manifest.xml 文件
-            if (this.userImages.Count > 0)
-            {
-                this.ProcessManifest();
-            }
-
             return this.resultDocument;
         }
 
@@ -77,34 +72,6 @@ namespace Bravo.Reporting
                 writer.Flush();
             }
         }
-
-        private void ProcessManifest()
-        {
-            OdfManifestDocument manifestDoc = null;
-
-            using (var manifestStream = this.templateDocument.GetEntryInputStream(OdfDocument.ManifestEntry))
-            {
-                manifestDoc = new OdfManifestDocument();
-                manifestDoc.Load(manifestStream);
-            }
-
-            if (this.userImages.Count > 0)
-            {
-                manifestDoc.CreatePicturesEntryElement();
-            }
-
-            foreach (var item in this.userImages)
-            {
-                manifestDoc.AppendFileEntry(item.Key.ExtensionName, item.Value);
-            }
-
-            //处理 manifest.xml
-            using (var manifestStream = this.resultDocument.GetEntryOutputStream(OdfDocument.ManifestEntry))
-            {
-                manifestDoc.Save(manifestStream);
-            }
-        }
-
 
         private VelocityContext CreateVelocityContext(IDictionary<string, object> data)
         {
