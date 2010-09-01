@@ -11,12 +11,12 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace Bravo.Reporting.OpenDocument
 {
-    public class OdfDocument
+    public class OdfDocument : ITemplate, ICompiledTemplate
     {
-        public const string MimeTypeEntry = "mimetype";
-        public const string ContentEntry = "content.xml";
-        public const string ManifestEntry = "META-INF/manifest.xml";
-        public const string SettingsEntry = "settings.xml";
+        public const string MimeTypeEntryPath = "mimetype";
+        public const string ContentEntryPath = "content.xml";
+        public const string ManifestEntryPath = "META-INF/manifest.xml";
+        public const string SettingsEntryPath = "settings.xml";
 
         /// <summary>
         /// 加载到内存的 ODF 的文件内容
@@ -87,7 +87,7 @@ namespace Bravo.Reporting.OpenDocument
             }
 
             //ODF 格式约定 mimetype 必须为第一个文件
-            if (!this.odfEntries.ContainsKey(MimeTypeEntry))
+            if (!this.odfEntries.ContainsKey(MimeTypeEntryPath))
             {
                 throw new InvalidDataException("Can not found entry: 'mimetype'");
             }
@@ -97,11 +97,11 @@ namespace Bravo.Reporting.OpenDocument
                 //zos.SetLevel(0);
                 zos.UseZip64 = UseZip64.Off;
 
-                this.WriteZipEntry(zos, MimeTypeEntry);
+                this.WriteZipEntry(zos, MimeTypeEntryPath);
 
                 foreach (var item in this.odfEntries)
                 {
-                    if (item.Key == MimeTypeEntry)
+                    if (item.Key == MimeTypeEntryPath)
                     {
                         continue;
                     }
@@ -150,7 +150,7 @@ namespace Bravo.Reporting.OpenDocument
             return new MemoryStream(data);
         }
 
-        public TextReader GetEntryReader(string name)
+        public TextReader GetEntryTextReader(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -178,7 +178,7 @@ namespace Bravo.Reporting.OpenDocument
             return oms;
         }
 
-        public TextWriter GetEntryWriter(string name)
+        public TextWriter GetEntryTextWriter(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -259,7 +259,7 @@ namespace Bravo.Reporting.OpenDocument
             }
 
             var manifestDoc = new OdfManifestDocument();
-            using (var manifestInStream = this.GetEntryInputStream(OdfDocument.ManifestEntry))
+            using (var manifestInStream = this.GetEntryInputStream(OdfDocument.ManifestEntryPath))
             {
                 manifestDoc.Load(manifestInStream);
             }
@@ -267,7 +267,7 @@ namespace Bravo.Reporting.OpenDocument
             manifestDoc.AppendImageFileEntry(img.ExtensionName, fullPath);
             manifestDoc.CreatePicturesEntryElement();
 
-            using (var manifestOutStream = this.GetEntryOutputStream(OdfDocument.ManifestEntry))
+            using (var manifestOutStream = this.GetEntryOutputStream(OdfDocument.ManifestEntryPath))
             {
                 manifestDoc.Save(manifestOutStream);
             }
@@ -275,30 +275,38 @@ namespace Bravo.Reporting.OpenDocument
             return fullPath;
         }
 
-        public void WriteContentXml(XmlDocument xml)
+        public void WriteXmlEntry(XmlDocument xml, string entryPath)
         {
             if (xml == null)
             {
                 throw new ArgumentNullException("xml");
             }
 
-            using (var cos = this.GetEntryOutputStream(OdfDocument.ContentEntry))
+            using (var cos = this.GetEntryOutputStream(entryPath))
             using (var writer = new XmlTextWriter(cos, Encoding.UTF8))
             {
                 xml.WriteTo(writer);
             }
         }
 
-        public XmlDocument ReadContentXml()
+        public XmlDocument ReadXmlEntry(string entryPath)
         {
             var xml = new XmlDocument();
-            using (var contentStream = this.GetEntryInputStream(OdfDocument.ContentEntry))
+            using (var contentStream = this.GetEntryInputStream(entryPath))
             {
                 xml.Load(contentStream);
             }
             return xml;
         }
 
+        public void WriteContentXml(XmlDocument xml)
+        {
+            this.WriteXmlEntry(xml, ContentEntryPath);
+        }
 
+        public XmlDocument ReadContentXml()
+        {
+            return this.ReadXmlEntry(ContentEntryPath);
+        }
     }
 }

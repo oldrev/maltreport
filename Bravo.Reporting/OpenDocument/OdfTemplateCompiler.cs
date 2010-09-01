@@ -16,12 +16,10 @@ namespace Bravo.Reporting.OpenDocument
     /// ODF 编译器
     /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
     /// </summary>
-    public class OdfTemplateCompiler : ITemplateCompiler
+    public class OdfTemplateCompiler
     {
         public const string PlaceHolderPattern =
             @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
-
-        #region ITemplateCompiler 成员
 
         public OdfDocument Compile(OdfDocument inputOdf)
         {
@@ -209,8 +207,5 @@ namespace Bravo.Reporting.OpenDocument
 
             return ancestor;
         }
-
-
-        #endregion
     }
 }

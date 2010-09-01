@@ -117,7 +117,7 @@ namespace Bravo.Reporting.Test
                 @"odf_docs/template_image.odt", ctx);
 
             var manifestDoc = new XmlDocument();
-            using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntry))
+            using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntryPath))
             {
                 manifestDoc.Load(s);
             }

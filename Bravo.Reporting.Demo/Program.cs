@@ -72,7 +72,7 @@ namespace Bravo.Reporting.Demo
                 template2.Save(stFile);
             }
 
-            var tr1 = new TemplateRenderer(template1);
+            var tr1 = new OdfTemplateRenderer(template1);
             var result1 = tr1.Render(renderContext);
 
             Console.WriteLine("正在生成 ODT 模板...");
@@ -83,7 +83,7 @@ namespace Bravo.Reporting.Demo
             }
 
             Console.WriteLine("正在生成 ODS 模板...");
-            var tr2 = new TemplateRenderer(template2);
+            var tr2 = new OdfTemplateRenderer(template2);
             var result2 = tr2.Render(renderContext);
             using (var resultFile2 = File.Open(
                 "result2.ods", FileMode.Create, FileAccess.ReadWrite))

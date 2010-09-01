@@ -17,11 +17,9 @@ using NVelocity.App.Events;
 using NVelocity;
 using NVelocity.Context;
 
-using Bravo.Reporting.OpenDocument;
-
-namespace Bravo.Reporting
+namespace Bravo.Reporting.OpenDocument
 {
-    public class TemplateRenderer
+    public class OdfTemplateRenderer 
     {
         private IDictionary<Image, string> userImages
             = new Dictionary<Image, string>();
@@ -29,7 +27,7 @@ namespace Bravo.Reporting
         private OdfDocument templateDocument;
         private OdfDocument resultDocument;
 
-        public TemplateRenderer(OdfDocument template)
+        public OdfTemplateRenderer(OdfDocument template)
         {
             if (template == null)
             {
@@ -58,13 +56,13 @@ namespace Bravo.Reporting
 
         private void MainRender(VelocityContext ctx, VelocityEngine ve)
         {
-            using (var inStream = this.resultDocument.GetEntryInputStream(OdfDocument.ContentEntry))
+            using (var inStream = this.resultDocument.GetEntryInputStream(OdfDocument.ContentEntryPath))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = this.resultDocument.GetEntryOutputStream(OdfDocument.ContentEntry))
+            using (var ws = this.resultDocument.GetEntryOutputStream(OdfDocument.ContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
                 //执行渲染
-                var successed = ve.Evaluate(ctx, writer, "OdfTemplateRender", reader);
+                var successed = ve.Evaluate(ctx, writer, "TemplateRender", reader);
                 if (!successed)
                 {
                     throw new TemplateException("Render template failed");
