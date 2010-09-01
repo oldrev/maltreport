@@ -22,7 +22,7 @@ namespace Bravo.Reporting
     public class TemplateRenderer
     {
 
-        private IDictionary<Image, string> images
+        private IDictionary<Image, string> userImages
             = new Dictionary<Image, string>();
 
         private OdfDocument templateDocument;
@@ -53,7 +53,7 @@ namespace Bravo.Reporting
             this.MainRender(ctx, ve);
 
             //处理 Manifest.xml 文件
-            if (this.images.Count > 0)
+            if (this.userImages.Count > 0)
             {
                 this.ProcessManifest();
             }
@@ -88,12 +88,12 @@ namespace Bravo.Reporting
                 manifestDoc.Load(manifestStream);
             }
 
-            if (this.images.Count > 0)
+            if (this.userImages.Count > 0)
             {
                 manifestDoc.CreatePicturesEntryElement();
             }
 
-            foreach (var item in this.images)
+            foreach (var item in this.userImages)
             {
                 manifestDoc.AppendFileEntry(item.Key.ExtensionName, item.Value);
             }
@@ -147,18 +147,14 @@ namespace Bravo.Reporting
             {
                 string filename = null;
 
-                if (this.images.ContainsKey(image))
+                if (this.userImages.ContainsKey(image))
                 {
-                    filename = this.images[image];
+                    filename = this.userImages[image];
                 }
                 else
                 {
-                    filename = "Pictures/" + image.DocumentFileName;
-                    using (var outStream = this.resultDocument.GetEntryOutputStream(filename))
-                    {
-                        outStream.Write(image.GetData(), 0, image.DataSize);
-                    }
-                    this.images.Add(image, filename);
+                    filename = this.resultDocument.AddImage(image);
+                    this.userImages.Add(image, filename);
                 }
 
                 using (var ws = new StringWriter(CultureInfo.InvariantCulture))

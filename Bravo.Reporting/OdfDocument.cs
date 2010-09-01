@@ -247,5 +247,15 @@ namespace Bravo.Reporting
             return Convert.ToBase64String(this.GetBuffer());
         }
 
+        public string AddImage(Image img)
+        {
+            var filename = "Pictures/" + img.DocumentFileName;
+            using (var outStream = this.GetEntryOutputStream(filename))
+            {
+                outStream.Write(img.GetData(), 0, img.DataSize);
+            }
+            return filename;
+        }
+
     }
 }
