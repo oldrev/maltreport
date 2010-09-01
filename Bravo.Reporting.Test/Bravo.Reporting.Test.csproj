@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageTest.cs" />
     <Compile Include="OdfTemplateTestHelper.cs" />
     <Compile Include="OdsTemplateTest.cs" />
     <Compile Include="OdtDocumentTest.cs" />

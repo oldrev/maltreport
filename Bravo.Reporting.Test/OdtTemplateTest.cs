@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Xml;
 
 using NUnit.Framework;
 
@@ -114,7 +115,25 @@ namespace Bravo.Reporting.Test
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"odf_docs/template_image.odt", ctx);
 
-            var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
+            var manifestDoc = new XmlDocument();
+            using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntry))
+            {
+                manifestDoc.Load(s);
+            }
+
+            manifestDoc.Save(Console.Out);
+
+            var mediaType = "manifest:media-type";
+            var imageCount = 0;
+            foreach (XmlElement e in manifestDoc.GetElementsByTagName("manifest:file-entry"))
+            {
+                if (e.HasAttribute(mediaType) && e.GetAttribute(mediaType) == "image/png")
+                {
+                    imageCount++;
+                }
+            }
+
+            Assert.AreEqual(2, imageCount);
 
         }
 

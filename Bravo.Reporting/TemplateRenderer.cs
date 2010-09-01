@@ -154,7 +154,7 @@ namespace Bravo.Reporting
                 else
                 {
                     filename = this.resultDocument.AddImage(image);
-                    this.userImages.Add(image, filename);
+                    this.userImages[image] = filename;
                 }
 
                 using (var ws = new StringWriter(CultureInfo.InvariantCulture))

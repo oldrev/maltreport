@@ -10,7 +10,7 @@ namespace Bravo.Reporting
     /// <summary>
     /// 
     /// </summary>
-    public class Image
+    public class Image : IEquatable<Image>
     {
         private byte[] data;
         private string documentFileName;
@@ -28,7 +28,7 @@ namespace Bravo.Reporting
             }
 
             this.Id = Guid.NewGuid();
-            this.ExtensionName = extensionName;
+            this.ExtensionName = extensionName.ToLowerInvariant();
             this.data = imageData;
             this.SetDocumentFileName();
         }
@@ -41,15 +41,15 @@ namespace Bravo.Reporting
             }
 
             this.Id = Guid.NewGuid();
-            this.ExtensionName = Path.GetExtension(imagePath).Substring(1);
+            this.ExtensionName = Path.GetExtension(imagePath).Substring(1).ToLowerInvariant();
             this.data = File.ReadAllBytes(imagePath);
             this.SetDocumentFileName();
         }
 
         private void SetDocumentFileName()
         {
-            this.documentFileName = 
-                this.Id.ToString("N").ToUpperInvariant() + "." + 
+            this.documentFileName =
+                this.Id.ToString("N").ToUpperInvariant() + "." +
                 this.ExtensionName.ToLowerInvariant();
         }
 
@@ -82,12 +82,37 @@ namespace Bravo.Reporting
 
         public override bool Equals(object obj)
         {
-            return this.Id.Equals(obj);
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            var rhs = obj as Image;
+            if (rhs == null)
+            {
+                return false;
+            }
+
+            if (this.Id == rhs.Id)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public override int GetHashCode()
         {
             return this.Id.GetHashCode();
         }
+
+        #region IEquatable<Image> 成员
+
+        public bool Equals(Image other)
+        {
+            return other.Id == this.Id;
+        }
+
+        #endregion
     }
 }
