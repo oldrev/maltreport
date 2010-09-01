@@ -14,6 +14,7 @@ namespace Bravo.Reporting.Demo
         {
             var dt = new DataTable("T_BIZ_CATEGORY");
 
+            //从数据库里查询数据填充 DataTable
             var connectionString =
                 @"Data Source=.\SQLEXPRESS;Initial Catalog=VoucherDev;Integrated Security=True;";
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -25,11 +26,14 @@ namespace Bravo.Reporting.Demo
                 adapter.Fill(dt);
             }
 
-            var context = new Dictionary<string, object>()
+            var renderContext = new Dictionary<string, object>()
             {
+                //传递简单的类型
                 {"title", "公司雇员一览表"},
                 {"property1", "属性1"},
                 {"property2", "属性2"},
+
+                // 可以传递具有强类型的对象数据给模板
                 {"employees",
                     new List<Employee>()
                     {
@@ -39,12 +43,14 @@ namespace Bravo.Reporting.Demo
                         new Employee("小明", "小明的地址", 19),
                     }
                 },
-                {"categories", dt},
-                {"now", DateTime.Now},
+
+                {"categories", dt}, //可以传递 DataTable 给模板
+
+                {"now", DateTime.Now}, //任何类型都可以传给模板
             };
 
 
-            var odt = new OdfDocument("template1.odt");
+            var odt = new OdfDocument("template1.odt"); //加载模板文档
             var ods = new OdfDocument("template2.ods");
 
             //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
@@ -53,6 +59,7 @@ namespace Bravo.Reporting.Demo
             var template1 = compiler.Compile(odt);
             var template2 = compiler.Compile(ods);
 
+            //保存编译后的报表，这并不是必须的
             using (var stFile = File.Open("template1.odt.st", FileMode.Create, FileAccess.ReadWrite))
             {
                 template1.Save(stFile);
@@ -64,7 +71,7 @@ namespace Bravo.Reporting.Demo
             }
 
             var tr1 = new TemplateRenderer(template1);
-            var result1 = tr1.Render(context);
+            var result1 = tr1.Render(renderContext);
 
             Console.WriteLine("正在生成 ODT 模板...");
             using (var resultFile = File.Open(
@@ -75,7 +82,7 @@ namespace Bravo.Reporting.Demo
 
             Console.WriteLine("正在生成 ODS 模板...");
             var tr2 = new TemplateRenderer(template2);
-            var result2 = tr2.Render(context);
+            var result2 = tr2.Render(renderContext);
             using (var resultFile2 = File.Open(
                 "result2.ods", FileMode.Create, FileAccess.ReadWrite))
             {

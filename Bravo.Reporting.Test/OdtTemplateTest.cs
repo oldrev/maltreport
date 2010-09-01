@@ -108,7 +108,7 @@ namespace Bravo.Reporting.Test
         {
             var ctx = new Dictionary<string, object>()
             {
-                { "image1", new Image("odf_docs/go-home.PNG") },
+                { "image1", new Image("png", File.ReadAllBytes("odf_docs/go-home.PNG")) },
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
@@ -116,11 +116,6 @@ namespace Bravo.Reporting.Test
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
-            if (File.Exists("d:\\image.odt"))
-            {
-                File.Delete("d:\\image.odt");
-            }
-            result.Save("d:\\image.odt");
         }
 
     }

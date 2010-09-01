@@ -134,7 +134,24 @@ namespace Bravo.Reporting
 
         private static void ProcessIdentifierTag(XmlDocument xml, XmlNode placeholder, string value)
         {
+            Debug.Assert(xml != null);
+            Debug.Assert(placeholder != null);
+            Debug.Assert(!string.IsNullOrEmpty(value));
+
             var ie = new IdentifierElement(xml, value);
+
+            if (placeholder.Name == "text:placeholder")
+            {
+                ProcessPlaceHolderElement(placeholder, ie);
+            }
+            else
+            {
+                placeholder.ParentNode.ReplaceChild(ie, placeholder);
+            }
+        }
+
+        private static void ProcessPlaceHolderElement(XmlNode placeholder, IdentifierElement ie)
+        {
             var placeholderType = placeholder.Attributes["text:placeholder-type"]
                 .InnerText.Trim().ToLowerInvariant(); ;
             //处理图像占位符
@@ -156,6 +173,9 @@ namespace Bravo.Reporting
 
         private static void ProcessImageTag(XmlNode placeholder, IdentifierElement ie)
         {
+            Debug.Assert(placeholder != null);
+            Debug.Assert(ie != null);
+
             //向上查找 drawbox
             var drawboxNode = LookupAncestor(placeholder, "draw:text-box");
             if (drawboxNode.Name != "draw:text-box")
