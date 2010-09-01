@@ -28,7 +28,7 @@ namespace Bravo.Reporting.OpenDocument
             var odfTemplate = new OdfDocument();
             inputOdf.CopyTo(odfTemplate);
 
-            var xml = LoadXml(odfTemplate);
+            var xml = odfTemplate.ReadContentXml();
             var nsmanager = new OdfNamespaceManager(xml.NameTable);
 
             //第1遍，先处理简单的Tag 替换
@@ -37,7 +37,7 @@ namespace Bravo.Reporting.OpenDocument
             //第2遍，处理表格循环
             ProcessTableRowNodes(xml, nsmanager);
 
-            SaveXml(odfTemplate, xml);
+            odfTemplate.WriteContentXml(xml);
 
             return odfTemplate;
         }
@@ -210,25 +210,6 @@ namespace Bravo.Reporting.OpenDocument
             return ancestor;
         }
 
-
-        private static void SaveXml(OdfDocument odfTemplate, XmlDocument xml)
-        {
-            using (var cos = odfTemplate.GetEntryOutputStream(OdfDocument.ContentEntry))
-            using (var writer = new XmlTextWriter(cos, Encoding.UTF8))
-            {
-                xml.WriteTo(writer);
-            }
-        }
-
-        private static XmlDocument LoadXml(OdfDocument odfTemplate)
-        {
-            var xml = new XmlDocument();
-            using (var contentStream = odfTemplate.GetEntryInputStream(OdfDocument.ContentEntry))
-            {
-                xml.Load(contentStream);
-            }
-            return xml;
-        }
 
         #endregion
     }

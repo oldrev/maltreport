@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Xml;
 
 using ICSharpCode.SharpZipLib.Zip;
 
@@ -247,6 +248,8 @@ namespace Bravo.Reporting.OpenDocument
             return Convert.ToBase64String(this.GetBuffer());
         }
 
+        // 下面几个方法是否要提升一级？
+
         public string AddImage(Image img)
         {
             var fullPath = "Pictures/" + img.DocumentFileName;
@@ -271,6 +274,31 @@ namespace Bravo.Reporting.OpenDocument
 
             return fullPath;
         }
+
+        public void WriteContentXml(XmlDocument xml)
+        {
+            if (xml == null)
+            {
+                throw new ArgumentNullException("xml");
+            }
+
+            using (var cos = this.GetEntryOutputStream(OdfDocument.ContentEntry))
+            using (var writer = new XmlTextWriter(cos, Encoding.UTF8))
+            {
+                xml.WriteTo(writer);
+            }
+        }
+
+        public XmlDocument ReadContentXml()
+        {
+            var xml = new XmlDocument();
+            using (var contentStream = this.GetEntryInputStream(OdfDocument.ContentEntry))
+            {
+                xml.Load(contentStream);
+            }
+            return xml;
+        }
+
 
     }
 }
