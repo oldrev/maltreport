@@ -12,6 +12,11 @@ namespace Bravo.Reporting
     public interface ITemplateCompiler
     {
 
+        /// <summary>
+        /// 编译模板
+        /// </summary>
+        /// <param name="inputOdf"></param>
+        /// <returns></returns>
         OdfDocument Compile(OdfDocument inputOdf);
 
     }

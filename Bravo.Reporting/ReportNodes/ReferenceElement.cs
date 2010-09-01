@@ -10,12 +10,12 @@ using System.Diagnostics;
 
 namespace Bravo.Reporting.ReportNodes
 {
-    internal class IdentifierElement : XmlElement
+    internal class ReferenceElement : XmlElement
     {
         private string expression = null;
 
-        public IdentifierElement(XmlDocument doc, string exp)
-            : base(string.Empty, "report-identifier", string.Empty, doc)
+        public ReferenceElement(XmlDocument doc, string exp)
+            : base(string.Empty, "report-reference", string.Empty, doc)
         {
             Debug.Assert(doc != null);
             Debug.Assert(exp != null);

@@ -126,7 +126,7 @@ namespace Bravo.Reporting.OpenDocument
             Debug.Assert(placeholder != null);
             Debug.Assert(!string.IsNullOrEmpty(value));
 
-            var ie = new IdentifierElement(xml, value);
+            var ie = new ReferenceElement(xml, value);
 
             if (placeholder.Name == "text:placeholder")
             {
@@ -138,7 +138,7 @@ namespace Bravo.Reporting.OpenDocument
             }
         }
 
-        private static void ProcessPlaceHolderElement(XmlNode placeholder, IdentifierElement ie)
+        private static void ProcessPlaceHolderElement(XmlNode placeholder, ReferenceElement ie)
         {
             var placeholderType = placeholder.Attributes["text:placeholder-type"]
                 .InnerText.Trim().ToLowerInvariant(); ;
@@ -159,7 +159,7 @@ namespace Bravo.Reporting.OpenDocument
             }
         }
 
-        private static void ProcessImageTag(XmlNode placeholder, IdentifierElement ie)
+        private static void ProcessImageTag(XmlNode placeholder, ReferenceElement ie)
         {
             Debug.Assert(placeholder != null);
             Debug.Assert(ie != null);
