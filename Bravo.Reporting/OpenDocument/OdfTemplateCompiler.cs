@@ -31,6 +31,7 @@ namespace Bravo.Reporting.OpenDocument
 
             var xml = t.ReadMainContentXml();
             var nsmanager = new OdfNamespaceManager(xml.NameTable);
+            nsmanager.LoadOpenDocumentNamespaces();
 
             //第1遍，先处理简单的Tag 替换
             ClearTextTags(xml, nsmanager);

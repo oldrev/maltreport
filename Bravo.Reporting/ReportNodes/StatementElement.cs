@@ -14,7 +14,7 @@ namespace Bravo.Reporting.ReportNodes
     /// <summary>
     /// VTL Statement XML Element
     /// </summary>
-    internal class StatementElement : XmlElement
+    internal sealed class StatementElement : XmlElement
     {
         private string statement;
         public StatementElement(XmlDocument doc, string exp, string directive)

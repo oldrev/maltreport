@@ -27,18 +27,6 @@ namespace Bravo.Reporting.OpenDocument
             this.Path = null;
         }
 
-        public OdfDocument(string odfPath)
-        {
-            if (string.IsNullOrEmpty(odfPath))
-            {
-                throw new ArgumentNullException("odfPath");
-            }
-
-            this.Path = odfPath;
-
-            this.LoadContents(odfPath);
-        }
-
         public OdfDocument(Stream documentStream)
         {
             if (documentStream == null)
@@ -76,6 +64,18 @@ namespace Bravo.Reporting.OpenDocument
                     }
                 }
             }
+        }
+
+        public void Load(string odfPath)
+        {
+            if (string.IsNullOrEmpty(odfPath))
+            {
+                throw new ArgumentNullException("odfPath");
+            }
+
+            this.Path = odfPath;
+
+            this.LoadContents(odfPath);
         }
 
         public override void Save(Stream outStream)

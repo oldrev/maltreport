@@ -47,6 +47,7 @@ namespace Bravo.Reporting.OpenDocument
         private void Init()
         {
             this.nsmanager = new OdfNamespaceManager(this.NameTable);
+            this.nsmanager.LoadOpenDocumentNamespaces();
 
             this.manifestElement = (XmlElement)this.SelectSingleNode(@"/manifest:manifest", nsmanager);
 

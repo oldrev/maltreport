@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Bravo.Reporting.ReportNodes
 {
-    internal class ReferenceElement : XmlElement
+    internal sealed class ReferenceElement : XmlElement
     {
         private string expression = null;
 

@@ -16,7 +16,8 @@ namespace Bravo.Reporting.Test
         /// <returns></returns>
         public static IDocument RenderTemplate(string odfPath, IDictionary<string, object> context)
         {
-            var odf = new OdfDocument(odfPath);
+            var odf = new OdfDocument();
+            odf.Load(odfPath);
             var compiler = new OdfTemplateCompiler();
             var template = compiler.Compile(odf);
             return template.Render(context);
