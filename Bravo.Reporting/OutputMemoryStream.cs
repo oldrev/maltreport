@@ -41,6 +41,22 @@ namespace Bravo.Reporting
             }
         }
 
+        public override bool CanSeek
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool CanWrite
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override int Read(byte[] buffer, int offset, int count)
         {
             throw new NotSupportedException();

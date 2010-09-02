@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Bravo.Reporting
 {
-    public interface ICompiledTemplate
+    public interface ITemplateCompiler
     {
+        ITemplate Compile(IDocument doc);
     }
 }

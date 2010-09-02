@@ -14,20 +14,21 @@ namespace Bravo.Reporting.Test
         /// </summary>
         /// <param name="odfPath"></param>
         /// <returns></returns>
-        public static OdfDocument RenderTemplate(string odfPath, IDictionary<string, object> context)
+        public static IDocument RenderTemplate(string odfPath, IDictionary<string, object> context)
         {
             var odf = new OdfDocument(odfPath);
             var compiler = new OdfTemplateCompiler();
             var template = compiler.Compile(odf);
-            var tr = new OdfTemplateRenderer(template);
-            return tr.Render(context);
+            return template.Render(context);
         }
 
-        public static XmlDocument GetContentDocument(OdfDocument odfDoc)
+        public static XmlDocument GetContentDocument(IDocument odfTemplate)
         {
-            var inputStream = odfDoc.GetEntryInputStream(OdfDocument.ContentEntryPath);
             var xmldoc = new XmlDocument();
-            xmldoc.Load(inputStream);
+            using (var inputStream = odfTemplate.GetEntryInputStream(odfTemplate.MainContentEntryPath))
+            {
+                xmldoc.Load(inputStream);
+            }
             return xmldoc;
         }
     }

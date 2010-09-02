@@ -19,29 +19,19 @@ using NVelocity.Context;
 
 namespace Bravo.Reporting.OpenDocument
 {
-    public class OdfTemplateRenderer 
+    public class OdfTemplate : OdfDocument, ITemplate
     {
         private IDictionary<Image, string> userImages
             = new Dictionary<Image, string>();
 
-        private OdfDocument templateDocument;
-        private OdfDocument resultDocument;
+        private IDocument resultDocument;
 
-        public OdfTemplateRenderer(OdfDocument template)
-        {
-            if (template == null)
-            {
-                throw new ArgumentNullException("template");
-            }
+        #region ITemplate 接口实现
 
-            this.templateDocument = template;
-
-        }
-
-        public OdfDocument Render(IDictionary<string, object> data)
+        public IDocument Render(IDictionary<string, object> data)
         {
             this.resultDocument = new OdfDocument();
-            this.templateDocument.CopyTo(this.resultDocument);
+            this.resultDocument = (OdfDocument)this.Clone();
 
             var ctx = CreateVelocityContext(data);
 
@@ -54,11 +44,13 @@ namespace Bravo.Reporting.OpenDocument
             return this.resultDocument;
         }
 
+        #endregion
+
         private void MainRender(VelocityContext ctx, VelocityEngine ve)
         {
-            using (var inStream = this.resultDocument.GetEntryInputStream(OdfDocument.ContentEntryPath))
+            using (var inStream = this.resultDocument.GetEntryInputStream(this.resultDocument.MainContentEntryPath))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = this.resultDocument.GetEntryOutputStream(OdfDocument.ContentEntryPath))
+            using (var ws = this.resultDocument.GetEntryOutputStream(this.resultDocument.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
                 //执行渲染

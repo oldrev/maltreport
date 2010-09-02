@@ -11,10 +11,9 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace Bravo.Reporting.OpenDocument
 {
-    public class OdfDocument : ITemplate, ICompiledTemplate
+    public class OdfDocument : DocumentBase
     {
         public const string MimeTypeEntryPath = "mimetype";
-        public const string ContentEntryPath = "content.xml";
         public const string ManifestEntryPath = "META-INF/manifest.xml";
         public const string SettingsEntryPath = "settings.xml";
 
@@ -25,7 +24,7 @@ namespace Bravo.Reporting.OpenDocument
 
         public OdfDocument()
         {
-            this.OdfPath = null;
+            this.Path = null;
         }
 
         public OdfDocument(string odfPath)
@@ -35,7 +34,7 @@ namespace Bravo.Reporting.OpenDocument
                 throw new ArgumentNullException("odfPath");
             }
 
-            this.OdfPath = odfPath;
+            this.Path = odfPath;
 
             this.LoadContents(odfPath);
         }
@@ -65,7 +64,7 @@ namespace Bravo.Reporting.OpenDocument
             Debug.Assert(stream != null);
 
             //把 zip 的内容加载到内存
-            using (var zf = new ZipFile(this.OdfPath))
+            using (var zf = new ZipFile(this.Path))
             {
                 foreach (ZipEntry ze in zf)
                 {
@@ -79,7 +78,7 @@ namespace Bravo.Reporting.OpenDocument
             }
         }
 
-        public void Save(Stream outStream)
+        public override void Save(Stream outStream)
         {
             if (outStream == null || !outStream.CanWrite)
             {
@@ -110,20 +109,7 @@ namespace Bravo.Reporting.OpenDocument
                 }
             }
         }
-
-        public void Save(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new ArgumentNullException("path");
-            }
-
-            using (var fs = File.Open(path, FileMode.CreateNew, FileAccess.Write))
-            {
-                this.Save(fs);
-            }
-        }
-
+  
         private void WriteZipEntry(ZipOutputStream zipStream, string name)
         {
             Debug.Assert(zipStream != null);
@@ -137,27 +123,17 @@ namespace Bravo.Reporting.OpenDocument
             zipStream.CloseEntry();
         }
 
-        public string OdfPath { get; set; }
+        public string Path { get; private set; }
 
-        public ICollection<string> OdfEntryNames
+        public override ICollection<string> EntryPaths
         {
             get { return this.odfEntries.Keys; }
         }
 
-        public Stream GetEntryInputStream(string name)
+        public override Stream GetEntryInputStream(string entryPath)
         {
-            var data = this.odfEntries[name];
+            var data = this.odfEntries[entryPath];
             return new MemoryStream(data);
-        }
-
-        public TextReader GetEntryTextReader(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name");
-            }
-
-            return new StreamReader(this.GetEntryInputStream(name));
         }
 
         /// <summary>
@@ -165,92 +141,29 @@ namespace Bravo.Reporting.OpenDocument
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Stream GetEntryOutputStream(string name)
+        public override Stream GetEntryOutputStream(string entryPath)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(entryPath))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException("entryPath");
             }
 
-            var oms = new OutputMemoryStream(name, this.odfEntries);
-            this.odfEntries[name] = oms.GetBuffer();
+            var oms = new OutputMemoryStream(entryPath, this.odfEntries);
+            this.odfEntries[entryPath] = oms.GetBuffer();
 
             return oms;
         }
 
-        public TextWriter GetEntryTextWriter(string name)
+        public override bool EntryExists(string entryPath)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(entryPath))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException("entryPath");
             }
-
-            return new StreamWriter(this.GetEntryOutputStream(name));
+            return this.odfEntries.ContainsKey(entryPath);
         }
 
-        public bool EntryExists(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name");
-            }
-            return this.odfEntries.ContainsKey(name);
-        }
-
-        public void CopyTo(OdfDocument destDoc)
-        {
-            if (destDoc == null)
-            {
-                throw new ArgumentNullException("destDoc");
-            }
-
-            foreach (var item in this.odfEntries)
-            {
-                using (var outStream = destDoc.GetEntryOutputStream(item.Key))
-                {
-                    outStream.Write(item.Value, 0, item.Value.Length);
-                }
-            }
-        }
-
-        protected static void CopyStream(Stream src, Stream dest)
-        {
-            if (src == null)
-            {
-                throw new ArgumentNullException("src");
-            }
-
-            if (dest == null)
-            {
-                throw new ArgumentNullException("dest");
-            }
-
-            var bufSize = 2048;
-            var buf = new byte[bufSize];
-            int nRead = 0;
-            while ((nRead = src.Read(buf, 0, bufSize)) > 0)
-            {
-                dest.Write(buf, 0, nRead);
-            }
-        }
-
-        public byte[] GetBuffer()
-        {
-            using (var ms = new MemoryStream())
-            {
-                this.Save(ms);
-                return ms.GetBuffer();
-            }
-        }
-
-        public string ToBase64String()
-        {
-            return Convert.ToBase64String(this.GetBuffer());
-        }
-
-        // 下面几个方法是否要提升一级？
-
-        public string AddImage(Image img)
+        public override string AddImage(Image img)
         {
             var fullPath = "Pictures/" + img.DocumentFileName;
             using (var outStream = this.GetEntryOutputStream(fullPath))
@@ -275,38 +188,19 @@ namespace Bravo.Reporting.OpenDocument
             return fullPath;
         }
 
-        public void WriteXmlEntry(XmlDocument xml, string entryPath)
+
+        public override string MainContentEntryPath { get { return "content.xml"; } }
+
+        public override object Clone()
         {
-            if (xml == null)
+            var o = new OdfDocument();
+            foreach (var item in this.odfEntries)
             {
-                throw new ArgumentNullException("xml");
+                var newBuf = new byte[item.Value.Length];
+                Buffer.BlockCopy(item.Value, 0, newBuf, 0, item.Value.Length);
+                o.odfEntries.Add(item.Key, newBuf);
             }
-
-            using (var cos = this.GetEntryOutputStream(entryPath))
-            using (var writer = new XmlTextWriter(cos, Encoding.UTF8))
-            {
-                xml.WriteTo(writer);
-            }
-        }
-
-        public XmlDocument ReadXmlEntry(string entryPath)
-        {
-            var xml = new XmlDocument();
-            using (var contentStream = this.GetEntryInputStream(entryPath))
-            {
-                xml.Load(contentStream);
-            }
-            return xml;
-        }
-
-        public void WriteContentXml(XmlDocument xml)
-        {
-            this.WriteXmlEntry(xml, ContentEntryPath);
-        }
-
-        public XmlDocument ReadContentXml()
-        {
-            return this.ReadXmlEntry(ContentEntryPath);
+            return o;
         }
     }
 }

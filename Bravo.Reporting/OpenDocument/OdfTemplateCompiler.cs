@@ -1,7 +1,5 @@
 ﻿//作者：李维
 //创建时间：2010-08-20
-
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,20 +11,25 @@ using Bravo.Reporting.ReportNodes;
 namespace Bravo.Reporting.OpenDocument
 {
     /// <summary>
-    /// ODF 编译器
+    /// ODF 模板编译器
     /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
     /// </summary>
-    public class OdfTemplateCompiler
+    public class OdfTemplateCompiler : ITemplateCompiler
     {
         public const string PlaceHolderPattern =
             @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
-        public OdfDocument Compile(OdfDocument inputOdf)
+        public ITemplate Compile(IDocument doc)
         {
-            var odfTemplate = new OdfDocument();
-            inputOdf.CopyTo(odfTemplate);
+            if (doc.GetType() != typeof(OdfDocument))
+            {
+                throw new ArgumentException("只支持编译 OdfDocument 类型", "doc");
+            }
 
-            var xml = odfTemplate.ReadContentXml();
+            var t = new OdfTemplate();
+            doc.CopyTo(t);
+
+            var xml = t.ReadMainContentXml();
             var nsmanager = new OdfNamespaceManager(xml.NameTable);
 
             //第1遍，先处理简单的Tag 替换
@@ -35,9 +38,9 @@ namespace Bravo.Reporting.OpenDocument
             //第2遍，处理表格循环
             ProcessTableRowNodes(xml, nsmanager);
 
-            odfTemplate.WriteContentXml(xml);
+            t.WriteMainContentXml(xml);
 
-            return odfTemplate;
+            return t;
         }
 
         private static void ProcessTableRowNodes(XmlDocument xml, XmlNamespaceManager nsmanager)
@@ -153,7 +156,7 @@ namespace Bravo.Reporting.OpenDocument
                     break;
 
                 default:
-                    throw new SyntaxErrorException("不支持的占位符类型：" + placeholderType);
+                    throw new SyntaxErrorException("Unsupported placeholder type: " + placeholderType);
             }
         }
 
