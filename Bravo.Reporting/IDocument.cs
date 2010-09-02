@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Bravo.Reporting
 {
-    public interface IDocument : ICloneable
+    public interface IDocument
     {
         void Save(Stream outStream);
         void Save(string path);

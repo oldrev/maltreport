@@ -113,16 +113,6 @@ namespace Bravo.Reporting
             return this.ReadXmlEntry(this.MainContentEntryPath);
         }
 
-        public virtual object Clone()
-        {
-            var o = Activator.CreateInstance(this.GetType()) as IDocument;
-            Debug.Assert(o != null);
-
-            this.CopyTo(o);
-
-            return o;
-        }
-
         public abstract ICollection<string> EntryPaths { get; }
 
         public abstract bool EntryExists(string entryPath);

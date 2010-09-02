@@ -190,17 +190,5 @@ namespace Bravo.Reporting.OpenDocument
 
 
         public override string MainContentEntryPath { get { return "content.xml"; } }
-
-        public override object Clone()
-        {
-            var o = new OdfDocument();
-            foreach (var item in this.odfEntries)
-            {
-                var newBuf = new byte[item.Value.Length];
-                Buffer.BlockCopy(item.Value, 0, newBuf, 0, item.Value.Length);
-                o.odfEntries.Add(item.Key, newBuf);
-            }
-            return o;
-        }
     }
 }

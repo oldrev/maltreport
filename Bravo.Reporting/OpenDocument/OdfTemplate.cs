@@ -31,7 +31,7 @@ namespace Bravo.Reporting.OpenDocument
         public IDocument Render(IDictionary<string, object> data)
         {
             this.resultDocument = new OdfDocument();
-            this.resultDocument = (OdfDocument)this.Clone();
+            this.CopyTo(this.resultDocument);
 
             var ctx = CreateVelocityContext(data);
 
