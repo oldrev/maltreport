@@ -15,20 +15,20 @@ namespace Bravo.Reporting
     internal sealed class OutputMemoryStream : MemoryStream
     {
         private string name;
-        private IDictionary<string, byte[]> odfEntries;
+        private IDictionary<string, byte[]> entries;
 
-        public OutputMemoryStream(string name, IDictionary<string, byte[]> odfEntries)
+        public OutputMemoryStream(string name, IDictionary<string, byte[]> entries)
         {
-            Debug.Assert(odfEntries != null);
+            Debug.Assert(entries != null);
             Debug.Assert(!string.IsNullOrEmpty(name));
 
             this.name = name;
-            this.odfEntries = odfEntries;
+            this.entries = entries;
         }
 
         protected override void Dispose(bool disposing)
         {
-            this.odfEntries[this.name] = this.ToArray();
+            this.entries[this.name] = this.ToArray();
 
             base.Dispose(disposing);
         }

@@ -1,5 +1,5 @@
 ﻿//作者：李维
-//创建时间：2010-08-20
+//创建时间：2010-09-03
 
 using System;
 using System.Collections.Generic;
@@ -17,30 +17,18 @@ using NVelocity.App.Events;
 using NVelocity;
 using NVelocity.Context;
 
-namespace Bravo.Reporting.OpenDocument
+namespace Bravo.Reporting.Excel2003Xml
 {
-    public class OdfTemplate : OdfDocument, ITemplate
+    public class ExcelXmlTemplate : ExcelXmlDocument, ITemplate
     {
-        private IDictionary<Image, string> userImages
-            = new Dictionary<Image, string>();
-
         private IDocument resultDocument;
-
-        private IDictionary<Type, IRenderFilter> filters;
-
 
         #region ITemplate 接口实现
 
         public IDocument Render(IDictionary<string, object> data)
         {
-            this.resultDocument = new OdfDocument();
+            this.resultDocument = new ExcelXmlDocument();
             this.CopyTo(this.resultDocument);
-
-            this.filters = new Dictionary<Type, IRenderFilter>()
-            {
-                 { typeof(string), new XmlStringRenderFilter() },
-                 { typeof(Image), new OdfImageRenderFilter(this.userImages, this.resultDocument) },
-            };
 
             var ctx = CreateVelocityContext(data);
 
@@ -81,7 +69,7 @@ namespace Bravo.Reporting.OpenDocument
             }
 
             EventCartridge eventCart = new EventCartridge();
-            eventCart.ReferenceInsertion += this.OnReferenceInsertion;
+            eventCart.ReferenceInsertion += this.OnStringReferenceInsertion;
             ctx.AttachEventCartridge(eventCart);
             return ctx;
         }
@@ -91,17 +79,13 @@ namespace Bravo.Reporting.OpenDocument
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void OnReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
+        void OnStringReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
         {
-            var t = e.OriginalValue.GetType();
-            IRenderFilter filter = null;
-            var hasFilter = this.filters.TryGetValue(t, out filter);
-            if (hasFilter)
+            var originalStr = e.OriginalValue as string;
+            if (originalStr != null)
             {
-                Debug.Assert(filter != null);
-                e.NewValue = filter.Filter(e.OriginalValue);
+                e.NewValue = SecurityElement.Escape(originalStr);
             }
         }
-
     }
 }

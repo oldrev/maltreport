@@ -10,6 +10,9 @@ namespace Bravo.Reporting
         void Save(Stream outStream);
         void Save(string path);
 
+        void Load(Stream inStream);
+        void Load(string path);
+
         Stream GetEntryInputStream(string entryPath);
         Stream GetEntryOutputStream(string entryPath);
 

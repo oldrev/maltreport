@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Bravo.Reporting.ReportNodes;
+using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.OpenDocument
 {

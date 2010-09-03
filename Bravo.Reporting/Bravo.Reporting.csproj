@@ -57,18 +57,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Excel2003Xml\ExcelXmlDocument.cs" />
+    <Compile Include="Excel2003Xml\ExcelXmlNamespaceManager.cs" />
+    <Compile Include="Excel2003Xml\ExcelXmlTemplate.cs" />
+    <Compile Include="Excel2003Xml\ExcelXmlTemplateCompiler.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
+    <Compile Include="IRenderFilter.cs" />
     <Compile Include="ITemplate.cs" />
     <Compile Include="ITemplateCompiler.cs" />
     <Compile Include="OpenDocument\OdfDocument.cs" />
+    <Compile Include="OpenDocument\OdfImageRenderFilter.cs" />
     <Compile Include="OpenDocument\OdfNamespaceManager.cs" />
     <Compile Include="OpenDocument\OdfTemplateCompiler.cs" />
     <Compile Include="OpenDocument\OdfManifestDocument.cs" />
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportNodes\ReferenceElement.cs" />
-    <Compile Include="ReportNodes\StatementElement.cs" />
+    <Compile Include="XmlStringRenderFilter.cs" />
+    <Compile Include="Xml\ReferenceElement.cs" />
+    <Compile Include="Xml\StatementElement.cs" />
     <Compile Include="SyntaxErrorException.cs" />
     <Compile Include="DocumentBase.cs" />
     <Compile Include="TemplateException.cs" />
@@ -76,9 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="TODO.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Excel2003Xml\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

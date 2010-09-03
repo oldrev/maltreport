@@ -13,46 +13,28 @@ namespace Bravo.Reporting.OpenDocument
 {
     public class OdfDocument : DocumentBase
     {
-        public const string MimeTypeEntryPath = "mimetype";
+        internal const string MimeTypeEntryPath = "mimetype";
+        internal const string SettingsEntryPath = "settings.xml";
+
         public const string ManifestEntryPath = "META-INF/manifest.xml";
-        public const string SettingsEntryPath = "settings.xml";
 
         /// <summary>
         /// 加载到内存的 ODF 的文件内容
         /// </summary>
-        private IDictionary<string, byte[]> odfEntries = new Dictionary<string, byte[]>();
+        private IDictionary<string, byte[]> entries = new Dictionary<string, byte[]>();
 
         public OdfDocument()
         {
-            this.Path = null;
         }
 
-        public OdfDocument(Stream documentStream)
-        {
-            if (documentStream == null)
-            {
-                throw new ArgumentNullException("documentStream");
-            }
-
-            this.LoadContents(documentStream);
-        }
-
-        private void LoadContents(string path)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(path));
-
-            using (var fs = File.OpenRead(path))
-            {
-                this.LoadContents(fs);
-            }
-        }
-
-        private void LoadContents(Stream stream)
+        public override void Load(Stream stream)
         {
             Debug.Assert(stream != null);
 
+            this.entries.Clear();
+
             //把 zip 的内容加载到内存
-            using (var zf = new ZipFile(this.Path))
+            using (var zf = new ZipFile(stream))
             {
                 foreach (ZipEntry ze in zf)
                 {
@@ -66,18 +48,6 @@ namespace Bravo.Reporting.OpenDocument
             }
         }
 
-        public void Load(string odfPath)
-        {
-            if (string.IsNullOrEmpty(odfPath))
-            {
-                throw new ArgumentNullException("odfPath");
-            }
-
-            this.Path = odfPath;
-
-            this.LoadContents(odfPath);
-        }
-
         public override void Save(Stream outStream)
         {
             if (outStream == null || !outStream.CanWrite)
@@ -86,7 +56,7 @@ namespace Bravo.Reporting.OpenDocument
             }
 
             //ODF 格式约定 mimetype 必须为第一个文件
-            if (!this.odfEntries.ContainsKey(MimeTypeEntryPath))
+            if (!this.entries.ContainsKey(MimeTypeEntryPath))
             {
                 throw new InvalidDataException("Can not found entry: 'mimetype'");
             }
@@ -98,7 +68,7 @@ namespace Bravo.Reporting.OpenDocument
 
                 this.WriteZipEntry(zos, MimeTypeEntryPath);
 
-                foreach (var item in this.odfEntries)
+                foreach (var item in this.entries)
                 {
                     if (item.Key == MimeTypeEntryPath)
                     {
@@ -114,25 +84,23 @@ namespace Bravo.Reporting.OpenDocument
         {
             Debug.Assert(zipStream != null);
             Debug.Assert(!string.IsNullOrEmpty(name));
-            Debug.Assert(this.odfEntries.ContainsKey(name));
+            Debug.Assert(this.entries.ContainsKey(name));
 
-            var data = this.odfEntries[name];
+            var data = this.entries[name];
             var ze = new ZipEntry(name);
             zipStream.PutNextEntry(ze);
             zipStream.Write(data, 0, data.Length);
             zipStream.CloseEntry();
         }
 
-        public string Path { get; private set; }
-
         public override ICollection<string> EntryPaths
         {
-            get { return this.odfEntries.Keys; }
+            get { return this.entries.Keys; }
         }
 
         public override Stream GetEntryInputStream(string entryPath)
         {
-            var data = this.odfEntries[entryPath];
+            var data = this.entries[entryPath];
             return new MemoryStream(data);
         }
 
@@ -148,8 +116,8 @@ namespace Bravo.Reporting.OpenDocument
                 throw new ArgumentNullException("entryPath");
             }
 
-            var oms = new OutputMemoryStream(entryPath, this.odfEntries);
-            this.odfEntries[entryPath] = oms.GetBuffer();
+            var oms = new OutputMemoryStream(entryPath, this.entries);
+            this.entries[entryPath] = oms.GetBuffer();
 
             return oms;
         }
@@ -160,7 +128,7 @@ namespace Bravo.Reporting.OpenDocument
             {
                 throw new ArgumentNullException("entryPath");
             }
-            return this.odfEntries.ContainsKey(entryPath);
+            return this.entries.ContainsKey(entryPath);
         }
 
         public override string AddImage(Image img)

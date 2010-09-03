@@ -8,7 +8,7 @@ using System.Text;
 using System.Xml;
 using System.Diagnostics;
 
-namespace Bravo.Reporting.ReportNodes
+namespace Bravo.Reporting.Xml
 {
     internal sealed class ReferenceElement : XmlElement
     {

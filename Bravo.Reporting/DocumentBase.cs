@@ -16,7 +16,8 @@ namespace Bravo.Reporting
 
         #region ITemplate 成员
 
-        public abstract void Save(System.IO.Stream outStream);
+        public abstract void Save(Stream outStream);
+        public abstract void Load(Stream inStream);
 
         public virtual void Save(string path)
         {
@@ -28,6 +29,19 @@ namespace Bravo.Reporting
             using (var fs = File.Open(path, FileMode.CreateNew, FileAccess.Write))
             {
                 this.Save(fs);
+            }
+        }
+
+        public virtual void Load(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            using (var fs = File.Open(path, FileMode.Open, FileAccess.Read))
+            {
+                this.Load(fs);
             }
         }
 

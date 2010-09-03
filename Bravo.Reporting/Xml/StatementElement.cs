@@ -9,7 +9,7 @@ using System.Xml;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 
-namespace Bravo.Reporting.ReportNodes
+namespace Bravo.Reporting.Xml
 {
     /// <summary>
     /// VTL Statement XML Element
