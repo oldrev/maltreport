@@ -16,8 +16,17 @@ namespace Bravo.Reporting.Excel2003Xml
     /// </summary>
     public class ExcelXmlTemplateCompiler : ITemplateCompiler
     {
-        public const string PlaceHolderPattern =
-            @"//Cell[starts-with(@ss:HRef, 'rtl://')]";
+        private const string HRefAttribute = "ss:HRef";
+
+        private static readonly Dictionary<string, INodeVisitor> visitors =
+            new Dictionary<string, INodeVisitor>()
+            {
+                { "Table", new TableNodeVisitor() },
+                { "Row", new RowNodeVisitor() },
+                { "Column", new ColumnNodeVisitor() },
+                { "Cell", new CellNodeVisitor() },
+
+            };
 
         public ITemplate Compile(IDocument doc)
         {
@@ -33,13 +42,119 @@ namespace Bravo.Reporting.Excel2003Xml
             var nsmanager = new ExcelXmlNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 
-            //第一步
+            ClearTemplate(xml);
 
-
+            this.ProcessPlaceHolders(xml);
 
             t.WriteMainContentXml(xml);
 
             return t;
+        }
+
+        private void ProcessPlaceHolders(XmlDocument xml)
+        {
+            var workbookNode = FindFirstChildNode(xml, "Workbook");
+
+            if (workbookNode == null)
+            {
+                throw new TemplateException("无效的 Excel 2003 Xml 文件格式");
+            }
+
+            var placeholders = FindAllPlaceholders(workbookNode);
+
+            foreach (XmlElement phe in placeholders)
+            {
+                var attr = phe.GetAttribute(HRefAttribute);
+                var value = attr.Substring(5).Trim('/', ' ');
+
+                if (value.Length < 2)
+                {
+                    throw new SyntaxErrorException();
+                }
+
+                if (value[0] == '#')
+                {
+                    ProcessStatementTag(xml, phe, value);
+                }
+                else if (value[0] == '$')
+                {
+                    ProcessReferenceTag(phe, value);
+                }
+                else
+                {
+                    throw new SyntaxErrorException(attr);
+                }
+
+            }
+        }
+
+        private static void ClearTemplate(XmlNode doc)
+        {
+            //把所有的行数和列数设置去掉, Excel 会自动计算的
+            //ss:ExpandedColumnCount="5" ss:ExpandedRowCount="3"
+            var nodes = doc.SelectNodes("//*");
+            foreach (XmlElement e in nodes)
+            {
+                INodeVisitor visitor = null;
+                if (visitors.TryGetValue(e.Name, out visitor))
+                {
+                    visitor.ProcessNode(e);
+                }
+            }
+        }
+
+        private static void ProcessReferenceTag(XmlElement phe, string value)
+        {
+            phe.RemoveAttribute(HRefAttribute);
+            phe.Value = value;
+        }
+
+        private static void ProcessStatementTag(XmlDocument xml, XmlElement phe, string value)
+        {
+            var se = new StatementElement(xml, value, "null");
+            if (phe.ParentNode.ChildNodes.Count == 1)
+            {
+                phe.ParentNode.ParentNode.ReplaceChild(se, phe.ParentNode);
+            }
+            else
+            {
+                phe.ParentNode.ReplaceChild(phe, se);
+            }
+        }
+
+        private static List<XmlElement> FindAllPlaceholders(XmlNode doc)
+        {
+            var placeholders = new List<XmlElement>();
+            var allNodes = doc.SelectNodes("//*");
+
+            foreach (XmlElement e in allNodes)
+            {
+                if (e.Name == "Cell" && e.HasAttribute(HRefAttribute))
+                {
+                    var attr = e.GetAttribute(HRefAttribute);
+                    if (attr.StartsWith("rtl://"))
+                    {
+                        placeholders.Add(e);
+                    }
+                }
+            }
+
+            return placeholders;
+        }
+
+        private XmlNode FindFirstChildNode(XmlNode parent, string childName)
+        {
+            Debug.Assert(parent != null);
+            Debug.Assert(!string.IsNullOrEmpty(childName));
+            foreach (XmlNode n in parent.ChildNodes)
+            {
+                if (n.Name == childName)
+                {
+                    return n;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -61,6 +61,11 @@
     <Compile Include="Excel2003Xml\ExcelXmlNamespaceManager.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlTemplate.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlTemplateCompiler.cs" />
+    <Compile Include="Excel2003Xml\INodeVisitor.cs" />
+    <Compile Include="Excel2003Xml\RowNodeVisitor.cs" />
+    <Compile Include="Excel2003Xml\TableNodeVisitor.cs" />
+    <Compile Include="Excel2003Xml\ColumnNodeVisitor.cs" />
+    <Compile Include="Excel2003Xml\CellNodeVisitor.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />

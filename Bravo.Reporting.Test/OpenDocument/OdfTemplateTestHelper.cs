@@ -5,7 +5,7 @@ using System.Xml;
 
 using Bravo.Reporting.OpenDocument;
 
-namespace Bravo.Reporting.Test
+namespace Bravo.Reporting.OpenDocument.Test
 {
     public static class OdfTemplateTestHelper
     {

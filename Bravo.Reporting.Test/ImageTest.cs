@@ -10,7 +10,7 @@ namespace Bravo.Reporting.Test
     [TestFixture(Description = "内嵌图片的支持")]
     public class ImageTest
     {
-        const string ImagePath = "odf_docs/go-home.PNG";
+        const string ImagePath = "resources/go-home.PNG";
 
         [Test]
         public void TestConstructor()

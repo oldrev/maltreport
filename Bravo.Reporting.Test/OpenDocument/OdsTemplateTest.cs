@@ -7,7 +7,7 @@ using System.Text;
 
 using NUnit.Framework;
 
-namespace Bravo.Reporting.Test
+namespace Bravo.Reporting.OpenDocument.Test
 {
 
     [TestFixture]
@@ -24,7 +24,7 @@ namespace Bravo.Reporting.Test
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"odf_docs/template_column_loop.ods", ctx);
+                @"resources/odf_docs/template_column_loop.ods", ctx);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 

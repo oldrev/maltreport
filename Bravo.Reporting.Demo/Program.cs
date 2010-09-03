@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 using Bravo.Reporting.OpenDocument;
+using Bravo.Reporting.Excel2003Xml;
 
 namespace Bravo.Reporting.Demo
 {
@@ -56,6 +57,8 @@ namespace Bravo.Reporting.Demo
             odt.Load("template1.odt");
             var ods = new OdfDocument();
             ods.Load("template2.ods");
+            var xls = new ExcelXmlDocument();
+            xls.Load("template3.xls");
 
             //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
             //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
@@ -63,16 +66,10 @@ namespace Bravo.Reporting.Demo
             var template1 = compiler.Compile(odt);
             var template2 = compiler.Compile(ods);
 
-            //保存编译后的报表，这并不是必须的
-            using (var stFile = File.Open("template1.odt.st", FileMode.Create, FileAccess.ReadWrite))
-            {
-                template1.Save(stFile);
-            }
+            var xlsCompiler = new ExcelXmlTemplateCompiler();
+            var template3 = xlsCompiler.Compile(xls);
 
-            using (var stFile = File.Open("template2.ods.st", FileMode.Create, FileAccess.Write))
-            {
-                template2.Save(stFile);
-            }
+            //模板编译后的结果可以保存在磁盘上用于多次渲染
 
             var result1 = template1.Render(renderContext);
 
@@ -89,6 +86,14 @@ namespace Bravo.Reporting.Demo
                 "result2.ods", FileMode.Create, FileAccess.ReadWrite))
             {
                 result2.Save(resultFile2);
+            }
+
+            Console.WriteLine("正在生成 Excel 2003 XML 格式模板...");
+            var result3 = template3.Render(renderContext);
+            using (var resultFile3 = File.Open(
+                "result3.xls", FileMode.Create, FileAccess.ReadWrite))
+            {
+                result3.Save(resultFile3);
             }
 
             Console.WriteLine("成功完成模板渲染");

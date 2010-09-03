@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 using Bravo.Reporting.OpenDocument;
 
-namespace Bravo.Reporting.Test
+namespace Bravo.Reporting.OpenDocument.Test
 {
     [TestFixture]
     public class OdtDocumentTest

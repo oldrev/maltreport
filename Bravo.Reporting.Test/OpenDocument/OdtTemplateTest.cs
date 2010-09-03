@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 using Bravo.Reporting.OpenDocument;
 
-namespace Bravo.Reporting.Test
+namespace Bravo.Reporting.OpenDocument.Test
 {
     [TestFixture(Description = "ODT 格式模板的测试")]
     public sealed class OdtTemplateTest
@@ -23,7 +23,7 @@ namespace Bravo.Reporting.Test
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"odf_docs/template_ids.odt", ctx);
+                @"resources/odf_docs/template_ids.odt", ctx);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
             var paras = xmldoc.GetElementsByTagName("text:p");
@@ -42,7 +42,7 @@ namespace Bravo.Reporting.Test
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"odf_docs/template_row_loop.odt", ctx);
+                @"resources/odf_docs/template_row_loop.odt", ctx);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
@@ -66,7 +66,7 @@ namespace Bravo.Reporting.Test
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"odf_docs/template_escape.odt", ctx);
+                @"resources/odf_docs/template_escape.odt", ctx);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
@@ -88,7 +88,7 @@ namespace Bravo.Reporting.Test
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"odf_docs/template_statement.odt", ctx);
+                @"resources/odf_docs/template_statement.odt", ctx);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
@@ -110,11 +110,11 @@ namespace Bravo.Reporting.Test
         {
             var ctx = new Dictionary<string, object>()
             {
-                { "image1", new Image("png", File.ReadAllBytes("odf_docs/go-home.PNG")) },
+                { "image1", new Image("png", File.ReadAllBytes("resources/go-home.PNG")) },
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"odf_docs/template_image.odt", ctx);
+                @"resources/odf_docs/template_image.odt", ctx);
 
             var manifestDoc = new XmlDocument();
             using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntryPath))

@@ -11,6 +11,10 @@ namespace Bravo.Reporting.Excel2003Xml
 {
     public class ExcelXmlDocument : DocumentBase
     {
+        public const string IndexAttribute = "ss:Index";
+        public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
+        public const string ExpandedRowCountAttribute = "ss:ExpandedRowCount";
+
         private static readonly string[] entryPaths = new string[] { "xml" };
         private Dictionary<string, byte[]> entries = new Dictionary<string, byte[]>();
 
