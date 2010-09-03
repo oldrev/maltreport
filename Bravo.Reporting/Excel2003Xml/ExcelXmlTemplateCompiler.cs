@@ -25,6 +25,7 @@ namespace Bravo.Reporting.Excel2003Xml
                 { "Row", new RowNodeVisitor() },
                 { "Column", new ColumnNodeVisitor() },
                 { "Cell", new CellNodeVisitor() },
+                { "NumberFormat", new NumberFormatNodeVisitor() },
 
             };
 
@@ -89,7 +90,7 @@ namespace Bravo.Reporting.Excel2003Xml
         }
 
         private static void ClearTemplate(XmlNode doc)
-        {
+        {           
             //把所有的行数和列数设置去掉, Excel 会自动计算的
             //ss:ExpandedColumnCount="5" ss:ExpandedRowCount="3"
             var nodes = doc.SelectNodes("//*");
@@ -156,5 +157,6 @@ namespace Bravo.Reporting.Excel2003Xml
 
             return null;
         }
+
     }
 }

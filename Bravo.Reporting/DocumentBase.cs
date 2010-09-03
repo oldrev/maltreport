@@ -103,6 +103,7 @@ namespace Bravo.Reporting
             using (var cos = this.GetEntryOutputStream(entryPath))
             using (var writer = new XmlTextWriter(cos, Encoding.UTF8))
             {
+                writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
                 xml.WriteTo(writer);
             }
         }

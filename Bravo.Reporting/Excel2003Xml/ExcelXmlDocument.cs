@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Xml;
 
 namespace Bravo.Reporting.Excel2003Xml
 {
@@ -14,6 +15,8 @@ namespace Bravo.Reporting.Excel2003Xml
         public const string IndexAttribute = "ss:Index";
         public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
         public const string ExpandedRowCountAttribute = "ss:ExpandedRowCount";
+        public const string FormatAttribute = "ss:Format";
+        public const string TypeAttribute = "ss:Type";
 
         private static readonly string[] entryPaths = new string[] { "xml" };
         private Dictionary<string, byte[]> entries = new Dictionary<string, byte[]>();

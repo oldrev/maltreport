@@ -8,6 +8,7 @@
  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
   <Author>微软系统</Author>
   <LastAuthor>微软系统</LastAuthor>
+  <LastPrinted>2010-09-03T17:26:24Z</LastPrinted>
   <Created>2010-09-03T01:43:50Z</Created>
   <Company>微软中国</Company>
   <Version>12.00</Version>
@@ -29,11 +30,11 @@
    <NumberFormat/>
    <Protection/>
   </Style>
-  <Style ss:ID="s72" ss:Name="超链接">
+  <Style ss:ID="s62" ss:Name="超链接">
    <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#0000FF"
     ss:Underline="Single"/>
   </Style>
-  <Style ss:ID="m38496692" ss:Parent="s72">
+  <Style ss:ID="m76335764" ss:Parent="s62">
    <Alignment ss:Vertical="Center"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -43,7 +44,7 @@
    </Borders>
    <Protection/>
   </Style>
-  <Style ss:ID="m38496712" ss:Parent="s72">
+  <Style ss:ID="m76335784" ss:Parent="s62">
    <Alignment ss:Vertical="Center"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -52,12 +53,13 @@
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
    </Borders>
    <Protection/>
-  </Style>
-  <Style ss:ID="s63">
-   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
-   <Font ss:FontName="黑体" x:CharSet="134" ss:Size="18" ss:Color="#000000"/>
   </Style>
   <Style ss:ID="s64">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="黑体" x:CharSet="134" x:Family="Modern" ss:Size="18"
+    ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s65">
    <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -68,7 +70,25 @@
    <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"
     ss:Bold="1"/>
   </Style>
-  <Style ss:ID="s65">
+  <Style ss:ID="s74">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <NumberFormat ss:Format="0_ "/>
+  </Style>
+  <Style ss:ID="s75">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s76">
+   <Alignment ss:Vertical="Center"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -77,55 +97,76 @@
    </Borders>
   </Style>
   <Style ss:ID="s77">
-   <Alignment ss:Vertical="Center" ss:ShrinkToFit="1"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
    </Borders>
+   <NumberFormat ss:Format="&quot;¥&quot;#,##0.00;&quot;¥&quot;\-#,##0.00"/>
+  </Style>
+  <Style ss:ID="s78">
+   <Alignment ss:Vertical="Center"/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s79">
+   <Alignment ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="s80">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <NumberFormat ss:Format="[ENG][$-F800]dddd\,\ mmmm\ dd\,\ yyyy"/>
   </Style>
  </Styles>
  <Worksheet ss:Name="Sheet1">
   <Table ss:ExpandedColumnCount="5" ss:ExpandedRowCount="7" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
-   <Column ss:AutoFitWidth="0" ss:Width="34.5"/>
-   <Column ss:Index="3" ss:AutoFitWidth="0" ss:Width="114.75"/>
-   <Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="267"/>
+   <Column ss:AutoFitWidth="0" ss:Width="36.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="55.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="144"/>
+   <Column ss:AutoFitWidth="0" ss:Width="51"/>
+   <Column ss:AutoFitWidth="0" ss:Width="234"/>
    <Row ss:AutoFitHeight="0" ss:Height="42">
-    <Cell ss:MergeAcross="4" ss:StyleID="s63"><Data ss:Type="String">商品种类一览表</Data></Cell>
+    <Cell ss:MergeAcross="4" ss:StyleID="s64"><Data ss:Type="String">商品种类一览表</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:StyleID="s64"><Data ss:Type="String">序号</Data></Cell>
-    <Cell ss:StyleID="s64"><Data ss:Type="String">编号</Data></Cell>
-    <Cell ss:StyleID="s64"><Data ss:Type="String">名称</Data></Cell>
-    <Cell ss:StyleID="s64"><Data ss:Type="String">单价</Data></Cell>
-    <Cell ss:StyleID="s64"><Data ss:Type="String">备注</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String">序号</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String">编号</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String">名称</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String">单价</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="String">备注</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:MergeAcross="4" ss:StyleID="m38496692" ss:HRef="rtl:///#foreach($c in $categories.Rows)"><Data
+    <Cell ss:MergeAcross="4" ss:StyleID="m76335764" ss:HRef="rtl:///#foreach($c in $categories.Rows)"><Data
       ss:Type="String">#foreach($c in $categories.Rows)</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:StyleID="s65"><Data ss:Type="String">$velocityCount</Data></Cell>
-    <Cell ss:StyleID="s65"><Data ss:Type="String">$c.CategoryCode</Data></Cell>
-    <Cell ss:StyleID="s77"><Data ss:Type="String">$c.CategoryName</Data></Cell>
-    <Cell ss:StyleID="s65"><Data ss:Type="String">$c.UnitPrice.ToString(&quot;C&quot;)</Data></Cell>
-    <Cell ss:StyleID="s77"><Data ss:Type="String">$c.Summary</Data></Cell>
+    <Cell ss:StyleID="s74" ss:Formula="=VALUE(&quot;$velocityCount&quot;)"><Data
+      ss:Type="Error">#VALUE!</Data></Cell>
+    <Cell ss:StyleID="s75"><Data ss:Type="String">$c.CategoryCode</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="String">$c.CategoryName</Data></Cell>
+    <Cell ss:StyleID="s77" ss:Formula="=VALUE(&quot;$c.UnitPrice&quot;)"><Data
+      ss:Type="Error">#VALUE!</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="String">$c.Summary</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:MergeAcross="4" ss:StyleID="m38496712" ss:HRef="rtl:///#end"><Data
+    <Cell ss:MergeAcross="4" ss:StyleID="m76335784" ss:HRef="rtl:///#end"><Data
       ss:Type="String">#end</Data></Cell>
    </Row>
    <Row ss:Index="7" ss:AutoFitHeight="0">
-    <Cell ss:MergeAcross="4"><Data ss:Type="String">制单时间：$now</Data></Cell>
+    <Cell ss:StyleID="s78"><Data ss:Type="String">制单时间</Data></Cell>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s79"/>
+    <Cell ss:StyleID="s80"><Data ss:Type="String">$now</Data></Cell>
    </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
    <PageSetup>
-    <Header x:Margin="0.3"/>
-    <Footer x:Margin="0.3"/>
-    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+    <Layout x:CenterHorizontal="1"/>
+    <Header x:Margin="0.31496062992125984"/>
+    <Footer x:Margin="0.31496062992125984"/>
+    <PageMargins x:Bottom="0.74803149606299213" x:Left="0.78740157480314965"
+     x:Right="0.78740157480314965" x:Top="0.74803149606299213"/>
    </PageSetup>
    <Unsynced/>
    <Print>
@@ -138,8 +179,8 @@
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>3</ActiveRow>
-     <ActiveCol>2</ActiveCol>
+     <ActiveRow>4</ActiveRow>
+     <RangeSelection>R5C1:R5C5</RangeSelection>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>

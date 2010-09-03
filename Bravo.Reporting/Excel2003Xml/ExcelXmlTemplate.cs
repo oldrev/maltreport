@@ -68,6 +68,8 @@ namespace Bravo.Reporting.Excel2003Xml
                 ctx.Put(pair.Key, pair.Value);
             }
 
+            ctx.Put(VelocityEscapeTool.DefaultKey, new VelocityEscapeTool());
+
             EventCartridge eventCart = new EventCartridge();
             eventCart.ReferenceInsertion += this.OnStringReferenceInsertion;
             ctx.AttachEventCartridge(eventCart);

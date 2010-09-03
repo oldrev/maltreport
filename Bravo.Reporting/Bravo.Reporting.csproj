@@ -66,6 +66,7 @@
     <Compile Include="Excel2003Xml\TableNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\ColumnNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\CellNodeVisitor.cs" />
+    <Compile Include="Excel2003Xml\NumberFormatNodeVisitor.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="OpenDocument\OdfManifestDocument.cs" />
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VelocityEscapeTool.cs" />
     <Compile Include="XmlStringRenderFilter.cs" />
     <Compile Include="Xml\ReferenceElement.cs" />
     <Compile Include="Xml\StatementElement.cs" />

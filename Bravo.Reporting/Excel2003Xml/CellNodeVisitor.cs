@@ -21,7 +21,9 @@ namespace Bravo.Reporting.Excel2003Xml
                 cell.FirstChild.Name == "Data" &&
                 cell.FirstChild.InnerText == "#VALUE!")
             {
-                cell.FirstChild.InnerText = "";
+                var data = (XmlElement)cell.FirstChild;
+                data.SetAttribute(ExcelXmlDocument.TypeAttribute, "String");
+                data.InnerText = "";
             }
 
         }
