@@ -107,7 +107,7 @@ namespace Bravo.Reporting.Excel2003Xml
         private static void ProcessReferenceTag(XmlElement phe, string value)
         {
             phe.RemoveAttribute(HRefAttribute);
-            phe.Value = value;
+            phe.InnerText = value;
         }
 
         private static void ProcessStatementTag(XmlDocument xml, XmlElement phe, string value)
@@ -119,7 +119,7 @@ namespace Bravo.Reporting.Excel2003Xml
             }
             else
             {
-                phe.ParentNode.ReplaceChild(phe, se);
+                phe.ParentNode.ReplaceChild(se, phe);
             }
         }
 

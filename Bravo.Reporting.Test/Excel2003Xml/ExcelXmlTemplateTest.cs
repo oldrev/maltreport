@@ -39,5 +39,29 @@ namespace Bravo.Reporting.Excel2003Xml.Test
             Assert.AreEqual("FFFFF", row5);
         }
 
+        [Test(Description = "测试 Excel 2003 Xml 的简单列循环")]
+        public void TestSimpleColumnLoop()
+        {
+            var ctx = new Dictionary<string, object>()
+            {
+                {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
+            };
+
+            var result = ExcelXmlTemplateTestHelper.RenderTemplate(
+                @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
+
+            var xmldoc = new XmlDocument();
+            using (var ins = result.GetEntryInputStream(result.MainContentEntryPath))
+            {
+                xmldoc.Load(ins);
+            }
+
+            var table = xmldoc.GetElementsByTagName("Table")[0];
+
+            xmldoc.Save("d:\\test_loop_col.xml");
+
+            Assert.AreEqual("JJJXYABCDEFZKKK", table.InnerText);
+        }
+
     }
 }

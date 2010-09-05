@@ -122,8 +122,6 @@ namespace Bravo.Reporting.OpenDocument.Test
                 manifestDoc.Load(s);
             }
 
-            manifestDoc.Save(Console.Out);
-
             var mediaType = "manifest:media-type";
             var imageCount = 0;
             foreach (XmlElement e in manifestDoc.GetElementsByTagName("manifest:file-entry"))

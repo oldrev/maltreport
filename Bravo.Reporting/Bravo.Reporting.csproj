@@ -72,6 +72,7 @@
     <Compile Include="IRenderFilter.cs" />
     <Compile Include="ITemplate.cs" />
     <Compile Include="ITemplateCompiler.cs" />
+    <Compile Include="ITextTemplateEngine.cs" />
     <Compile Include="OpenDocument\OdfDocument.cs" />
     <Compile Include="OpenDocument\OdfImageRenderFilter.cs" />
     <Compile Include="OpenDocument\OdfNamespaceManager.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VelocityEscapeTool.cs" />
+    <Compile Include="VelocityTextTemplateEngine.cs" />
     <Compile Include="XmlStringRenderFilter.cs" />
     <Compile Include="Xml\ReferenceElement.cs" />
     <Compile Include="Xml\StatementElement.cs" />
