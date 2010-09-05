@@ -7,7 +7,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Xml;
 
-using ICSharpCode.SharpZipLib.Zip;
+using Ionic.Zip;
 
 namespace Bravo.Reporting.OpenDocument
 {
@@ -34,15 +34,13 @@ namespace Bravo.Reporting.OpenDocument
             this.entries.Clear();
 
             //把 zip 的内容加载到内存
-            using (var zf = new ZipFile(stream))
+            using (var zf = ZipFile.Read(stream))
             {
                 foreach (ZipEntry ze in zf)
                 {
-                    var zis = zf.GetInputStream(ze.ZipFileIndex);
-
-                    using (var ws = this.GetEntryOutputStream(ze.Name))
+                    using (var ws = this.GetEntryOutputStream(ze.FileName))
                     {
-                        CopyStream(zis, ws);
+                        ze.Extract(ws);
                     }
                 }
             }
@@ -61,12 +59,9 @@ namespace Bravo.Reporting.OpenDocument
                 throw new InvalidDataException("Can not found entry: 'mimetype'");
             }
 
-            using (var zos = new ZipOutputStream(outStream))
+            using (var ze = new ZipFile())
             {
-                //zos.SetLevel(0);
-                zos.UseZip64 = UseZip64.Off;
-
-                this.WriteZipEntry(zos, MimeTypeEntryPath);
+                this.AppendZipEntry(ze, MimeTypeEntryPath);
 
                 foreach (var item in this.entries)
                 {
@@ -75,22 +70,38 @@ namespace Bravo.Reporting.OpenDocument
                         continue;
                     }
 
-                    this.WriteZipEntry(zos, item.Key);
+                    this.AppendZipEntry(ze, item.Key);
                 }
+
+                ze.Save(outStream);
             }
         }
-  
-        private void WriteZipEntry(ZipOutputStream zipStream, string name)
+
+        private void AppendZipEntry(ZipFile zf, string name)
         {
-            Debug.Assert(zipStream != null);
+            Debug.Assert(zf != null);
             Debug.Assert(!string.IsNullOrEmpty(name));
             Debug.Assert(this.entries.ContainsKey(name));
 
             var data = this.entries[name];
-            var ze = new ZipEntry(name);
-            zipStream.PutNextEntry(ze);
-            zipStream.Write(data, 0, data.Length);
-            zipStream.CloseEntry();
+            var ze = zf.AddEntry(name, data);
+
+            var extensionName = Path.GetExtension(name).ToUpperInvariant();
+
+            switch (extensionName)
+            {
+                case "JPEG":
+                case "JPG":
+                case "PNG":
+                    ze.CompressionMethod = CompressionMethod.None;
+                    break;
+
+                default:
+                    ze.CompressionMethod = CompressionMethod.Deflate;
+                    ze.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
+                    break;
+            }
+
         }
 
         public override ICollection<string> EntryPaths
