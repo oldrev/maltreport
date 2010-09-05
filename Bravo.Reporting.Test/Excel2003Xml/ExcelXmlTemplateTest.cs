@@ -58,9 +58,14 @@ namespace Bravo.Reporting.Excel2003Xml.Test
 
             var table = xmldoc.GetElementsByTagName("Table")[0];
 
-            xmldoc.Save("d:\\test_loop_col.xml");
-
             Assert.AreEqual("JJJXYABCDEFZKKK", table.InnerText);
+
+            var rows = xmldoc.GetElementsByTagName("Row");
+
+            Assert.AreEqual("JJJ", rows[0].InnerText);
+            Assert.AreEqual("XYABCDEFZ", rows[1].InnerText);
+            Assert.AreEqual("KKK", rows[2].InnerText);
+
         }
 
     }
