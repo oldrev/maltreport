@@ -11,6 +11,8 @@ using System.Xml;
 using System.Diagnostics;
 using System.Globalization;
 
+using Bravo.Reporting.Xml;
+
 namespace Bravo.Reporting.OpenDocument
 {
     public class OdfTemplate : OdfDocument, ITemplate

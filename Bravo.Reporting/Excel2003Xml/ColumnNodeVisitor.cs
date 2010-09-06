@@ -4,9 +4,11 @@ using System.Text;
 using System.Xml;
 using System.Diagnostics;
 
+using Bravo.Reporting.Xml;
+
 namespace Bravo.Reporting.Excel2003Xml
 {
-    internal class ColumnNodeVisitor : INodeVisitor
+    internal class ColumnNodeVisitor : IXmlNodeVisitor
     {
         #region INodeVisitor 成员
 

@@ -18,8 +18,8 @@ namespace Bravo.Reporting.Excel2003Xml
     {
         private const string HRefAttribute = "ss:HRef";
 
-        private static readonly Dictionary<string, INodeVisitor> visitors =
-            new Dictionary<string, INodeVisitor>()
+        private static readonly Dictionary<string, IXmlNodeVisitor> visitors =
+            new Dictionary<string, IXmlNodeVisitor>()
             {
                 { "Table", new TableNodeVisitor() },
                 { "Row", new RowNodeVisitor() },
@@ -96,7 +96,7 @@ namespace Bravo.Reporting.Excel2003Xml
             var nodes = doc.SelectNodes("//*");
             foreach (XmlElement e in nodes)
             {
-                INodeVisitor visitor = null;
+                IXmlNodeVisitor visitor = null;
                 if (visitors.TryGetValue(e.Name, out visitor))
                 {
                     visitor.ProcessNode(e);

@@ -14,8 +14,22 @@ namespace Bravo.Reporting
 
         public static string EscapeVelocity(string str)
         {
-            return str.Replace("$", "${" + DefaultKey + ".d}").Replace("#", "${" + DefaultKey + ".h}");
+            if (str == null)
+            {
+                throw new ArgumentNullException("str");
+            }
+
+            return EscapeDirective(str.Replace("$", "${" + DefaultKey + ".d}"));
         }
 
+        public static string EscapeDirective(string str)
+        {
+            if (str == null)
+            {
+                throw new ArgumentNullException("str");
+            }
+
+            return str.Replace("#", "${" + DefaultKey + ".h}");
+        }
     }
 }

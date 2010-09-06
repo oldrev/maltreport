@@ -61,7 +61,7 @@
     <Compile Include="Excel2003Xml\ExcelXmlNamespaceManager.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlTemplate.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlTemplateCompiler.cs" />
-    <Compile Include="Excel2003Xml\INodeVisitor.cs" />
+    <Compile Include="Xml\IXmlNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\RowNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\TableNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\ColumnNodeVisitor.cs" />
@@ -82,7 +82,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VelocityEscapeTool.cs" />
     <Compile Include="VelocityTextTemplateEngine.cs" />
-    <Compile Include="XmlStringRenderFilter.cs" />
+    <Compile Include="Xml\VelocityEscapedXmlTextWriter.cs" />
+    <Compile Include="Xml\XmlStringRenderFilter.cs" />
     <Compile Include="Xml\ReferenceElement.cs" />
     <Compile Include="Xml\StatementElement.cs" />
     <Compile Include="SyntaxErrorException.cs" />

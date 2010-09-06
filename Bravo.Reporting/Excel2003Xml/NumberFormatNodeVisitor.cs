@@ -4,9 +4,11 @@ using System.Text;
 using System.Xml;
 using System.Diagnostics;
 
+using Bravo.Reporting.Xml;
+
 namespace Bravo.Reporting.Excel2003Xml
 {
-    internal class NumberFormatNodeVisitor : INodeVisitor
+    internal class NumberFormatNodeVisitor : IXmlNodeVisitor
     {
         #region INodeVisitor 成员
         private const string Key = "esc";

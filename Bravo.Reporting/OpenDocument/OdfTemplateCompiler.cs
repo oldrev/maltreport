@@ -39,9 +39,20 @@ namespace Bravo.Reporting.OpenDocument
             //第2遍，处理表格循环
             ProcessTableRowNodes(xml, nsmanager);
 
-            t.WriteMainContentXml(xml);
+            WriteMainContentXml(t, xml);
 
             return t;
+        }
+
+        private static void WriteMainContentXml(OdfTemplate t, XmlDocument xml)
+        {
+            //把编译后的 XmlDocument 写入
+            using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
+            using (var writer = new VelocityEscapedXmlTextWriter(cos))
+            {
+                writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
+                xml.WriteTo(writer);
+            }
         }
 
         private static void ProcessTableRowNodes(XmlDocument xml, XmlNamespaceManager nsmanager)

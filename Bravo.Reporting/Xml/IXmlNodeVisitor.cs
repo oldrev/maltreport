@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace Bravo.Reporting.Excel2003Xml
+namespace Bravo.Reporting.Xml
 {
-    internal interface INodeVisitor
+    internal interface IXmlNodeVisitor
     {
         void ProcessNode(XmlNode node);
     }

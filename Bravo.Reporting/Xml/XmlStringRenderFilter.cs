@@ -4,7 +4,7 @@ using System.Text;
 using System.Security;
 using System.Diagnostics;
 
-namespace Bravo.Reporting
+namespace Bravo.Reporting.Xml
 {
     internal class XmlStringRenderFilter : IRenderFilter
     {
