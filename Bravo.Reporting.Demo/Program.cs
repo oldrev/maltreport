@@ -62,12 +62,9 @@ namespace Bravo.Reporting.Demo
 
             //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
             //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
-            var compiler = new OdfTemplateCompiler();
-            var template1 = compiler.Compile(odt);
-            var template2 = compiler.Compile(ods);
-
-            var xlsCompiler = new ExcelXmlTemplateCompiler();
-            var template3 = xlsCompiler.Compile(xls);
+            var template1 = odt.Compile();
+            var template2 = ods.Compile();
+            var template3 = xls.Compile();
 
             //模板编译后的结果可以保存在磁盘上用于多次渲染
 

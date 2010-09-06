@@ -18,9 +18,7 @@ namespace Bravo.Reporting.Excel2003Xml.Test
         {
             var t = new ExcelXmlDocument();
             t.Load(tmpPath);
-            var compiler = new ExcelXmlTemplateCompiler();
-            var template = compiler.Compile(t);
-            return template.Render(context);
+            return t.Compile().Render(context);
         }
     }
 }

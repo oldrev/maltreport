@@ -134,6 +134,8 @@ namespace Bravo.Reporting
 
         public abstract string AddImage(Image img);
 
+        public abstract ITemplate Compile();
+
         protected static void CopyStream(Stream src, Stream dest)
         {
             if (src == null)

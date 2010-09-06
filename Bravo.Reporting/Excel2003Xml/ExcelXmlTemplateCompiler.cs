@@ -14,7 +14,7 @@ namespace Bravo.Reporting.Excel2003Xml
     /// ODF 模板编译器
     /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
     /// </summary>
-    public class ExcelXmlTemplateCompiler : ITemplateCompiler
+    internal class ExcelXmlTemplateCompiler 
     {
         private const string HRefAttribute = "ss:HRef";
 

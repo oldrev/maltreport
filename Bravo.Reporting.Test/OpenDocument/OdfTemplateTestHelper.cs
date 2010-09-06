@@ -18,9 +18,7 @@ namespace Bravo.Reporting.OpenDocument.Test
         {
             var odf = new OdfDocument();
             odf.Load(odfPath);
-            var compiler = new OdfTemplateCompiler();
-            var template = compiler.Compile(odf);
-            return template.Render(context);
+            return odf.Compile().Render(context);
         }
 
         public static XmlDocument GetContentDocument(IDocument odfTemplate)

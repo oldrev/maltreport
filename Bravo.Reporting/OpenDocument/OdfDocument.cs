@@ -168,5 +168,11 @@ namespace Bravo.Reporting.OpenDocument
         }
 
         public override string MainContentEntryPath { get { return "content.xml"; } }
+
+        public override ITemplate Compile()
+        {
+            var compiler = new OdfTemplateCompiler();
+            return compiler.Compile(this);
+        }
     }
 }

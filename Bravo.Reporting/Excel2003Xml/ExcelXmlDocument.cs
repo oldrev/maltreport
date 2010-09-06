@@ -94,5 +94,11 @@ namespace Bravo.Reporting.Excel2003Xml
             throw new NotSupportedException(
                 "Microsoft Excel 2003 XML 文档不支持内嵌的图片");
         }
+
+        public override ITemplate Compile()
+        {
+            var compiler = new ExcelXmlTemplateCompiler();
+            return compiler.Compile(this);
+        }
     }
 }

@@ -27,5 +27,7 @@ namespace Bravo.Reporting
         string AddImage(Image img);
 
         void CopyTo(IDocument destDoc);
+
+        ITemplate Compile();
     }
 }

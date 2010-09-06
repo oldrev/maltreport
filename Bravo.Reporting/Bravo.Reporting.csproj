@@ -71,7 +71,6 @@
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />
     <Compile Include="ITemplate.cs" />
-    <Compile Include="ITemplateCompiler.cs" />
     <Compile Include="ITextTemplateEngine.cs" />
     <Compile Include="OpenDocument\OdfDocument.cs" />
     <Compile Include="OpenDocument\OdfImageRenderFilter.cs" />
