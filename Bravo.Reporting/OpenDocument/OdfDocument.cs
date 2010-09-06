@@ -27,14 +27,14 @@ namespace Bravo.Reporting.OpenDocument
         {
         }
 
-        public override void Load(Stream stream)
+        public override void Load(Stream inStream)
         {
-            Debug.Assert(stream != null);
+            Debug.Assert(inStream != null);
 
             this.entries.Clear();
 
             //把 zip 的内容加载到内存
-            using (var zf = ZipFile.Read(stream))
+            using (var zf = ZipFile.Read(inStream))
             {
                 foreach (ZipEntry ze in zf)
                 {
@@ -166,7 +166,6 @@ namespace Bravo.Reporting.OpenDocument
 
             return fullPath;
         }
-
 
         public override string MainContentEntryPath { get { return "content.xml"; } }
     }

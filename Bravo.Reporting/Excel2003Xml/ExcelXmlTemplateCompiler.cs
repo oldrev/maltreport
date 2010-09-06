@@ -45,7 +45,7 @@ namespace Bravo.Reporting.Excel2003Xml
 
             ClearTemplate(xml);
 
-            this.ProcessPlaceHolders(xml);
+            ProcessPlaceHolders(xml);
 
             //把编译后的 XmlDocument 写入
             using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
@@ -58,7 +58,7 @@ namespace Bravo.Reporting.Excel2003Xml
             return t;
         }
 
-        private void ProcessPlaceHolders(XmlDocument xml)
+        private static void ProcessPlaceHolders(XmlDocument xml)
         {
             var workbookNode = FindFirstChildNode(xml, "Workbook");
 
@@ -139,7 +139,7 @@ namespace Bravo.Reporting.Excel2003Xml
                 if (e.Name == "Cell" && e.HasAttribute(HRefAttribute))
                 {
                     var attr = e.GetAttribute(HRefAttribute);
-                    if (attr.StartsWith("rtl://"))
+                    if (attr.StartsWith("rtl://", StringComparison.InvariantCulture))
                     {
                         placeholders.Add(e);
                     }
@@ -149,7 +149,7 @@ namespace Bravo.Reporting.Excel2003Xml
             return placeholders;
         }
 
-        private XmlNode FindFirstChildNode(XmlNode parent, string childName)
+        private static XmlNode FindFirstChildNode(XmlNode parent, string childName)
         {
             Debug.Assert(parent != null);
             Debug.Assert(!string.IsNullOrEmpty(childName));

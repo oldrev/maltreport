@@ -77,7 +77,7 @@ namespace Bravo.Reporting
 
             if (this.filters.ContainsKey(t))
             {
-                throw new ArgumentException("t");
+                throw new ArgumentException("Duplicated type: " + t.Name);
             }
 
             this.filters[t] = filter;

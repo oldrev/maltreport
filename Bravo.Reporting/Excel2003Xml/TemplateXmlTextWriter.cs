@@ -8,7 +8,7 @@ namespace Bravo.Reporting.Xml
 {
     internal class TemplateXmlTextWriter : XmlTextWriter
     {
-        private string currentElementName = null;
+        private string currentElementName;
 
         public TemplateXmlTextWriter(Stream inStream)
             : base(inStream, Encoding.UTF8)
@@ -22,7 +22,7 @@ namespace Bravo.Reporting.Xml
         }
 
         /// <summary>
-        /// 只允许 Cell 或 Data
+        /// 只允许 Cell 或 Data 中存在 Velocity 的 #directive
         /// </summary>
         /// <param name="text"></param>
         public override void WriteString(string text)

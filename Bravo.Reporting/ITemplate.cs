@@ -7,6 +7,6 @@ namespace Bravo.Reporting
 {
     public interface ITemplate : IDocument
     {
-        IDocument Render(IDictionary<string, object> data);
+        IDocument Render(IDictionary<string, object> context);
     }
 }

@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Bravo.Reporting
 {
-    internal class VelocityEscapeTool
+    internal sealed class VelocityEscapeTool
     {
         public const string DefaultKey = "esc";
 
-        public char D { get { return '$'; } }
+        public static char D { get { return '$'; } }
 
-        public char H { get { return '#'; } }
+        public static char H { get { return '#'; } }
 
         public static string EscapeVelocity(string str)
         {
