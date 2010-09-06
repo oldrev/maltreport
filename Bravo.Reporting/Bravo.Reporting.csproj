@@ -61,6 +61,7 @@
     <Compile Include="Excel2003Xml\ExcelXmlNamespaceManager.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlTemplate.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlTemplateCompiler.cs" />
+    <Compile Include="Excel2003Xml\TemplateXmlTextWriter.cs" />
     <Compile Include="Xml\IXmlNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\RowNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\TableNodeVisitor.cs" />

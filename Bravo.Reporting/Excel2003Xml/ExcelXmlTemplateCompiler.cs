@@ -25,7 +25,7 @@ namespace Bravo.Reporting.Excel2003Xml
                 { "Row", new RowNodeVisitor() },
                 { "Column", new ColumnNodeVisitor() },
                 { "Cell", new CellNodeVisitor() },
-                { "NumberFormat", new NumberFormatNodeVisitor() },
+                //{ "NumberFormat", new NumberFormatNodeVisitor() },
 
             };
 
@@ -47,7 +47,13 @@ namespace Bravo.Reporting.Excel2003Xml
 
             this.ProcessPlaceHolders(xml);
 
-            t.WriteMainContentXml(xml);
+            //把编译后的 XmlDocument 写入
+            using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
+            using (var writer = new TemplateXmlTextWriter(cos))
+            {
+                writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
+                xml.WriteTo(writer);
+            }
 
             return t;
         }
@@ -90,7 +96,7 @@ namespace Bravo.Reporting.Excel2003Xml
         }
 
         private static void ClearTemplate(XmlNode doc)
-        {           
+        {
             //把所有的行数和列数设置去掉, Excel 会自动计算的
             //ss:ExpandedColumnCount="5" ss:ExpandedRowCount="3"
             var nodes = doc.SelectNodes("//*");

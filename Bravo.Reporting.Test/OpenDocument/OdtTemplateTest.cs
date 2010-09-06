@@ -74,7 +74,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             Assert.GreaterOrEqual(paras.Count, 1);
             var p = paras[0];
-            Assert.AreEqual("X > Y < Z &; & #set($var=\"ABC\")", p.InnerText);
+            Assert.AreEqual("X > Y < Z &; & #end", p.InnerText);
         }
 
         [Test(Description = "测试模板中的 VTL 语句")]
