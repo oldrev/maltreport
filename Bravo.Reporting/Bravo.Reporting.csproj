@@ -86,7 +86,7 @@
     <Compile Include="Xml\ReferenceElement.cs" />
     <Compile Include="Xml\StatementElement.cs" />
     <Compile Include="SyntaxErrorException.cs" />
-    <Compile Include="DocumentBase.cs" />
+    <Compile Include="ZipArchiveDocumentBase.cs" />
     <Compile Include="TemplateException.cs" />
     <Compile Include="OpenDocument\OdfTemplate.cs" />
   </ItemGroup>

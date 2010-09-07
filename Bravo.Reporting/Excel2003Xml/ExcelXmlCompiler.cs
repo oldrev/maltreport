@@ -6,6 +6,8 @@ using System.Text;
 using System.Xml;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.IO;
+
 using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Excel2003Xml
@@ -35,10 +37,9 @@ namespace Bravo.Reporting.Excel2003Xml
             }
 
             var t = new ExcelXmlTemplate();
-            doc.CopyTo(t);
+            t.LoadFromDocument((ExcelXmlDocument)doc);
+            var xml = t.GetXmlDocument();
 
-            var xml = new XmlDocument();
-            t.ReadMainContentXml(xml);
             var nsmanager = new ExcelXmlNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 
@@ -53,11 +54,14 @@ namespace Bravo.Reporting.Excel2003Xml
 
         private static void WriteCompiledMainContent(ExcelXmlTemplate t, XmlDocument xml)
         {
-            using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
-            using (var writer = new TemplateXmlTextWriter(cos))
+            using(var ms = new MemoryStream())
+            using (var writer = new TemplateXmlTextWriter(ms))
             {
                 writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
                 xml.WriteTo(writer);
+                writer.Flush();
+                ms.Flush();
+                t.PutBuffer(ms.GetBuffer());
             }
         }
 

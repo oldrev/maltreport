@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace Bravo.Reporting.Excel2003Xml
 {
-    public class ExcelXmlDocument : DocumentBase
+    public class ExcelXmlDocument : IDocument
     {
         public const string IndexAttribute = "ss:Index";
         public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
@@ -18,100 +18,105 @@ namespace Bravo.Reporting.Excel2003Xml
         public const string FormatAttribute = "ss:Format";
         public const string TypeAttribute = "ss:Type";
 
-        private static readonly string[] entryPaths = new string[] { "xml" };
-        private Dictionary<string, byte[]> entries = new Dictionary<string, byte[]>();
+        private byte[] data;
 
         public ExcelXmlDocument()
         {
         }
 
-        public override void Load(Stream inStream)
+        public void Load(Stream inStream)
         {
-            if(inStream == null)
+            if (inStream == null)
             {
                 throw new ArgumentNullException("inStream");
             }
 
-            this.entries.Clear();
+            var size = (int)inStream.Length;
+            this.data = new byte[size];
+            var nread = inStream.Read(data, 0, size);
 
-            if (inStream.Length >= int.MaxValue)
-            {
-                throw new OverflowException();
-            }
-
-            var xmlSize = (int)inStream.Length;
-            var buf = new byte[xmlSize];
-            var nread = inStream.Read(buf, 0, xmlSize);
-            if (nread != xmlSize)
+            if (nread != size)
             {
                 throw new IOException();
             }
-
-            this.entries["xml"] = buf;
         }
 
-        public override void Save(Stream outStream)
+        public void Save(Stream outStream)
         {
+            Debug.Assert(this.data != null);
+
             if (outStream == null)
             {
                 throw new ArgumentNullException("outStream");
             }
 
-            using (var contentStream = this.GetEntryInputStream(this.MainContentEntryPath))
-            {
-                CopyStream(contentStream, outStream);
-                outStream.Flush();
-            }
+            outStream.Write(this.data, 0, this.data.Length);
         }
 
-        public override Stream GetEntryInputStream(string entryPath)
-        {
-            if (string.IsNullOrEmpty(entryPath))
-            {
-                throw new ArgumentNullException("entryPath");
-            }
-
-            return new MemoryStream(this.entries[entryPath]);
-        }
-
-        public override Stream GetEntryOutputStream(string entryPath)
-        {
-            if (string.IsNullOrEmpty(entryPath))
-            {
-                throw new ArgumentNullException("entryPath");
-            }
-
-            return new OutputMemoryStream(entryPath, this.entries);
-        }
-
-        public override string MainContentEntryPath
-        {
-            get { return "xml"; }
-        }
-
-        public override ICollection<string> EntryPaths
-        {
-            get { return entryPaths; }
-        }
-
-        public override bool EntryExists(string entryPath)
-        {
-            if (string.IsNullOrEmpty(entryPath))
-            {
-                throw new ArgumentNullException("entryPath");
-            }
-            return entryPath.ToLowerInvariant() == this.MainContentEntryPath;
-        }
-
-        public override string AddImage(Image img)
-        {
-            throw new NotSupportedException(
-                "Microsoft Excel 2003 XML 文档不支持内嵌的图片");
-        }
-
-        public override ITemplate Compile()
+        public virtual ITemplate Compile()
         {
             return ExcelXmlCompiler.Compile(this);
+        }
+
+        #region IDocument 成员
+
+
+        public void Save(string path)
+        {
+            using (var fs = File.Open(path, FileMode.Create, FileAccess.Write))
+            {
+                this.Save(fs);
+            }
+        }
+
+        public void Load(string path)
+        {
+            using(var fs = File.OpenRead(path))
+            {
+                this.Load(fs);
+            }
+        }
+
+        public byte[] GetBuffer()
+        {
+            return this.data;
+        }
+
+        #endregion
+
+        #region ICloneable 成员
+
+        public object Clone()
+        {
+            var o = new ExcelXmlDocument();
+            o.PutBuffer(this.data);
+            return o;
+        }
+
+        #endregion
+
+        internal XmlDocument GetXmlDocument()
+        {
+            Debug.Assert(this.data != null);
+
+            var xmldoc = new XmlDocument();
+            using (var ms = new MemoryStream(this.data, false))
+            {
+                xmldoc.Load(ms);
+            }
+            return xmldoc;
+        }
+
+        internal MemoryStream GetInputStream()
+        {
+            return new MemoryStream(this.data, false);
+        }
+
+        internal void PutBuffer(byte[] buffer)
+        {
+            Debug.Assert(buffer != null);
+
+            this.data = buffer;
         }
     }
 }

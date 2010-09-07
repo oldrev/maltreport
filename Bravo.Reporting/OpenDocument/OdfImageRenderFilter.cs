@@ -11,9 +11,9 @@ namespace Bravo.Reporting.OpenDocument
     internal class OdfImageRenderFilter : IRenderFilter
     {
         private IDictionary<Image, string> userImages;
-        private IDocument resultDocument;
+        private OdfDocument resultDocument;
 
-        public OdfImageRenderFilter(IDictionary<Image, string> userImages, IDocument odfDoc)
+        public OdfImageRenderFilter(IDictionary<Image, string> userImages, OdfDocument odfDoc)
         {
             Debug.Assert(userImages != null);
             Debug.Assert(odfDoc != null);

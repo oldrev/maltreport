@@ -14,14 +14,14 @@ namespace Bravo.Reporting.OpenDocument.Test
         /// </summary>
         /// <param name="odfPath"></param>
         /// <returns></returns>
-        public static IDocument RenderTemplate(string odfPath, IDictionary<string, object> context)
+        public static OdfDocument RenderTemplate(string odfPath, IDictionary<string, object> context)
         {
             var odf = new OdfDocument();
             odf.Load(odfPath);
-            return odf.Compile().Render(context);
+            return (OdfDocument)odf.Compile().Render(context);
         }
 
-        public static XmlDocument GetContentDocument(IDocument odfTemplate)
+        public static XmlDocument GetContentDocument(OdfDocument odfTemplate)
         {
             var xmldoc = new XmlDocument();
             using (var inputStream = odfTemplate.GetEntryInputStream(odfTemplate.MainContentEntryPath))

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Bravo.Reporting
 {
-    public interface IDocument
+    public interface IDocument : ICloneable
     {
         void Save(Stream outStream);
         void Save(string path);
@@ -13,20 +13,7 @@ namespace Bravo.Reporting
         void Load(Stream inStream);
         void Load(string path);
 
-        Stream GetEntryInputStream(string entryPath);
-        Stream GetEntryOutputStream(string entryPath);
-
-        string MainContentEntryPath { get; }
-
         byte[] GetBuffer();
-
-        ICollection<string> EntryPaths { get; }
-
-        bool EntryExists(string entryPath);
-
-        string AddImage(Image img);
-
-        void CopyTo(IDocument destDoc);
 
         ITemplate Compile();
     }

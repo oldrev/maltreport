@@ -23,12 +23,8 @@ namespace Bravo.Reporting.Excel2003Xml.Test
             var result = ExcelXmlTemplateTestHelper.RenderTemplate(
                 @"resources/excel2003xml_docs/template_row_loop.xml", ctx);
 
-            var xmldoc = new XmlDocument();
-            using (var ins = result.GetEntryInputStream(result.MainContentEntryPath))
-            {
-                xmldoc.Load(ins);
-            }
-
+            var xmldoc = ExcelXmlTemplateTestHelper.GetExcelXmlDocument((ExcelXmlDocument)result);
+      
             var rows = xmldoc.GetElementsByTagName("Row");
 
             Assert.AreEqual(6, rows.Count);
@@ -50,11 +46,7 @@ namespace Bravo.Reporting.Excel2003Xml.Test
             var result = ExcelXmlTemplateTestHelper.RenderTemplate(
                 @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
 
-            var xmldoc = new XmlDocument();
-            using (var ins = result.GetEntryInputStream(result.MainContentEntryPath))
-            {
-                xmldoc.Load(ins);
-            }
+            var xmldoc = ExcelXmlTemplateTestHelper.GetExcelXmlDocument(result);
 
             var table = xmldoc.GetElementsByTagName("Table")[0];
 

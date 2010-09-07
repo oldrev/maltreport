@@ -11,7 +11,7 @@ using Ionic.Zip;
 
 namespace Bravo.Reporting.OpenDocument
 {
-    public class OdfDocument : DocumentBase
+    public class OdfDocument : ZipArchiveDocumentBase
     {
         internal const string MimeTypeEntryPath = "mimetype";
         internal const string SettingsEntryPath = "settings.xml";
@@ -185,6 +185,32 @@ namespace Bravo.Reporting.OpenDocument
         public override ITemplate Compile()
         {
             return OdfCompiler.Compile(this);
+        }
+
+        #region ICloneable 接口
+        public override object Clone()
+        {
+            var destDoc = new OdfDocument();
+            this.CopyTo(destDoc);
+            return destDoc;
+        }
+        #endregion
+
+        public void CopyTo(OdfDocument destDoc)
+        {
+            if (destDoc == null)
+            {
+                throw new ArgumentNullException("destDoc");
+            }
+
+            foreach (var item in this.EntryPaths)
+            {
+                using (var inStream = this.GetEntryInputStream(item))
+                using (var outStream = destDoc.GetEntryOutputStream(item))
+                {
+                    CopyStream(inStream, outStream);
+                }
+            }
         }
     }
 }

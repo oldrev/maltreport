@@ -19,8 +19,8 @@ namespace Bravo.Reporting.OpenDocument
         public const string PlaceHolderPattern =
             @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
-       public static readonly Regex PlaceHolderValuePattern = 
-           new Regex(@"<\s*(([\$#]\w+).*)\s*>$");
+        public static readonly Regex PlaceHolderValuePattern =
+            new Regex(@"<\s*(([\$#]\w+).*)\s*>$");
 
         public static readonly Regex HyperLinkValuePattern =
             new Regex(@"^rtl://(([\$#]\w+).*)\s*$");
@@ -29,8 +29,9 @@ namespace Bravo.Reporting.OpenDocument
         {
             Debug.Assert(doc is OdfDocument);
 
+            var odfDoc = (OdfDocument)doc;
             var t = new OdfTemplate();
-            doc.CopyTo(t);
+            odfDoc.CopyTo(t);
 
             var xml = new XmlDocument();
             t.ReadMainContentXml(xml);

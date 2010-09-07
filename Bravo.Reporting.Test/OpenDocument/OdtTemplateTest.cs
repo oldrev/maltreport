@@ -25,7 +25,7 @@ namespace Bravo.Reporting.OpenDocument.Test
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"resources/odf_docs/template_ids.odt", ctx);
 
-            var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
+            var xmldoc = OdfTemplateTestHelper.GetContentDocument((OdfDocument)result);
             var paras = xmldoc.GetElementsByTagName("text:p");
 
             Assert.GreaterOrEqual(1, paras.Count);

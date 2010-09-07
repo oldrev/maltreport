@@ -24,7 +24,7 @@ namespace Bravo.Reporting.OpenDocument
             this.engine = new VelocityTextTemplateEngine("OdfTemplate");
         }
 
-        private void ResetTextEngine(IDictionary<Image, string> userImages, IDocument resultDocument)
+        private void ResetTextEngine(IDictionary<Image, string> userImages, OdfDocument resultDocument)
         {
             Debug.Assert(this.engine != null);
             Debug.Assert(userImages != null);
@@ -47,8 +47,8 @@ namespace Bravo.Reporting.OpenDocument
             }
 
             var userImages = new Dictionary<Image, string>();
-            var resultDocument = new OdfDocument();
-            this.CopyTo(resultDocument);
+
+            var resultDocument = (OdfDocument)this.Clone();
 
             this.ResetTextEngine(userImages, resultDocument);
 

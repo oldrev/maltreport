@@ -36,23 +36,36 @@ namespace Bravo.Reporting.Excel2003Xml
                 throw new ArgumentNullException("context");
             }
 
-            var resultDocument = new ExcelXmlDocument();
-            this.CopyTo(resultDocument);
+            var resultDocument = (ExcelXmlDocument)this.Clone();
 
             //执行主要内容的渲染过程
-            using (var inStream = resultDocument.GetEntryInputStream(resultDocument.MainContentEntryPath))
+            using (var inStream = this.GetInputStream())
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = resultDocument.GetEntryOutputStream(resultDocument.MainContentEntryPath))
+            using (var ws = new MemoryStream())
             using (var writer = new StreamWriter(ws))
             {
                 //执行渲染
                 this.engine.Evaluate(context, reader, writer);
+                resultDocument.PutBuffer(ws.GetBuffer());
             }
 
             return resultDocument;
         }
 
         #endregion
+
+        internal void LoadFromDocument(ExcelXmlDocument doc)
+        {
+            var buf = doc.GetBuffer();
+            var newBuf = new byte[buf.Length];
+            Buffer.BlockCopy(buf, 0, newBuf, 0, buf.Length);
+            this.PutBuffer(newBuf);
+        }
+
+        public override ITemplate Compile()
+        {
+            throw new NotSupportedException();
+        }
 
     }
 }

@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace Bravo.Reporting
 {
-    public abstract class DocumentBase : IDocument
+    public abstract class ZipArchiveDocumentBase : IDocument
     {
 
         #region ITemplate 成员
@@ -67,7 +67,7 @@ namespace Bravo.Reporting
             return Convert.ToBase64String(this.GetBuffer());
         }
 
-        public TextReader GetEntryTextReader(string entryPath)
+        internal TextReader GetEntryTextReader(string entryPath)
         {
             if (string.IsNullOrEmpty(entryPath))
             {
@@ -77,7 +77,7 @@ namespace Bravo.Reporting
             return new StreamReader(this.GetEntryInputStream(entryPath));
         }
 
-        public TextWriter GetEntryTextWriter(string entryPath)
+        internal TextWriter GetEntryTextWriter(string entryPath)
         {
             if (string.IsNullOrEmpty(entryPath))
             {
@@ -87,7 +87,7 @@ namespace Bravo.Reporting
             return new StreamWriter(this.GetEntryOutputStream(entryPath));
         }
 
-        public void WriteXmlEntry(string entryPath, XmlDocument xml)
+        internal void WriteXmlEntry(string entryPath, XmlDocument xml)
         {
             if (xml == null)
             {
@@ -107,7 +107,7 @@ namespace Bravo.Reporting
             }
         }
 
-        public void ReadXmlEntry(string entryPath, XmlDocument xml)
+        internal void ReadXmlEntry(string entryPath, XmlDocument xml)
         {
             using (var contentStream = this.GetEntryInputStream(entryPath))
             {
@@ -115,12 +115,12 @@ namespace Bravo.Reporting
             }
         }
 
-        public void WriteMainContentXml(XmlDocument xml)
+        internal void WriteMainContentXml(XmlDocument xml)
         {
             this.WriteXmlEntry(this.MainContentEntryPath, xml);
         }
 
-        public void ReadMainContentXml(XmlDocument xml)
+        internal void ReadMainContentXml(XmlDocument xml)
         {
             this.ReadXmlEntry(this.MainContentEntryPath, xml);
         }
@@ -154,16 +154,6 @@ namespace Bravo.Reporting
             }
         }
 
-        public virtual void CopyTo(IDocument destDoc)
-        {
-            foreach (var item in this.EntryPaths)
-            {
-                using (var inStream = this.GetEntryInputStream(item))
-                using (var outStream = destDoc.GetEntryOutputStream(item))
-                {
-                    CopyStream(inStream, outStream);
-                }
-            }
-        }
+        public abstract object Clone();
     }
 }

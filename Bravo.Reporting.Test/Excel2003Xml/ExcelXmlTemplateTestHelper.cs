@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.IO;
 
 using Bravo.Reporting.OpenDocument;
 
@@ -14,11 +15,22 @@ namespace Bravo.Reporting.Excel2003Xml.Test
         /// </summary>
         /// <param name="odfPath"></param>
         /// <returns></returns>
-        public static IDocument RenderTemplate(string tmpPath, IDictionary<string, object> context)
+        public static ExcelXmlDocument RenderTemplate(string tmpPath, IDictionary<string, object> context)
         {
             var t = new ExcelXmlDocument();
             t.Load(tmpPath);
-            return t.Compile().Render(context);
+            return (ExcelXmlDocument)t.Compile().Render(context);
+        }
+
+        public static XmlDocument GetExcelXmlDocument(ExcelXmlDocument excelDoc)
+        {
+            var xmldoc = new XmlDocument();
+            using(var ms = new MemoryStream(excelDoc.GetBuffer()))
+            {
+                xmldoc.Load(ms);
+            }
+
+            return xmldoc;
         }
     }
 }
