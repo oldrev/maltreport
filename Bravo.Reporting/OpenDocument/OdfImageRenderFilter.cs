@@ -26,42 +26,54 @@ namespace Bravo.Reporting.OpenDocument
 
         public object Filter(object originalValue)
         {
-            var image = originalValue as Image;
-            Debug.Assert(image != null);
+            var image = (Image)originalValue;
 
-            string filename = this.GetOrCreatePath(image);
+            string filename = this.PutImage(image);
 
+            return GetDrawImageElementXml(filename);
+
+        }
+
+        private static object GetDrawImageElementXml(string imagePath)
+        {
             using (var ws = new StringWriter(CultureInfo.InvariantCulture))
             using (var xw = new XmlTextWriter(ws))
             {
-                xw.WriteStartElement("draw:image");
-                xw.WriteAttributeString("xlink:href", filename);
-                xw.WriteAttributeString("xlink:type", "simple");
-                xw.WriteAttributeString("xlink:show", "embed");
-                xw.WriteAttributeString("xlink:actuate", "onLoad");
-                xw.WriteEndElement();
+                WriteDrawImageElement(xw, imagePath);
                 xw.Flush();
 
                 return ws.ToString();
             }
+        }
 
+        private static void WriteDrawImageElement(XmlWriter xw, string imagePath)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(imagePath));
+            Debug.Assert(xw != null);
+
+            xw.WriteStartElement("draw:image");
+            xw.WriteAttributeString("xlink:href", imagePath);
+            xw.WriteAttributeString("xlink:type", "simple");
+            xw.WriteAttributeString("xlink:show", "embed");
+            xw.WriteAttributeString("xlink:actuate", "onLoad");
+            xw.WriteEndElement();
         }
 
         #endregion
 
-        private string GetOrCreatePath(Image image)
+        private string PutImage(Image image)
         {
-            string filename = null;
+            Debug.Assert(image != null);
 
-            if (this.userImages.ContainsKey(image))
-            {
-                filename = this.userImages[image];
-            }
-            else
+            string filename = null;
+            var hasImage = this.userImages.TryGetValue(image, out filename);
+
+            if(!hasImage)
             {
                 filename = this.resultDocument.AddImage(image);
                 this.userImages[image] = filename;
             }
+
             return filename;
         }
 

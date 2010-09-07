@@ -67,7 +67,6 @@ namespace Bravo.Reporting
             return Convert.ToBase64String(this.GetBuffer());
         }
 
-
         public TextReader GetEntryTextReader(string entryPath)
         {
             if (string.IsNullOrEmpty(entryPath))
@@ -88,7 +87,7 @@ namespace Bravo.Reporting
             return new StreamWriter(this.GetEntryOutputStream(entryPath));
         }
 
-        public void WriteXmlEntry(XmlDocument xml, string entryPath)
+        public void WriteXmlEntry(string entryPath, XmlDocument xml)
         {
             if (xml == null)
             {
@@ -118,7 +117,7 @@ namespace Bravo.Reporting
 
         public void WriteMainContentXml(XmlDocument xml)
         {
-            this.WriteXmlEntry(xml, this.MainContentEntryPath);
+            this.WriteXmlEntry(this.MainContentEntryPath, xml);
         }
 
         public void ReadMainContentXml(XmlDocument xml)

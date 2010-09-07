@@ -29,7 +29,10 @@ namespace Bravo.Reporting.OpenDocument
 
         public override void Load(Stream inStream)
         {
-            Debug.Assert(inStream != null);
+            if (inStream == null)
+            {
+                throw new ArgumentNullException("inStream");
+            }
 
             this.entries.Clear();
 
@@ -111,6 +114,11 @@ namespace Bravo.Reporting.OpenDocument
 
         public override Stream GetEntryInputStream(string entryPath)
         {
+            if (string.IsNullOrEmpty(entryPath))
+            {
+                throw new ArgumentNullException("entryPath");
+            }
+
             var data = this.entries[entryPath];
             return new MemoryStream(data);
         }
@@ -144,6 +152,11 @@ namespace Bravo.Reporting.OpenDocument
 
         public override string AddImage(Image img)
         {
+            if (img == null)
+            {
+                throw new ArgumentNullException("img");
+            }
+
             var fullPath = "Pictures/" + img.DocumentFileName;
             using (var outStream = this.GetEntryOutputStream(fullPath))
             {

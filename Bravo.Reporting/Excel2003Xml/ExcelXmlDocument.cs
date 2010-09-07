@@ -27,6 +27,11 @@ namespace Bravo.Reporting.Excel2003Xml
 
         public override void Load(Stream inStream)
         {
+            if(inStream == null)
+            {
+                throw new ArgumentNullException("inStream");
+            }
+
             this.entries.Clear();
 
             if (inStream.Length >= int.MaxValue)
@@ -47,6 +52,11 @@ namespace Bravo.Reporting.Excel2003Xml
 
         public override void Save(Stream outStream)
         {
+            if (outStream == null)
+            {
+                throw new ArgumentNullException("outStream");
+            }
+
             using (var contentStream = this.GetEntryInputStream(this.MainContentEntryPath))
             {
                 CopyStream(contentStream, outStream);
@@ -86,6 +96,10 @@ namespace Bravo.Reporting.Excel2003Xml
 
         public override bool EntryExists(string entryPath)
         {
+            if (string.IsNullOrEmpty(entryPath))
+            {
+                throw new ArgumentNullException("entryPath");
+            }
             return entryPath.ToLowerInvariant() == this.MainContentEntryPath;
         }
 

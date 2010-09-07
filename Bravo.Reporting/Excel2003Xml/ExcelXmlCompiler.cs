@@ -25,8 +25,6 @@ namespace Bravo.Reporting.Excel2003Xml
                 { "Row", new RowNodeVisitor() },
                 { "Column", new ColumnNodeVisitor() },
                 { "Cell", new CellNodeVisitor() },
-                //{ "NumberFormat", new NumberFormatNodeVisitor() },
-
             };
 
         public static ITemplate Compile(IDocument doc)
@@ -48,15 +46,19 @@ namespace Bravo.Reporting.Excel2003Xml
 
             ProcessPlaceHolders(xml);
 
-            //把编译后的 XmlDocument 写入
+            WriteCompiledMainContent(t, xml);
+
+            return t;
+        }
+
+        private static void WriteCompiledMainContent(ExcelXmlTemplate t, XmlDocument xml)
+        {
             using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
             using (var writer = new TemplateXmlTextWriter(cos))
             {
                 writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
                 xml.WriteTo(writer);
             }
-
-            return t;
         }
 
         private static void ProcessPlaceHolders(XmlDocument xml)

@@ -14,17 +14,20 @@ namespace Bravo.Reporting.OpenDocument
     /// ODF 模板编译器
     /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
     /// </summary>
-    internal static class OdfCompiler 
+    internal static class OdfCompiler
     {
         public const string PlaceHolderPattern =
             @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
+       public static readonly Regex PlaceHolderValuePattern = 
+           new Regex(@"<\s*(([\$#]\w+).*)\s*>$");
+
+        public static readonly Regex HyperLinkValuePattern =
+            new Regex(@"^rtl://(([\$#]\w+).*)\s*$");
+
         public static ITemplate Compile(IDocument doc)
         {
-            if (doc.GetType() != typeof(OdfDocument))
-            {
-                throw new ArgumentException("只支持编译 OdfDocument 类型", "doc");
-            }
+            Debug.Assert(doc is OdfDocument);
 
             var t = new OdfTemplate();
             doc.CopyTo(t);
@@ -38,7 +41,7 @@ namespace Bravo.Reporting.OpenDocument
             ClearTextTags(xml, nsmanager);
 
             //第2遍，处理表格循环
-            ProcessTableRowNodes(xml, nsmanager);
+            ProcessTableRows(xml, nsmanager);
 
             //把编译后的 XmlDocument 写入
             using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
@@ -51,24 +54,16 @@ namespace Bravo.Reporting.OpenDocument
             return t;
         }
 
-        private static void ProcessTableRowNodes(XmlDocument xml, XmlNamespaceManager nsmanager)
+        private static void ProcessTableRows(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
             var rowNodes = xml.SelectNodes("//table:table-row", nsmanager);
-            var rowStatementNodes = new List<StatementElement>(5);
             foreach (XmlElement row in rowNodes)
             {
-                rowStatementNodes.Clear();
+                var rowStatementNodes = new List<StatementElement>(5);
 
                 //检测一个行中的 table-cell 是否只包含 table:table-cell 和 report-statement 元素
                 //把其中的 cell 都去掉
-                foreach (XmlElement subnode in row.ChildNodes)
-                {
-                    var se = subnode as StatementElement;
-                    if (se != null)
-                    {
-                        rowStatementNodes.Add(se);
-                    }
-                }
+                FindStatementNodesInRow(row, rowStatementNodes);
 
                 if (rowStatementNodes.Count == 1)
                 {
@@ -77,38 +72,24 @@ namespace Bravo.Reporting.OpenDocument
             }
         }
 
+        private static void FindStatementNodesInRow(XmlElement row, List<StatementElement> rowStatementNodes)
+        {
+            foreach (XmlElement subnode in row.ChildNodes)
+            {
+                var se = subnode as StatementElement;
+                if (se != null)
+                {
+                    rowStatementNodes.Add(se);
+                }
+            }
+        }
+
         private static void ClearTextTags(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
-            var placeHolderPattern = new Regex(@"<\s*(([\$#]\w+).*)\s*>$");
-            var linkPattern = new Regex(@"^rtl://(([\$#]\w+).*)\s*$");
             var placeholders = xml.SelectNodes(PlaceHolderPattern, nsmanager);
             foreach (XmlNode placeholder in placeholders)
             {
-                string value = null;
-
-                Match match = null;
-
-                if (placeholder.Name == "text:placeholder")
-                {
-                    match = placeHolderPattern.Match(placeholder.InnerText);
-                }
-                else
-                {
-                    var href = placeholder.Attributes["xlink:href"].Value;
-                    match = linkPattern.Match(Uri.UnescapeDataString(href));
-                }
-
-                value = match.Groups[1].Value;
-
-                if (match.Groups.Count != 3)
-                {
-                    throw new SyntaxErrorException("Syntax Error: " + placeholder.InnerText);
-                }
-
-                if (value.Length < 1)
-                {
-                    throw new SyntaxErrorException();
-                }
+                string value = ExtractTemplateExpression(placeholder);
 
                 if (value[0] == '$')
                 {
@@ -125,6 +106,36 @@ namespace Bravo.Reporting.OpenDocument
                     throw new SyntaxErrorException();
                 }
             }
+        }
+
+        private static string ExtractTemplateExpression(XmlNode placeholder)
+        {
+            string value = null;
+
+            Match match = null;
+
+            if (placeholder.Name == "text:placeholder")
+            {
+                match = PlaceHolderValuePattern.Match(placeholder.InnerText);
+            }
+            else
+            {
+                var href = placeholder.Attributes["xlink:href"].Value;
+                match = HyperLinkValuePattern.Match(Uri.UnescapeDataString(href));
+            }
+
+            value = match.Groups[1].Value;
+
+            if (match.Groups.Count != 3)
+            {
+                throw new SyntaxErrorException("Syntax Error: " + placeholder.InnerText);
+            }
+
+            if (value.Length < 1)
+            {
+                throw new SyntaxErrorException();
+            }
+            return value;
         }
 
         private static void ProcessIdentifierTag(XmlDocument xml, XmlNode placeholder, string value)
