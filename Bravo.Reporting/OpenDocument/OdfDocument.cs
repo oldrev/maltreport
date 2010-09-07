@@ -104,7 +104,6 @@ namespace Bravo.Reporting.OpenDocument
                     ze.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
                     break;
             }
-
         }
 
         public override ICollection<string> EntryPaths
@@ -195,22 +194,5 @@ namespace Bravo.Reporting.OpenDocument
             return destDoc;
         }
         #endregion
-
-        public void CopyTo(OdfDocument destDoc)
-        {
-            if (destDoc == null)
-            {
-                throw new ArgumentNullException("destDoc");
-            }
-
-            foreach (var item in this.EntryPaths)
-            {
-                using (var inStream = this.GetEntryInputStream(item))
-                using (var outStream = destDoc.GetEntryOutputStream(item))
-                {
-                    CopyStream(inStream, outStream);
-                }
-            }
-        }
     }
 }

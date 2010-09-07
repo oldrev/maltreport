@@ -29,15 +29,10 @@ namespace Bravo.Reporting.Excel2003Xml
                 { "Cell", new CellNodeVisitor() },
             };
 
-        public static ITemplate Compile(IDocument doc)
+        public static ITemplate Compile(ExcelXmlDocument doc)
         {
-            if (doc.GetType() != typeof(ExcelXmlDocument))
-            {
-                throw new ArgumentException("只支持编译 Microsoft Excel 2003 XML 类型", "doc");
-            }
-
             var t = new ExcelXmlTemplate();
-            t.LoadFromDocument((ExcelXmlDocument)doc);
+            t.LoadFromDocument(doc);
             var xml = t.GetXmlDocument();
 
             var nsmanager = new ExcelXmlNamespaceManager(xml.NameTable);

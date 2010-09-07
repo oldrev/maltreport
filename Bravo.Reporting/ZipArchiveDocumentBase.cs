@@ -155,5 +155,22 @@ namespace Bravo.Reporting
         }
 
         public abstract object Clone();
+
+        public void CopyTo(ZipArchiveDocumentBase destDoc)
+        {
+            if (destDoc == null)
+            {
+                throw new ArgumentNullException("destDoc");
+            }
+
+            foreach (var item in this.EntryPaths)
+            {
+                using (var inStream = this.GetEntryInputStream(item))
+                using (var outStream = destDoc.GetEntryOutputStream(item))
+                {
+                    CopyStream(inStream, outStream);
+                }
+            }
+        }
     }
 }
