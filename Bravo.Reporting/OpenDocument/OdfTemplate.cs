@@ -17,7 +17,7 @@ namespace Bravo.Reporting.OpenDocument
 {
     public class OdfTemplate : OdfDocument, ITemplate
     {
-        private ITextTemplateEngine engine = null;
+        private ITextTemplateEngine engine ;
 
         public OdfTemplate()
         {
@@ -39,6 +39,13 @@ namespace Bravo.Reporting.OpenDocument
 
         public IDocument Render(IDictionary<string, object> context)
         {
+            Debug.Assert(this.engine != null);
+
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var userImages = new Dictionary<Image, string>();
             var resultDocument = new OdfDocument();
             this.CopyTo(resultDocument);

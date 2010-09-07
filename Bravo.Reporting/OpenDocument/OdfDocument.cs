@@ -171,8 +171,7 @@ namespace Bravo.Reporting.OpenDocument
 
         public override ITemplate Compile()
         {
-            var compiler = new OdfTemplateCompiler();
-            return compiler.Compile(this);
+            return OdfCompiler.Compile(this);
         }
     }
 }

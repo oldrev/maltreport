@@ -97,8 +97,7 @@ namespace Bravo.Reporting.Excel2003Xml
 
         public override ITemplate Compile()
         {
-            var compiler = new ExcelXmlTemplateCompiler();
-            return compiler.Compile(this);
+            return ExcelXmlCompiler.Compile(this);
         }
     }
 }

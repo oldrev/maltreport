@@ -17,14 +17,12 @@ namespace Bravo.Reporting.Xml
     internal sealed class StatementElement : XmlElement
     {
         private string statement;
-        public StatementElement(XmlDocument doc, string exp, string directive)
+        public StatementElement(XmlDocument doc, string exp)
             : base(string.Empty, "report-statement", string.Empty, doc)
         {
             Debug.Assert(doc != null);
             Debug.Assert(exp != null);
-            Debug.Assert(directive != null);
 
-            this.Directive = directive;
             this.statement = exp;
         }
 
@@ -39,7 +37,5 @@ namespace Bravo.Reporting.Xml
             
             w.WriteRaw(this.statement);
         }
-
-        public string Directive { get; private set; }
     }
 }

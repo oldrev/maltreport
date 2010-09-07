@@ -14,7 +14,7 @@ namespace Bravo.Reporting.Excel2003Xml
     /// ODF 模板编译器
     /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
     /// </summary>
-    internal class ExcelXmlTemplateCompiler 
+    internal static class ExcelXmlCompiler
     {
         private const string HRefAttribute = "ss:HRef";
 
@@ -29,7 +29,7 @@ namespace Bravo.Reporting.Excel2003Xml
 
             };
 
-        public ITemplate Compile(IDocument doc)
+        public static ITemplate Compile(IDocument doc)
         {
             if (doc.GetType() != typeof(ExcelXmlDocument))
             {
@@ -118,7 +118,7 @@ namespace Bravo.Reporting.Excel2003Xml
 
         private static void ProcessStatementTag(XmlDocument xml, XmlElement phe, string value)
         {
-            var se = new StatementElement(xml, value, "null");
+            var se = new StatementElement(xml, value);
             if (phe.ParentNode.ChildNodes.Count == 1)
             {
                 phe.ParentNode.ParentNode.ReplaceChild(se, phe.ParentNode);

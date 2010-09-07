@@ -31,6 +31,11 @@ namespace Bravo.Reporting.Excel2003Xml
         {
             Debug.Assert(this.engine != null);
 
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             var resultDocument = new ExcelXmlDocument();
             this.CopyTo(resultDocument);
 

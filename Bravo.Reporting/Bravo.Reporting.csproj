@@ -60,7 +60,7 @@
     <Compile Include="Excel2003Xml\ExcelXmlDocument.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlNamespaceManager.cs" />
     <Compile Include="Excel2003Xml\ExcelXmlTemplate.cs" />
-    <Compile Include="Excel2003Xml\ExcelXmlTemplateCompiler.cs" />
+    <Compile Include="Excel2003Xml\ExcelXmlCompiler.cs" />
     <Compile Include="Excel2003Xml\TemplateXmlTextWriter.cs" />
     <Compile Include="Xml\IXmlNodeVisitor.cs" />
     <Compile Include="Excel2003Xml\RowNodeVisitor.cs" />
@@ -75,7 +75,7 @@
     <Compile Include="OpenDocument\OdfDocument.cs" />
     <Compile Include="OpenDocument\OdfImageRenderFilter.cs" />
     <Compile Include="OpenDocument\OdfNamespaceManager.cs" />
-    <Compile Include="OpenDocument\OdfTemplateCompiler.cs" />
+    <Compile Include="OpenDocument\OdfCompiler.cs" />
     <Compile Include="OpenDocument\OdfManifestDocument.cs" />
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

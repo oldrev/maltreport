@@ -14,12 +14,12 @@ namespace Bravo.Reporting.OpenDocument
     /// ODF 模板编译器
     /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
     /// </summary>
-    internal class OdfTemplateCompiler 
+    internal static class OdfCompiler 
     {
         public const string PlaceHolderPattern =
             @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
-        public ITemplate Compile(IDocument doc)
+        public static ITemplate Compile(IDocument doc)
         {
             if (doc.GetType() != typeof(OdfDocument))
             {
@@ -84,7 +84,6 @@ namespace Bravo.Reporting.OpenDocument
             foreach (XmlNode placeholder in placeholders)
             {
                 string value = null;
-                string directive = null;
 
                 Match match = null;
 
@@ -99,7 +98,6 @@ namespace Bravo.Reporting.OpenDocument
                 }
 
                 value = match.Groups[1].Value;
-                directive = match.Groups[2].Value;
 
                 if (match.Groups.Count != 3)
                 {
@@ -118,7 +116,7 @@ namespace Bravo.Reporting.OpenDocument
                 }
                 else if (value[0] == '#')
                 {
-                    var statementNode = new StatementElement(xml, value, directive);
+                    var statementNode = new StatementElement(xml, value);
                     ReduceTag(statementNode, placeholder);
                 }
                 else
