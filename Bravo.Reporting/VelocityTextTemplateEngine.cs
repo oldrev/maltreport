@@ -109,6 +109,11 @@ namespace Bravo.Reporting
 
         void OnReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
         {
+            if (e.OriginalValue == null)
+            {
+                return;
+            }
+
             var t = e.OriginalValue.GetType();
             IRenderFilter filter = null;
             var hasFilter = this.filters.TryGetValue(t, out filter);

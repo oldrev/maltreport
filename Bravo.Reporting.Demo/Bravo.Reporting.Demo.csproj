@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +48,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Database\northwind.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="template1.odt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -56,6 +60,10 @@
     <None Include="template3.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SQLite\System.Data.SQLite.dll" />
+    <Content Include="SQLite\System.Data.SQLite.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

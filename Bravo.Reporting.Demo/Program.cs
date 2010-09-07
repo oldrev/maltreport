@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.SQLite;
 
 using Bravo.Reporting.OpenDocument;
 using Bravo.Reporting.Excel2003Xml;
@@ -15,16 +15,15 @@ namespace Bravo.Reporting.Demo
     {
         static void Main(string[] args)
         {
-            var dt = new DataTable("T_BIZ_CATEGORY");
+            var dt = new DataTable("Employees");
 
             //从数据库里查询数据填充 DataTable
-            var connectionString =
-                @"Data Source=.\SQLEXPRESS;Initial Catalog=VoucherDev;Integrated Security=True;";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            var connectionString = @"Data Source=Database\northwind.db;Version=3;";
+            using (var connection = new SQLiteConnection(connectionString))
             {
-                SqlDataAdapter adapter = new SqlDataAdapter();
-                adapter.SelectCommand = new SqlCommand(
-                    "SELECT * FROM T_BIZ_CATEGORY", connection);
+                var adapter = new SQLiteDataAdapter();
+                adapter.SelectCommand = new SQLiteCommand(
+                    "SELECT * FROM Employees", connection);
                 adapter.FillSchema(dt, SchemaType.Source);
                 adapter.Fill(dt);
             }
@@ -37,7 +36,7 @@ namespace Bravo.Reporting.Demo
                 {"property2", "属性2"},
 
                 // 可以传递具有强类型的对象数据给模板
-                {"employees",
+                {"orm_employees",
                     new List<Employee>()
                     {
                         new Employee("张三", "张三的地址", 22),
@@ -47,7 +46,7 @@ namespace Bravo.Reporting.Demo
                     }
                 },
 
-                {"categories", dt}, //可以传递 DataTable 给模板
+                {"employees", dt}, //可以传递 DataTable 给模板
 
                 {"now", DateTime.Now}, //任何类型都可以传给模板
             };
@@ -55,11 +54,11 @@ namespace Bravo.Reporting.Demo
             //Bravo.Reporting 文档生成三部曲：
             var odt = new OdfDocument();
             //1. 加载用户创建的模板文档
-            odt.Load("template1.odt"); 
+            odt.Load("template1.odt");
             //2. 编译模板，编译结果 template1 可以保存到磁盘上避免多次编译
-            var template1 = odt.Compile();   
+            var template1 = odt.Compile();
             //3. 按照用户提供的上下文数据渲染模板得到结果
-            var result1 = template1.Render(renderContext); 
+            var result1 = template1.Render(renderContext);
             using (var resultFile = File.Open("result1.odt", FileMode.Create, FileAccess.ReadWrite))
             {
                 result1.Save(resultFile);
