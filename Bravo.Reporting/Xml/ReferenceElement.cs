@@ -20,7 +20,14 @@ namespace Bravo.Reporting.Xml
             Debug.Assert(doc != null);
             Debug.Assert(exp != null);
 
-            this.expression = exp;
+            if (exp[1] == '{')
+            {
+                this.expression = exp;
+            }
+            else
+            {
+                this.expression = "${" + exp.Substring(1) + "}";
+            }
         }
 
         public override void WriteTo(XmlWriter w)

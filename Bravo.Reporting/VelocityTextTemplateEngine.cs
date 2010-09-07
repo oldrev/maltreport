@@ -15,7 +15,7 @@ namespace Bravo.Reporting
     internal sealed class VelocityTextTemplateEngine : ITextTemplateEngine
     {
         private VelocityEngine engine;
-        private IDictionary<Type, IRenderFilter> filters = 
+        private IDictionary<Type, IRenderFilter> filters =
             new Dictionary<Type, IRenderFilter>();
 
         public VelocityTextTemplateEngine(string logTag)
@@ -54,7 +54,7 @@ namespace Bravo.Reporting
             var vctx = this.CreateVelocityContext(context);
 
             //执行渲染
-            var successed = this.engine.Evaluate(vctx, output, "VelocityTextTemplateEngine", input);     
+            var successed = this.engine.Evaluate(vctx, output, "VelocityTextTemplateEngine", input);
             output.Flush();
 
             if (!successed)
@@ -109,11 +109,18 @@ namespace Bravo.Reporting
 
         void OnReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
         {
-            if (e.OriginalValue == null)
+            if (e.OriginalValue != null)
             {
-                return;
+                this.DoFilter(e);
             }
+            else
+            {
+                e.NewValue = string.Empty;
+            }
+        }
 
+        private void DoFilter(ReferenceInsertionEventArgs e)
+        {
             var t = e.OriginalValue.GetType();
             IRenderFilter filter = null;
             var hasFilter = this.filters.TryGetValue(t, out filter);

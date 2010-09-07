@@ -20,10 +20,10 @@ namespace Bravo.Reporting.OpenDocument
             @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
         public static readonly Regex PlaceHolderValuePattern =
-            new Regex(@"<\s*(([\$#]\w+).*)\s*>$");
+            new Regex(@"<\s*([\$#].*)\s*>$");
 
         public static readonly Regex HyperLinkValuePattern =
-            new Regex(@"^rtl://(([\$#]\w+).*)\s*$");
+            new Regex(@"^rtl://([\$#].*)\s*$");
 
         public static ITemplate Compile(OdfDocument doc)
         {
@@ -124,7 +124,7 @@ namespace Bravo.Reporting.OpenDocument
 
             value = match.Groups[1].Value;
 
-            if (match.Groups.Count != 3)
+            if (match.Groups.Count != 2)
             {
                 throw new SyntaxErrorException("Syntax Error: " + placeholder.InnerText);
             }

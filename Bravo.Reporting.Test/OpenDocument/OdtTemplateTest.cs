@@ -20,6 +20,8 @@ namespace Bravo.Reporting.OpenDocument.Test
             var ctx = new Dictionary<string, object>()
             {
                 {"name", "John Doe"},
+                {"varNull", null },
+                {"varEmpty", string.Empty },
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
@@ -30,7 +32,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             Assert.GreaterOrEqual(1, paras.Count);
             var p = paras[0];
-            Assert.AreEqual("HELLO John Doe WORLD", p.InnerText);
+            Assert.AreEqual("HELLO John Doe WORLDABCABC", p.InnerText);
         }
 
         [Test(Description = "测试表格行进行循环填充")]
@@ -102,7 +104,7 @@ namespace Bravo.Reporting.OpenDocument.Test
             Assert.AreEqual("TRUE", p.InnerText);
 
             p = paras[2];
-            Assert.AreEqual("TRUE", p.InnerText);
+            Assert.AreEqual("TRUETAIL_STRING", p.InnerText);
         }
 
         [Test(Description = "测试图像标记替换")]

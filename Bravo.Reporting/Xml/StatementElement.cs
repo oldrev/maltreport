@@ -24,6 +24,7 @@ namespace Bravo.Reporting.Xml
             Debug.Assert(exp != null);
 
             this.statement = exp;
+            Console.WriteLine(exp);
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Bravo.Reporting.Xml
         {
             Debug.Assert(statement != null);
             Debug.Assert(w != null);
-            
+
             w.WriteRaw(this.statement);
         }
     }
