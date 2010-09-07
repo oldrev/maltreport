@@ -52,32 +52,24 @@ namespace Bravo.Reporting.Demo
                 {"now", DateTime.Now}, //任何类型都可以传给模板
             };
 
-
-            var odt = new OdfDocument(); //加载模板文档
-            odt.Load("template1.odt");
-            var ods = new OdfDocument();
-            ods.Load("template2.ods");
-            var xls = new ExcelXmlDocument();
-            xls.Load("template3.xls");
-
-            //编译报表，把用户设计的原始报表转换为可以用于直接渲染的模板
-            //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
-            var template1 = odt.Compile();
-            var template2 = ods.Compile();
-            var template3 = xls.Compile();
-
-            //模板编译后的结果可以保存在磁盘上用于多次渲染
-
-            var result1 = template1.Render(renderContext);
-
-            Console.WriteLine("正在生成 ODT 模板...");
-            using (var resultFile = File.Open(
-                "result1.odt", FileMode.Create, FileAccess.ReadWrite))
+            //Bravo.Reporting 文档生成三部曲：
+            var odt = new OdfDocument();
+            //1. 加载用户创建的模板文档
+            odt.Load("template1.odt"); 
+            //2. 编译模板，编译结果 template1 可以保存到磁盘上避免多次编译
+            var template1 = odt.Compile();   
+            //3. 按照用户提供的上下文数据渲染模板得到结果
+            var result1 = template1.Render(renderContext); 
+            using (var resultFile = File.Open("result1.odt", FileMode.Create, FileAccess.ReadWrite))
             {
                 result1.Save(resultFile);
             }
 
+
             Console.WriteLine("正在生成 ODS 模板...");
+            var ods = new OdfDocument();
+            ods.Load("template2.ods");
+            var template2 = ods.Compile();
             var result2 = template2.Render(renderContext);
             using (var resultFile2 = File.Open(
                 "result2.ods", FileMode.Create, FileAccess.ReadWrite))
@@ -86,12 +78,19 @@ namespace Bravo.Reporting.Demo
             }
 
             Console.WriteLine("正在生成 Excel 2003 XML 格式模板...");
+            var xls = new ExcelXmlDocument();
+            xls.Load("template3.xls");
+            var template3 = xls.Compile();
             var result3 = template3.Render(renderContext);
             using (var resultFile3 = File.Open(
                 "result3.xls", FileMode.Create, FileAccess.ReadWrite))
             {
                 result3.Save(resultFile3);
             }
+
+            //编译报表用于把用户设计的原始报表文档转换为可以用于直接渲染的模板
+            //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
+            //模板编译后的结果可以保存在磁盘上用于多次渲染
 
             Console.WriteLine("成功完成模板渲染");
 
