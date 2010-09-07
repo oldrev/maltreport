@@ -108,14 +108,12 @@ namespace Bravo.Reporting
             }
         }
 
-        public XmlDocument ReadXmlEntry(string entryPath)
+        public void ReadXmlEntry(string entryPath, XmlDocument xml)
         {
-            var xml = new XmlDocument();
             using (var contentStream = this.GetEntryInputStream(entryPath))
             {
                 xml.Load(contentStream);
             }
-            return xml;
         }
 
         public void WriteMainContentXml(XmlDocument xml)
@@ -123,9 +121,9 @@ namespace Bravo.Reporting
             this.WriteXmlEntry(xml, this.MainContentEntryPath);
         }
 
-        public XmlDocument ReadMainContentXml()
+        public void ReadMainContentXml(XmlDocument xml)
         {
-            return this.ReadXmlEntry(this.MainContentEntryPath);
+            this.ReadXmlEntry(this.MainContentEntryPath, xml);
         }
 
         public abstract ICollection<string> EntryPaths { get; }

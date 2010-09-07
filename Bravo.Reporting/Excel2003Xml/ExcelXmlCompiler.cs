@@ -39,7 +39,8 @@ namespace Bravo.Reporting.Excel2003Xml
             var t = new ExcelXmlTemplate();
             doc.CopyTo(t);
 
-            var xml = t.ReadMainContentXml();
+            var xml = new XmlDocument();
+            t.ReadMainContentXml(xml);
             var nsmanager = new ExcelXmlNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 

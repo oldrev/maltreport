@@ -29,7 +29,8 @@ namespace Bravo.Reporting.OpenDocument
             var t = new OdfTemplate();
             doc.CopyTo(t);
 
-            var xml = t.ReadMainContentXml();
+            var xml = new XmlDocument();
+            t.ReadMainContentXml(xml);
             var nsmanager = new OdfNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 
