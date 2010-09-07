@@ -17,39 +17,44 @@ namespace Bravo.Reporting.OpenDocument
 {
     public class OdfTemplate : OdfDocument, ITemplate
     {
-        private IDictionary<Image, string> userImages
-            = new Dictionary<Image, string>();
+        private ITextTemplateEngine engine = null;
 
-        private IDocument resultDocument;
-
-        private ITextTemplateEngine engine;
-
-        private void CreateTextEngine()
+        public OdfTemplate()
         {
             this.engine = new VelocityTextTemplateEngine("OdfTemplate");
+        }
+
+        private void ResetTextEngine(IDictionary<Image, string> userImages, IDocument resultDocument)
+        {
+            Debug.Assert(this.engine != null);
+            Debug.Assert(userImages != null);
+            Debug.Assert(resultDocument != null);
+
+            this.engine.Reset();
             this.engine.RegisterFilter(typeof(string), new XmlStringRenderFilter());
-            this.engine.RegisterFilter(typeof(Image), new OdfImageRenderFilter(this.userImages, this.resultDocument));
+            this.engine.RegisterFilter(typeof(Image), new OdfImageRenderFilter(userImages, resultDocument));
         }
 
         #region ITemplate 接口实现
 
         public IDocument Render(IDictionary<string, object> context)
         {
-            this.resultDocument = new OdfDocument();
-            this.CopyTo(this.resultDocument);
+            var userImages = new Dictionary<Image, string>();
+            var resultDocument = new OdfDocument();
+            this.CopyTo(resultDocument);
 
-            this.CreateTextEngine();
+            this.ResetTextEngine(userImages, resultDocument);
 
-            using (var inStream = this.resultDocument.GetEntryInputStream(this.resultDocument.MainContentEntryPath))
+            using (var inStream = resultDocument.GetEntryInputStream(resultDocument.MainContentEntryPath))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = this.resultDocument.GetEntryOutputStream(this.resultDocument.MainContentEntryPath))
+            using (var ws = resultDocument.GetEntryOutputStream(resultDocument.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
                 //执行渲染
                 this.engine.Evaluate(context, reader, writer);
             }
 
-            return this.resultDocument;
+            return resultDocument;
         }
 
         #endregion

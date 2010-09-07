@@ -16,6 +16,8 @@ namespace Bravo.Reporting
         void Evaluate(IDictionary<string, object> context, TextReader input, TextWriter output);
 
         void RegisterFilter(Type t, IRenderFilter filter);
+
+        void Reset();
      
     }
 }

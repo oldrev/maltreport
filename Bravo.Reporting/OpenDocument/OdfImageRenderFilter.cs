@@ -29,17 +29,7 @@ namespace Bravo.Reporting.OpenDocument
             var image = originalValue as Image;
             Debug.Assert(image != null);
 
-            string filename = null;
-
-            if (this.userImages.ContainsKey(image))
-            {
-                filename = this.userImages[image];
-            }
-            else
-            {
-                filename = this.resultDocument.AddImage(image);
-                this.userImages[image] = filename;
-            }
+            string filename = this.GetOrCreatePath(image);
 
             using (var ws = new StringWriter(CultureInfo.InvariantCulture))
             using (var xw = new XmlTextWriter(ws))
@@ -58,5 +48,22 @@ namespace Bravo.Reporting.OpenDocument
         }
 
         #endregion
+
+        private string GetOrCreatePath(Image image)
+        {
+            string filename = null;
+
+            if (this.userImages.ContainsKey(image))
+            {
+                filename = this.userImages[image];
+            }
+            else
+            {
+                filename = this.resultDocument.AddImage(image);
+                this.userImages[image] = filename;
+            }
+            return filename;
+        }
+
     }
 }

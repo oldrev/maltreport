@@ -83,6 +83,11 @@ namespace Bravo.Reporting
             this.filters[t] = filter;
         }
 
+        public void Reset()
+        {
+            this.filters.Clear();
+        }
+
         private VelocityContext CreateVelocityContext(IDictionary<string, object> context)
         {
             Debug.Assert(context != null);
