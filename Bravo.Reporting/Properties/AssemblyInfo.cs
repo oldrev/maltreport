@@ -10,11 +10,11 @@ using System.Runtime.InteropServices;
 // 控制。更改这些属性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("Bravo.Reporting")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("An OpenDocument/MS-Excel Document Generator for .Net")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("微软中国")]
+[assembly: AssemblyCompany("Wei Li")]
 [assembly: AssemblyProduct("Bravo.Reporting")]
-[assembly: AssemblyCopyright("Copyright © 微软中国 2010")]
+[assembly: AssemblyCopyright("Copyright © 2010-TODAY by Wei Li")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
