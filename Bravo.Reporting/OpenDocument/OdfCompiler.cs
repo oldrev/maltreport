@@ -20,10 +20,10 @@ namespace Bravo.Reporting.OpenDocument
             @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
 
         public static readonly Regex PlaceHolderValuePattern =
-            new Regex(@"<\s*([\$#].*)\s*>$");
+            new Regex(@"^<\s*(.*)\s*>$");
 
         public static readonly Regex HyperLinkValuePattern =
-            new Regex(@"^rtl://([\$#].*)\s*$");
+            new Regex(@"^rtl://(.*)\s*$");
 
         public static ITemplate Compile(OdfDocument doc)
         {
