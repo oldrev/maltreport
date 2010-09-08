@@ -23,8 +23,18 @@ namespace Bravo.Reporting.Xml
             Debug.Assert(doc != null);
             Debug.Assert(exp != null);
 
-            this.statement = exp;
-            Console.WriteLine(exp);
+            //WORKAROUND:
+            //由于 NVelocity 1.1 不支持 #{end} 形式的 Directive，因此遇到类似 #endWHATEVER_STRING
+            //的 Directive 会造成解析错误，这里我们在后边加上一个 VTL 注释隔开 #end#**#WHATEVER_STRING 
+
+            if (exp[exp.Length - 1] == ')')
+            {
+                this.statement = exp;
+            }
+            else
+            {
+                this.statement = exp + "#**#";
+            }
         }
 
         /// <summary>
