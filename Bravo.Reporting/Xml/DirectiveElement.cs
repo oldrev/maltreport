@@ -14,26 +14,26 @@ namespace Bravo.Reporting.Xml
     /// <summary>
     /// VTL Statement XML Element
     /// </summary>
-    internal sealed class StatementElement : XmlElement
+    internal sealed class DirectiveElement : XmlElement
     {
-        private string statement;
-        public StatementElement(XmlDocument doc, string exp)
+        private string directive;
+        public DirectiveElement(XmlDocument doc, string directive)
             : base(string.Empty, "report-statement", string.Empty, doc)
         {
             Debug.Assert(doc != null);
-            Debug.Assert(exp != null);
+            Debug.Assert(directive != null);
 
             //WORKAROUND:
             //由于 NVelocity 1.1 不支持 #{end} 形式的 Directive，因此遇到类似 #endWHATEVER_STRING
             //的 Directive 会造成解析错误，这里我们在后边加上一个 VTL 注释隔开 #end#**#WHATEVER_STRING 
 
-            if (exp[exp.Length - 1] == ')')
+            if (directive[directive.Length - 1] == ')')
             {
-                this.statement = exp;
+                this.directive = directive;
             }
             else
             {
-                this.statement = exp + "#**#";
+                this.directive = directive + "#**#";
             }
         }
 
@@ -43,10 +43,10 @@ namespace Bravo.Reporting.Xml
         /// <param name="w"></param>
         public override void WriteTo(XmlWriter w)
         {
-            Debug.Assert(statement != null);
+            Debug.Assert(directive != null);
             Debug.Assert(w != null);
 
-            w.WriteRaw(this.statement);
+            w.WriteRaw(this.directive);
         }
     }
 }

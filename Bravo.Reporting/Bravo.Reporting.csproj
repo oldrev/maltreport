@@ -84,7 +84,7 @@
     <Compile Include="Xml\VelocityEscapedXmlTextWriter.cs" />
     <Compile Include="Xml\XmlStringRenderFilter.cs" />
     <Compile Include="Xml\ReferenceElement.cs" />
-    <Compile Include="Xml\StatementElement.cs" />
+    <Compile Include="Xml\DirectiveElement.cs" />
     <Compile Include="SyntaxErrorException.cs" />
     <Compile Include="ZipArchiveDocumentBase.cs" />
     <Compile Include="TemplateException.cs" />

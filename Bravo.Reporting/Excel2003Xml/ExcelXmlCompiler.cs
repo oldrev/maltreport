@@ -120,7 +120,7 @@ namespace Bravo.Reporting.Excel2003Xml
 
         private static void ProcessStatementTag(XmlDocument xml, XmlElement phe, string value)
         {
-            var se = new StatementElement(xml, value);
+            var se = new DirectiveElement(xml, value);
             if (phe.ParentNode.ChildNodes.Count == 1)
             {
                 phe.ParentNode.ParentNode.ReplaceChild(se, phe.ParentNode);

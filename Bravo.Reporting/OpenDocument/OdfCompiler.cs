@@ -57,7 +57,7 @@ namespace Bravo.Reporting.OpenDocument
             var rowNodes = xml.SelectNodes("//table:table-row", nsmanager);
             foreach (XmlElement row in rowNodes)
             {
-                var rowStatementNodes = new List<StatementElement>(5);
+                var rowStatementNodes = new List<DirectiveElement>(5);
 
                 //检测一个行中的 table-cell 是否只包含 table:table-cell 和 report-statement 元素
                 //把其中的 cell 都去掉
@@ -70,11 +70,11 @@ namespace Bravo.Reporting.OpenDocument
             }
         }
 
-        private static void FindStatementNodesInRow(XmlElement row, List<StatementElement> rowStatementNodes)
+        private static void FindStatementNodesInRow(XmlElement row, List<DirectiveElement> rowStatementNodes)
         {
             foreach (XmlElement subnode in row.ChildNodes)
             {
-                var se = subnode as StatementElement;
+                var se = subnode as DirectiveElement;
                 if (se != null)
                 {
                     rowStatementNodes.Add(se);
@@ -96,7 +96,7 @@ namespace Bravo.Reporting.OpenDocument
                 }
                 else if (value[0] == '#')
                 {
-                    var statementNode = new StatementElement(xml, value);
+                    var statementNode = new DirectiveElement(xml, value);
                     ReduceTag(statementNode, placeholder);
                 }
                 else
