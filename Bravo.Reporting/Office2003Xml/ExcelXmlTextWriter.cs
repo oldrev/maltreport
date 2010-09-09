@@ -6,11 +6,11 @@ using System.IO;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal class TemplateXmlTextWriter : XmlTextWriter
+    internal class ExcelXmlTextWriter : XmlTextWriter
     {
         private string currentElementName;
 
-        public TemplateXmlTextWriter(Stream inStream)
+        public ExcelXmlTextWriter(Stream inStream)
             : base(inStream, Encoding.UTF8)
         {
         }

@@ -42,9 +42,22 @@ namespace Bravo.Reporting.Office2003Xml
 
             ProcessPlaceHolders(xml);
 
-            TemplateExtensions.WriteCompiledMainContent(t, xml);
+            WriteCompiledMainContent(t, xml);
 
             return t;
+        }
+
+        private static void WriteCompiledMainContent(ExcelXmlTemplate t, XmlDocument xml)
+        {
+            using (var ms = new MemoryStream())
+            using (var writer = new ExcelXmlTextWriter(ms))
+            {
+                writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
+                xml.WriteTo(writer);
+                writer.Flush();
+                ms.Flush();
+                t.PutBuffer(ms.GetBuffer());
+            }
         }
 
         private static void ProcessPlaceHolders(XmlDocument xml)

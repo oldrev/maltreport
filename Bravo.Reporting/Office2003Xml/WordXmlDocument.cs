@@ -26,10 +26,23 @@ namespace Bravo.Reporting.Office2003Xml
             nsmanager.LoadOpenDocumentNamespaces();
 
             //TODO: 这里执行编译
-
-            TemplateExtensions.WriteCompiledMainContent(t, xml);
+            WriteCompiledMainContent(t, xml);
 
             return t;
+        }
+
+        private static void WriteCompiledMainContent(WordXmlTemplate t, XmlDocument xml)
+        {
+            using (var ms = new MemoryStream())
+            using (var sw = new StreamWriter(ms))
+            using (var writer = new XmlTextWriter(sw))
+            {
+                writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
+                xml.WriteTo(writer);
+                writer.Flush();
+                ms.Flush();
+                t.PutBuffer(ms.GetBuffer());
+            }
         }
 
     }

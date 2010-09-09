@@ -62,7 +62,7 @@
     <Compile Include="Office2003Xml\ExcelXmlTemplate.cs" />
     <Compile Include="Office2003Xml\ExcelXmlCompiler.cs" />
     <Compile Include="Office2003Xml\TemplateExtensions.cs" />
-    <Compile Include="Office2003Xml\TemplateXmlTextWriter.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlTextWriter.cs" />
     <Compile Include="Office2003Xml\WordXmlDocument.cs" />
     <Compile Include="Office2003Xml\SingleXmlDocumentBase.cs" />
     <Compile Include="Office2003Xml\WordXmlTemplate.cs" />
