@@ -12,10 +12,6 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    /// <summary>
-    /// ODF 模板编译器
-    /// 把用户创建的 ODF 文档中的 content.xml 转换为合适的 NVelocity 模板格式文件
-    /// </summary>
     internal static class ExcelXmlCompiler
     {
         private const string HRefAttribute = "ss:HRef";
