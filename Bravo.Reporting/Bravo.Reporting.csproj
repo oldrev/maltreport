@@ -67,6 +67,7 @@
     <Compile Include="Office2003Xml\SingleXmlDocumentBase.cs" />
     <Compile Include="Office2003Xml\WordXmlTemplate.cs" />
     <Compile Include="Office2003Xml\WordXmllNamespaceManager.cs" />
+    <Compile Include="UrlUtility.cs" />
     <Compile Include="Xml\IXmlNodeVisitor.cs" />
     <Compile Include="Office2003Xml\ExcelXmlRowNodeVisitor.cs" />
     <Compile Include="Office2003Xml\ExcelXmlTableNodeVisitor.cs" />

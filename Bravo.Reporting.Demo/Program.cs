@@ -64,28 +64,9 @@ namespace Bravo.Reporting.Demo
                 result1.Save(resultFile);
             }
 
-
-            Console.WriteLine("正在生成 ODS 模板...");
-            var ods = new OdfDocument();
-            ods.Load("template2.ods");
-            var template2 = ods.Compile();
-            var result2 = template2.Render(renderContext);
-            using (var resultFile2 = File.Open(
-                "result2.ods", FileMode.Create, FileAccess.ReadWrite))
-            {
-                result2.Save(resultFile2);
-            }
-
-            Console.WriteLine("正在生成 Excel 2003 XML 格式模板...");
-            var xls = new ExcelXmlDocument();
-            xls.Load("template3.xls");
-            var template3 = xls.Compile();
-            var result3 = template3.Render(renderContext);
-            using (var resultFile3 = File.Open(
-                "result3.xls", FileMode.Create, FileAccess.ReadWrite))
-            {
-                result3.Save(resultFile3);
-            }
+            RenderTemplate<OdfDocument>(renderContext, "template2.ods", "result2.ods");
+            RenderTemplate<ExcelXmlDocument>(renderContext, "template3.xls", "result3.xls");
+            RenderTemplate<WordXmlDocument>(renderContext, "template4.doc", "result4.doc");
 
             //编译报表用于把用户设计的原始报表文档转换为可以用于直接渲染的模板
             //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
@@ -94,6 +75,24 @@ namespace Bravo.Reporting.Demo
             Console.WriteLine("成功完成模板渲染");
 
             Console.ReadKey();
+        }
+
+        private static void RenderTemplate<T>(
+            IDictionary<string, object> ctx, 
+            string templateFileName,
+            string resultFileName)
+            where T : IDocument, new()
+        {
+            Console.WriteLine("正在生成模板 '{0}' ...", resultFileName);
+            var doc = new T();
+            doc.Load(templateFileName);
+            var t = doc.Compile();
+            var result3 = t.Render(ctx);
+            using (var resultFile3 = File.Open(
+                resultFileName, FileMode.Create, FileAccess.ReadWrite))
+            {
+                result3.Save(resultFile3);
+            }
         }
     }
 }

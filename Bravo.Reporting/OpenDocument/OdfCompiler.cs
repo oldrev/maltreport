@@ -45,7 +45,7 @@ namespace Bravo.Reporting.OpenDocument
             using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
             using (var writer = new VelocityEscapedXmlTextWriter(cos))
             {
-                writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
+                writer.Formatting = Formatting.None; //对于 Velocity 模板，最好格式化
                 xml.WriteTo(writer);
             }
 

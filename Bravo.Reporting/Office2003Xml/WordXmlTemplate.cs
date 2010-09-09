@@ -46,7 +46,9 @@ namespace Bravo.Reporting.Office2003Xml
             {
                 //执行渲染
                 this.engine.Evaluate(context, reader, writer);
-                resultDocument.PutBuffer(ws.GetBuffer());
+                writer.Flush();
+                ws.Flush();
+                resultDocument.PutBuffer(ws.ToArray());
             }
 
             return resultDocument;

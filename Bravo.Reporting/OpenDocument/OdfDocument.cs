@@ -135,7 +135,7 @@ namespace Bravo.Reporting.OpenDocument
             }
 
             var oms = new OutputMemoryStream(entryPath, this.entries);
-            this.entries[entryPath] = oms.GetBuffer();
+            this.entries[entryPath] = oms.ToArray();
 
             return oms;
         }

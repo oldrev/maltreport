@@ -48,11 +48,11 @@ namespace Bravo.Reporting.Office2003Xml
             using (var ms = new MemoryStream())
             using (var writer = new ExcelXmlTextWriter(ms))
             {
-                writer.Formatting = Formatting.Indented; //对于 Velocity 模板，最好格式化
+                writer.Formatting = Formatting.None; //对于 Velocity 模板，最好格式化
                 xml.WriteTo(writer);
                 writer.Flush();
                 ms.Flush();
-                t.PutBuffer(ms.GetBuffer());
+                t.PutBuffer(ms.ToArray());
             }
         }
 

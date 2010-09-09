@@ -64,6 +64,9 @@
   <ItemGroup>
     <Content Include="SQLite\System.Data.SQLite.dll" />
     <Content Include="SQLite\System.Data.SQLite.XML" />
+    <None Include="template4.doc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
