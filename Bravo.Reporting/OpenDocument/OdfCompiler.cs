@@ -41,6 +41,13 @@ namespace Bravo.Reporting.OpenDocument
             //第2遍，处理表格循环
             ProcessTableRows(xml, nsmanager);
 
+            WriteXmlContent(t, xml);
+
+            return t;
+        }
+
+        private static void WriteXmlContent(OdfTemplate t, XmlDocument xml)
+        {
             //把编译后的 XmlDocument 写入
             using (var cos = t.GetEntryOutputStream(t.MainContentEntryPath))
             using (var writer = new VelocityEscapedXmlTextWriter(cos))
@@ -48,8 +55,6 @@ namespace Bravo.Reporting.OpenDocument
                 writer.Formatting = Formatting.None; //对于 Velocity 模板，最好格式化
                 xml.WriteTo(writer);
             }
-
-            return t;
         }
 
         private static void ProcessTableRows(XmlDocument xml, XmlNamespaceManager nsmanager)
@@ -124,6 +129,13 @@ namespace Bravo.Reporting.OpenDocument
             }
 
             value = match.Groups[1].Value;
+            CheckTemplateExpression(placeholder, value, match);
+
+            return value;
+        }
+
+        private static void CheckTemplateExpression(XmlNode placeholder, string value, Match match)
+        {
 
             if (match.Groups.Count != 2)
             {
@@ -134,7 +146,6 @@ namespace Bravo.Reporting.OpenDocument
             {
                 throw new SyntaxErrorException();
             }
-            return value;
         }
 
         private static void ProcessIdentifierTag(XmlDocument xml, XmlNode placeholder, string value)
