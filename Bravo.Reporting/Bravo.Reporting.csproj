@@ -65,10 +65,10 @@
     <Compile Include="Office2003Xml\WordXmlDocument.cs" />
     <Compile Include="Office2003Xml\SingleXmlDocumentBase.cs" />
     <Compile Include="Xml\IXmlNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\RowNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\TableNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\ColumnNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\CellNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlRowNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlTableNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlColumnNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlCellNodeVisitor.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />

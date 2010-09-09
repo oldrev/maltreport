@@ -23,10 +23,10 @@ namespace Bravo.Reporting.Office2003Xml
         private static readonly Dictionary<string, IXmlNodeVisitor> visitors =
             new Dictionary<string, IXmlNodeVisitor>()
             {
-                { "Table", new TableNodeVisitor() },
-                { "Row", new RowNodeVisitor() },
-                { "Column", new ColumnNodeVisitor() },
-                { "Cell", new CellNodeVisitor() },
+                { "Table", new ExcelXmlTableNodeVisitor() },
+                { "Row", new ExcelXmlRowNodeVisitor() },
+                { "Column", new ExcelXmlColumnNodeVisitor() },
+                { "Cell", new ExcelXmlCellNodeVisitor() },
             };
 
         public static ITemplate Compile(ExcelXmlDocument doc)

@@ -8,20 +8,20 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal class RowNodeVisitor : IXmlNodeVisitor
+    internal class ExcelXmlColumnNodeVisitor : IXmlNodeVisitor
     {
         #region INodeVisitor 成员
 
         public void ProcessNode(XmlNode node)
         {
             Debug.Assert(node.NodeType == XmlNodeType.Element);
-            Debug.Assert(node.Name == "Row");
+            Debug.Assert(node.Name == "Column");
 
-            var row = (XmlElement)node;
+            var column = (XmlElement)node ;
 
-            if (row.HasAttribute(ExcelXmlDocument.IndexAttribute))
+            if (column.HasAttribute(ExcelXmlDocument.IndexAttribute))
             {
-                row.RemoveAttribute(ExcelXmlDocument.IndexAttribute);
+                column.RemoveAttribute(ExcelXmlDocument.IndexAttribute);
             }
         }
 
