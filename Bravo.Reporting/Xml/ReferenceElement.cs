@@ -12,10 +12,11 @@ namespace Bravo.Reporting.Xml
 {
     internal sealed class ReferenceElement : XmlElement
     {
+        public const string ElementName = "report-reference";
         private string expression = null;
 
         public ReferenceElement(XmlDocument doc, string exp)
-            : base(string.Empty, "report-reference", string.Empty, doc)
+            : base(string.Empty, ElementName, string.Empty, doc)
         {
             Debug.Assert(doc != null);
             Debug.Assert(exp != null);

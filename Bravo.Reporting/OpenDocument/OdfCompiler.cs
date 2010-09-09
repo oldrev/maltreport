@@ -57,27 +57,28 @@ namespace Bravo.Reporting.OpenDocument
             var rowNodes = xml.SelectNodes("//table:table-row", nsmanager);
             foreach (XmlElement row in rowNodes)
             {
-                var rowStatementNodes = new List<DirectiveElement>(5);
+                var rowDirectiveNodes = new List<DirectiveElement>(5);
 
-                //检测一个行中的 table-cell 是否只包含 table:table-cell 和 report-statement 元素
+                //检测一个行中的 table-cell 是否只包含 table:table-cell 和 report-directive 元素
                 //把其中的 cell 都去掉
-                FindStatementNodesInRow(row, rowStatementNodes);
+                FindDirectiveNodesInRow(row, rowDirectiveNodes);
 
-                if (rowStatementNodes.Count == 1)
+                if (rowDirectiveNodes.Count == 1)
                 {
-                    row.ParentNode.ReplaceChild(rowStatementNodes[0], row);
+                    row.ParentNode.ReplaceChild(rowDirectiveNodes[0], row);
                 }
             }
         }
 
-        private static void FindStatementNodesInRow(XmlElement row, List<DirectiveElement> rowStatementNodes)
+        private static void FindDirectiveNodesInRow(
+            XmlElement row, List<DirectiveElement> rowDirectiveNodes)
         {
             foreach (XmlElement subnode in row.ChildNodes)
             {
                 var se = subnode as DirectiveElement;
                 if (se != null)
                 {
-                    rowStatementNodes.Add(se);
+                    rowDirectiveNodes.Add(se);
                 }
             }
         }
@@ -96,8 +97,8 @@ namespace Bravo.Reporting.OpenDocument
                 }
                 else if (value[0] == '#')
                 {
-                    var statementNode = new DirectiveElement(xml, value);
-                    ReduceTag(statementNode, placeholder);
+                    var directiveNode = new DirectiveElement(xml, value);
+                    ReduceTag(directiveNode, placeholder);
                 }
                 else
                 {

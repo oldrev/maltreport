@@ -15,11 +15,11 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    public class WordXmlTemplate : WordXmlDocument, ITemplate
+    public class WordMLTemplate : WordMLDocument, ITemplate
     {
         private ITextTemplateEngine engine;
 
-        public WordXmlTemplate()
+        public WordMLTemplate()
         {
             this.engine = new VelocityTextTemplateEngine("WordXmlTemplate");
             this.engine.RegisterFilter(typeof(string), new XmlStringRenderFilter());
@@ -36,7 +36,7 @@ namespace Bravo.Reporting.Office2003Xml
                 throw new ArgumentNullException("context");
             }
 
-            var resultDocument = (WordXmlDocument)this.Clone();
+            var resultDocument = (WordMLDocument)this.Clone();
 
             //执行主要内容的渲染过程
             using (var inStream = this.GetInputStream())
@@ -56,7 +56,7 @@ namespace Bravo.Reporting.Office2003Xml
 
         #endregion
 
-        internal void LoadFromDocument(WordXmlDocument doc)
+        internal void LoadFromDocument(WordMLDocument doc)
         {
             var buf = doc.GetBuffer();
             var newBuf = new byte[buf.Length];

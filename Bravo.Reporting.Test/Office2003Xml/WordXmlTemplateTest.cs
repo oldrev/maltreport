@@ -23,10 +23,10 @@ namespace Bravo.Reporting.Office2003Xml.Test
                 {"var2", "_WORLD_" },
             };
 
-            var result = TemplateTestHelper.RenderTemplate<WordXmlDocument>(
+            var result = TemplateTestHelper.RenderTemplate<WordMLDocument>(
                 @"resources/word2003xml_docs/template_reference_replacement.xml", ctx);
 
-            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordXmlDocument)result);
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLDocument)result);
       
             var body = xmldoc.GetElementsByTagName("w:body")[0];
             var bodyText = body.InnerText.Trim();

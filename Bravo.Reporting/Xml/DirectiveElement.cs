@@ -12,13 +12,15 @@ using System.Diagnostics;
 namespace Bravo.Reporting.Xml
 {
     /// <summary>
-    /// VTL Statement XML Element
+    /// VTL Directive XML Element
     /// </summary>
     internal sealed class DirectiveElement : XmlElement
     {
+        public const string ElementName = "report-directive";
+
         private string directive;
         public DirectiveElement(XmlDocument doc, string directive)
-            : base(string.Empty, "report-statement", string.Empty, doc)
+            : base(string.Empty, ElementName, string.Empty, doc)
         {
             Debug.Assert(doc != null);
             Debug.Assert(directive != null);

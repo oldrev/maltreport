@@ -10,22 +10,22 @@ using System.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    public class WordXmlDocument : SingleXmlDocumentBase
+    public class WordMLDocument : SingleXmlDocumentBase
     {
         private const string DestAttribute = "w:dest";
         private const string HlinkElement = "w:hlink";
 
-        public WordXmlDocument()
+        public WordMLDocument()
         {
         }
 
         public override ITemplate Compile()
         {
-            var t = new WordXmlTemplate();
+            var t = new WordMLTemplate();
             t.LoadFromDocument(this);
             var xml = t.GetXmlDocument();
 
-            var nsmanager = new WordXmlNamespaceManager(xml.NameTable);
+            var nsmanager = new WordMLNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 
             //TODO: 这里执行编译
@@ -37,7 +37,7 @@ namespace Bravo.Reporting.Office2003Xml
             return t;
         }
 
-        private static void WriteCompiledMainContent(WordXmlTemplate t, XmlDocument xml)
+        private static void WriteCompiledMainContent(WordMLTemplate t, XmlDocument xml)
         {
             using (var ms = new MemoryStream())
             using (var writer = new XmlTextWriter(ms, Encoding.UTF8))
@@ -69,7 +69,7 @@ namespace Bravo.Reporting.Office2003Xml
 
                 if (value[0] == '#')
                 {
-                    //ProcessStatementTag(xml, phe, value);
+                    throw new NotImplementedException();
                 }
                 else if (value[0] == '$')
                 {
@@ -108,8 +108,8 @@ namespace Bravo.Reporting.Office2003Xml
         {
             //这里我们强制替换成 w:t 元素，因为 Word2003 xml 不支持图片
             var refEle = new Xml.ReferenceElement(xml, value);
-            var rEle = xml.CreateElement("w:r", WordXmlNamespaceManager.WNamespace);
-            var tEle = xml.CreateElement("w:t", WordXmlNamespaceManager.WNamespace);
+            var rEle = xml.CreateElement("w:r", WordMLNamespaceManager.WNamespace);
+            var tEle = xml.CreateElement("w:t", WordMLNamespaceManager.WNamespace);
             rEle.AppendChild(tEle);
             tEle.AppendChild(refEle);
             placeholderElement.ParentNode.ReplaceChild(rEle, placeholderElement);

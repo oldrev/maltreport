@@ -63,10 +63,10 @@
     <Compile Include="Office2003Xml\ExcelXmlCompiler.cs" />
     <Compile Include="Office2003Xml\TemplateExtensions.cs" />
     <Compile Include="Office2003Xml\ExcelXmlTextWriter.cs" />
-    <Compile Include="Office2003Xml\WordXmlDocument.cs" />
+    <Compile Include="Office2003Xml\WordMLDocument.cs" />
     <Compile Include="Office2003Xml\SingleXmlDocumentBase.cs" />
-    <Compile Include="Office2003Xml\WordXmlTemplate.cs" />
-    <Compile Include="Office2003Xml\WordXmllNamespaceManager.cs" />
+    <Compile Include="Office2003Xml\WordMLTemplate.cs" />
+    <Compile Include="Office2003Xml\WordMLNamespaceManager.cs" />
     <Compile Include="UrlUtility.cs" />
     <Compile Include="Xml\IXmlNodeVisitor.cs" />
     <Compile Include="Office2003Xml\ExcelXmlRowNodeVisitor.cs" />

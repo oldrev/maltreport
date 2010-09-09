@@ -79,7 +79,7 @@ namespace Bravo.Reporting.Office2003Xml
 
                 if (value[0] == '#')
                 {
-                    ProcessStatementTag(xml, phe, value);
+                    ProcessDirectiveTag(xml, phe, value);
                 }
                 else if (value[0] == '$')
                 {
@@ -114,7 +114,7 @@ namespace Bravo.Reporting.Office2003Xml
             phe.InnerText = value;
         }
 
-        private static void ProcessStatementTag(XmlDocument xml, XmlElement phe, string value)
+        private static void ProcessDirectiveTag(XmlDocument xml, XmlElement phe, string value)
         {
             var se = new DirectiveElement(xml, value);
             if (phe.ParentNode.ChildNodes.Count == 1)
