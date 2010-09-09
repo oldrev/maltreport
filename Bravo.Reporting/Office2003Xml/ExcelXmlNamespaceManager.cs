@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace Bravo.Reporting.Excel2003Xml
+namespace Bravo.Reporting.Office2003Xml
 {
     internal sealed class ExcelXmlNamespaceManager : XmlNamespaceManager
     {

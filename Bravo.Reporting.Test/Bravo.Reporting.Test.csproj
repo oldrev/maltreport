@@ -48,8 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Excel2003Xml\ExcelXmlTemplateTest.cs" />
-    <Compile Include="Excel2003Xml\ExcelXmlTemplateTestHelper.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlTemplateTest.cs" />
+    <Compile Include="TemplateTestHelper.cs" />
     <Compile Include="ImageTest.cs" />
     <Compile Include="OpenDocument\OdfTemplateTestHelper.cs" />
     <Compile Include="OpenDocument\OdsTemplateTest.cs" />
@@ -93,6 +93,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\go-home.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\word2003xml_docs\template_reference_replacement.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

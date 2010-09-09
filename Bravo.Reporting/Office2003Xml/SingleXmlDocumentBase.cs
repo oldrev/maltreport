@@ -1,5 +1,5 @@
 ﻿//作者：李维
-//创建时间：2010-09-03
+//创建时间：2010-09-09
 
 using System;
 using System.Collections.Generic;
@@ -8,21 +8,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 
-namespace Bravo.Reporting.Excel2003Xml
+namespace Bravo.Reporting.Office2003Xml
 {
-    public class ExcelXmlDocument : IDocument
+    public abstract class SingleXmlDocumentBase : IDocument
     {
-        public const string IndexAttribute = "ss:Index";
-        public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
-        public const string ExpandedRowCountAttribute = "ss:ExpandedRowCount";
-        public const string FormatAttribute = "ss:Format";
-        public const string TypeAttribute = "ss:Type";
-
         private byte[] data;
-
-        public ExcelXmlDocument()
-        {
-        }
 
         public void Load(Stream inStream)
         {
@@ -53,10 +43,7 @@ namespace Bravo.Reporting.Excel2003Xml
             outStream.Write(this.data, 0, this.data.Length);
         }
 
-        public virtual ITemplate Compile()
-        {
-            return ExcelXmlCompiler.Compile(this);
-        }
+        public abstract ITemplate Compile();
 
         #region IDocument 成员
 
@@ -71,7 +58,7 @@ namespace Bravo.Reporting.Excel2003Xml
 
         public void Load(string path)
         {
-            using(var fs = File.OpenRead(path))
+            using (var fs = File.OpenRead(path))
             {
                 this.Load(fs);
             }
@@ -86,9 +73,9 @@ namespace Bravo.Reporting.Excel2003Xml
 
         #region ICloneable 成员
 
-        public object Clone()
+        public virtual object Clone()
         {
-            var o = new ExcelXmlDocument();
+            var o = (SingleXmlDocumentBase)Activator.CreateInstance(this.GetType());
             o.PutBuffer(this.data);
             return o;
         }

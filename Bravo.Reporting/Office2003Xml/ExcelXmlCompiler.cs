@@ -10,7 +10,7 @@ using System.IO;
 
 using Bravo.Reporting.Xml;
 
-namespace Bravo.Reporting.Excel2003Xml
+namespace Bravo.Reporting.Office2003Xml
 {
     /// <summary>
     /// ODF 模板编译器

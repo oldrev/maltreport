@@ -7,7 +7,7 @@ using System.Data;
 using System.Data.SQLite;
 
 using Bravo.Reporting.OpenDocument;
-using Bravo.Reporting.Excel2003Xml;
+using Bravo.Reporting.Office2003Xml;
 
 namespace Bravo.Reporting.Demo
 {

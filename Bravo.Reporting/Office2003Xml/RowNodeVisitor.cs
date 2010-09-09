@@ -6,22 +6,22 @@ using System.Diagnostics;
 
 using Bravo.Reporting.Xml;
 
-namespace Bravo.Reporting.Excel2003Xml
+namespace Bravo.Reporting.Office2003Xml
 {
-    internal class ColumnNodeVisitor : IXmlNodeVisitor
+    internal class RowNodeVisitor : IXmlNodeVisitor
     {
         #region INodeVisitor 成员
 
         public void ProcessNode(XmlNode node)
         {
             Debug.Assert(node.NodeType == XmlNodeType.Element);
-            Debug.Assert(node.Name == "Column");
+            Debug.Assert(node.Name == "Row");
 
-            var column = (XmlElement)node ;
+            var row = (XmlElement)node;
 
-            if (column.HasAttribute(ExcelXmlDocument.IndexAttribute))
+            if (row.HasAttribute(ExcelXmlDocument.IndexAttribute))
             {
-                column.RemoveAttribute(ExcelXmlDocument.IndexAttribute);
+                row.RemoveAttribute(ExcelXmlDocument.IndexAttribute);
             }
         }
 

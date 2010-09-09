@@ -57,16 +57,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Excel2003Xml\ExcelXmlDocument.cs" />
-    <Compile Include="Excel2003Xml\ExcelXmlNamespaceManager.cs" />
-    <Compile Include="Excel2003Xml\ExcelXmlTemplate.cs" />
-    <Compile Include="Excel2003Xml\ExcelXmlCompiler.cs" />
-    <Compile Include="Excel2003Xml\TemplateXmlTextWriter.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlDocument.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlNamespaceManager.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlTemplate.cs" />
+    <Compile Include="Office2003Xml\ExcelXmlCompiler.cs" />
+    <Compile Include="Office2003Xml\TemplateXmlTextWriter.cs" />
+    <Compile Include="Office2003Xml\WordXmlDocument.cs" />
+    <Compile Include="Office2003Xml\SingleXmlDocumentBase.cs" />
     <Compile Include="Xml\IXmlNodeVisitor.cs" />
-    <Compile Include="Excel2003Xml\RowNodeVisitor.cs" />
-    <Compile Include="Excel2003Xml\TableNodeVisitor.cs" />
-    <Compile Include="Excel2003Xml\ColumnNodeVisitor.cs" />
-    <Compile Include="Excel2003Xml\CellNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\RowNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\TableNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ColumnNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\CellNodeVisitor.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />

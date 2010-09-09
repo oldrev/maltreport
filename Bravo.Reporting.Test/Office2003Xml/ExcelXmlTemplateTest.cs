@@ -7,7 +7,9 @@ using System.Xml;
 
 using NUnit.Framework;
 
-namespace Bravo.Reporting.Excel2003Xml.Test
+using Bravo.Reporting.Test;
+
+namespace Bravo.Reporting.Office2003Xml.Test
 {
     [TestFixture(Description = "ODT 格式模板的测试")]
     public sealed class ExcelXmlTemplateTest
@@ -20,10 +22,10 @@ namespace Bravo.Reporting.Excel2003Xml.Test
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
             };
 
-            var result = ExcelXmlTemplateTestHelper.RenderTemplate(
+            var result = TemplateTestHelper.RenderTemplate<ExcelXmlDocument>(
                 @"resources/excel2003xml_docs/template_row_loop.xml", ctx);
 
-            var xmldoc = ExcelXmlTemplateTestHelper.GetExcelXmlDocument((ExcelXmlDocument)result);
+            var xmldoc = TemplateTestHelper.GetExcelXmlDocument((ExcelXmlDocument)result);
       
             var rows = xmldoc.GetElementsByTagName("Row");
 
@@ -43,10 +45,10 @@ namespace Bravo.Reporting.Excel2003Xml.Test
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
             };
 
-            var result = ExcelXmlTemplateTestHelper.RenderTemplate(
+            var result = TemplateTestHelper.RenderTemplate<ExcelXmlDocument>(
                 @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
 
-            var xmldoc = ExcelXmlTemplateTestHelper.GetExcelXmlDocument(result);
+            var xmldoc = TemplateTestHelper.GetExcelXmlDocument(result);
 
             var table = xmldoc.GetElementsByTagName("Table")[0];
 

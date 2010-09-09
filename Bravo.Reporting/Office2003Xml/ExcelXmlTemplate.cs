@@ -13,7 +13,7 @@ using System.Globalization;
 
 using Bravo.Reporting.Xml;
 
-namespace Bravo.Reporting.Excel2003Xml
+namespace Bravo.Reporting.Office2003Xml
 {
     public class ExcelXmlTemplate : ExcelXmlDocument, ITemplate
     {
