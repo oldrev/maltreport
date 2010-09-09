@@ -14,6 +14,7 @@ namespace Bravo.Reporting.Office2003Xml
     {
         private const string DestAttribute = "w:dest";
         private const string HlinkElement = "w:hlink";
+        private const string BookMarkElement = "w:bookmark";
 
         public WordMLDocument()
         {
@@ -57,15 +58,19 @@ namespace Bravo.Reporting.Office2003Xml
             foreach (XmlElement phe in placeholders)
             {
                 var attr = phe.GetAttribute(DestAttribute);
-                var value = attr.Substring(5).Trim('/', ' ');
+                var value = attr.Replace("rtl://", "").Trim('/', ' ');
+
+                if (phe.HasAttribute(BookMarkElement))
+                {
+                    value = "#" + phe.GetAttribute(BookMarkElement);
+                }
+
+                value = UrlUtility.UrlDecode(value, Encoding.UTF8);
 
                 if (value.Length < 2)
                 {
                     throw new SyntaxErrorException();
                 }
-
-                //TODO: 测试中文
-                value = UrlUtility.UrlDecode(value, Encoding.UTF8);
 
                 if (value[0] == '#')
                 {
@@ -93,7 +98,7 @@ namespace Bravo.Reporting.Office2003Xml
                 if (e.Name == HlinkElement)
                 {
                     var attr = e.GetAttribute(DestAttribute);
-                    if (attr.StartsWith("rtl://", StringComparison.InvariantCulture))
+                    if (attr.StartsWith("rtl://", StringComparison.Ordinal))
                     {
                         placeholders.Add(e);
                     }

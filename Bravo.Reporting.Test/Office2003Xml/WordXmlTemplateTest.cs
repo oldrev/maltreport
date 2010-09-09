@@ -34,5 +34,23 @@ namespace Bravo.Reporting.Office2003Xml.Test
             Assert.AreEqual("TEST_HELLO_REFERENCE_WORLD_REPLACEMENT", bodyText);
         }
 
+        [Test(Description = "测试 Word 2003 Xml 的 RTL:// 链接 URL 转义")]
+        public void TestEscapeUrl()
+        {
+            var ctx = new Dictionary<string, object>()
+            {
+            };
+
+            var result = TemplateTestHelper.RenderTemplate<WordMLDocument>(
+                @"resources/word2003xml_docs/template_escape_url.xml", ctx);
+
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLDocument)result);
+
+            var body = xmldoc.GetElementsByTagName("w:body")[0];
+            var bodyText = body.InnerText.Trim();
+
+            Assert.AreEqual("革命", bodyText);
+        }
+
     }
 }
