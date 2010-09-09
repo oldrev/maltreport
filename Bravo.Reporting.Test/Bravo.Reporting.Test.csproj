@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Office2003Xml\ExcelXmlTemplateTest.cs" />
+    <Compile Include="Office2003Xml\WordXmlTemplateTest.cs" />
     <Compile Include="TemplateTestHelper.cs" />
     <Compile Include="ImageTest.cs" />
     <Compile Include="OpenDocument\OdfTemplateTestHelper.cs" />

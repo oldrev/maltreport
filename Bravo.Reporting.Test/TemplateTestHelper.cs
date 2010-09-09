@@ -23,11 +23,11 @@ namespace Bravo.Reporting.Test
             return (T)t.Compile().Render(context);
         }
 
-        public static XmlDocument GetExcelXmlDocument<T>(T excelDoc)
+        public static XmlDocument GetlXmlDocument<T>(T singleXmlDoc)
             where T : IDocument
         {
             var xmldoc = new XmlDocument();
-            using (var ms = new MemoryStream(excelDoc.GetBuffer()))
+            using (var ms = new MemoryStream(singleXmlDoc.GetBuffer()))
             {
                 xmldoc.Load(ms);
             }

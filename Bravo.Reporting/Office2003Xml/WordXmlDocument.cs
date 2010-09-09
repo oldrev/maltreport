@@ -18,7 +18,18 @@ namespace Bravo.Reporting.Office2003Xml
 
         public override ITemplate Compile()
         {
-            throw new NotImplementedException();
+            var t = new WordXmlTemplate();
+            t.LoadFromDocument(this);
+            var xml = t.GetXmlDocument();
+
+            var nsmanager = new WordXmlNamespaceManager(xml.NameTable);
+            nsmanager.LoadOpenDocumentNamespaces();
+
+            //TODO: 这里执行编译
+
+            TemplateExtensions.WriteCompiledMainContent(t, xml);
+
+            return t;
         }
 
     }

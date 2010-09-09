@@ -11,10 +11,10 @@ using Bravo.Reporting.Test;
 
 namespace Bravo.Reporting.Office2003Xml.Test
 {
-    [TestFixture(Description = "ODT 格式模板的测试")]
+    [TestFixture(Description = "Excel 2003 XML 格式模板的测试")]
     public sealed class ExcelXmlTemplateTest
     {
-        [Test(Description = "测试 Excel 2003 Xml 的简单行循环")]
+        [Test(Description = "测试 Excel 2003 XML 的简单行循环")]
         public void TestSimpleRowLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -25,7 +25,7 @@ namespace Bravo.Reporting.Office2003Xml.Test
             var result = TemplateTestHelper.RenderTemplate<ExcelXmlDocument>(
                 @"resources/excel2003xml_docs/template_row_loop.xml", ctx);
 
-            var xmldoc = TemplateTestHelper.GetExcelXmlDocument((ExcelXmlDocument)result);
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelXmlDocument)result);
       
             var rows = xmldoc.GetElementsByTagName("Row");
 
@@ -48,7 +48,7 @@ namespace Bravo.Reporting.Office2003Xml.Test
             var result = TemplateTestHelper.RenderTemplate<ExcelXmlDocument>(
                 @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
 
-            var xmldoc = TemplateTestHelper.GetExcelXmlDocument(result);
+            var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
 
             var table = xmldoc.GetElementsByTagName("Table")[0];
 

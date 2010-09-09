@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-namespace Bravo.Reporting.Xml
+namespace Bravo.Reporting.Office2003Xml
 {
     internal class TemplateXmlTextWriter : XmlTextWriter
     {
