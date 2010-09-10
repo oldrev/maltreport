@@ -22,10 +22,10 @@ namespace Bravo.Reporting.Office2003Xml.Test
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
             };
 
-            var result = TemplateTestHelper.RenderTemplate<ExcelXmlDocument>(
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
                 @"resources/excel2003xml_docs/template_row_loop.xml", ctx);
 
-            var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelXmlDocument)result);
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelMLDocument)result);
       
             var rows = xmldoc.GetElementsByTagName("Row");
 
@@ -45,7 +45,7 @@ namespace Bravo.Reporting.Office2003Xml.Test
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
             };
 
-            var result = TemplateTestHelper.RenderTemplate<ExcelXmlDocument>(
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
                 @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);

@@ -8,7 +8,7 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal class ExcelXmlCellNodeVisitor : IXmlNodeVisitor
+    internal class ExcelMLCellNodeVisitor : IXmlNodeVisitor
     {
         #region INodeVisitor 成员
 
@@ -24,7 +24,7 @@ namespace Bravo.Reporting.Office2003Xml
                 cell.FirstChild.InnerText == "#VALUE!")
             {
                 var data = (XmlElement)cell.FirstChild;
-                data.SetAttribute(ExcelXmlDocument.TypeAttribute, "String");
+                data.SetAttribute(ExcelMLDocument.TypeAttribute, "String");
                 data.InnerText = "";
             }
 

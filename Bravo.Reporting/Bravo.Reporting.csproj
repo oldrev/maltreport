@@ -57,22 +57,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Office2003Xml\ExcelXmlDocument.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlNamespaceManager.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlTemplate.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlCompiler.cs" />
-    <Compile Include="Office2003Xml\TemplateExtensions.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlTextWriter.cs" />
+    <Compile Include="Office2003Xml\ExcelMLDocument.cs" />
+    <Compile Include="Office2003Xml\ExcelMLNamespaceManager.cs" />
+    <Compile Include="Office2003Xml\ExcelMLTemplate.cs" />
+    <Compile Include="Office2003Xml\ExcelMLCompiler.cs" />
+    <Compile Include="Office2003Xml\ExcelMLTextWriter.cs" />
     <Compile Include="Office2003Xml\WordMLDocument.cs" />
     <Compile Include="Office2003Xml\SingleXmlDocumentBase.cs" />
     <Compile Include="Office2003Xml\WordMLTemplate.cs" />
     <Compile Include="Office2003Xml\WordMLNamespaceManager.cs" />
     <Compile Include="UrlUtility.cs" />
     <Compile Include="Xml\IXmlNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlRowNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlTableNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlColumnNodeVisitor.cs" />
-    <Compile Include="Office2003Xml\ExcelXmlCellNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelMLlRowNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelMLTableNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelMLColumnNodeVisitor.cs" />
+    <Compile Include="Office2003Xml\ExcelMLCellNodeVisitor.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="OpenDocument\OdfDocument.cs" />
     <Compile Include="OpenDocument\OdfImageRenderFilter.cs" />
     <Compile Include="OpenDocument\OdfNamespaceManager.cs" />
-    <Compile Include="OpenDocument\OdfCompiler.cs" />
     <Compile Include="OpenDocument\OdfManifestDocument.cs" />
     <Compile Include="OutputMemoryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

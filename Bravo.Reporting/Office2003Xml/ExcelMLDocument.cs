@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    public class ExcelXmlDocument : SingleXmlDocumentBase
+    public class ExcelMLDocument : SingleXmlDocumentBase
     {
         public const string IndexAttribute = "ss:Index";
         public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
@@ -18,13 +18,13 @@ namespace Bravo.Reporting.Office2003Xml
         public const string FormatAttribute = "ss:Format";
         public const string TypeAttribute = "ss:Type";
 
-        public ExcelXmlDocument()
+        public ExcelMLDocument()
         {
         }
 
         public override ITemplate Compile()
         {
-            return ExcelXmlCompiler.Compile(this);
+            return ExcelMLCompiler.Compile(this);
         }
 
         #region IDocument 成员

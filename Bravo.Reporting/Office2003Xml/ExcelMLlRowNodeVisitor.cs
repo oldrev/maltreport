@@ -8,7 +8,7 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal class ExcelXmlRowNodeVisitor : IXmlNodeVisitor
+    internal class ExcelMLlRowNodeVisitor : IXmlNodeVisitor
     {
         #region INodeVisitor 成员
 
@@ -19,9 +19,9 @@ namespace Bravo.Reporting.Office2003Xml
 
             var row = (XmlElement)node;
 
-            if (row.HasAttribute(ExcelXmlDocument.IndexAttribute))
+            if (row.HasAttribute(ExcelMLDocument.IndexAttribute))
             {
-                row.RemoveAttribute(ExcelXmlDocument.IndexAttribute);
+                row.RemoveAttribute(ExcelMLDocument.IndexAttribute);
             }
         }
 

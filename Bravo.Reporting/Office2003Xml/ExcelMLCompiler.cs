@@ -12,26 +12,26 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal static class ExcelXmlCompiler
+    internal static class ExcelMLCompiler
     {
         private const string HRefAttribute = "ss:HRef";
 
         private static readonly Dictionary<string, IXmlNodeVisitor> visitors =
             new Dictionary<string, IXmlNodeVisitor>()
             {
-                { "Table", new ExcelXmlTableNodeVisitor() },
-                { "Row", new ExcelXmlRowNodeVisitor() },
-                { "Column", new ExcelXmlColumnNodeVisitor() },
-                { "Cell", new ExcelXmlCellNodeVisitor() },
+                { "Table", new ExcelMLTableNodeVisitor() },
+                { "Row", new ExcelMLlRowNodeVisitor() },
+                { "Column", new ExcelMLColumnNodeVisitor() },
+                { "Cell", new ExcelMLCellNodeVisitor() },
             };
 
-        public static ITemplate Compile(ExcelXmlDocument doc)
+        public static ITemplate Compile(ExcelMLDocument doc)
         {
-            var t = new ExcelXmlTemplate();
+            var t = new ExcelMLTemplate();
             t.LoadFromDocument(doc);
             var xml = t.GetXmlDocument();
 
-            var nsmanager = new ExcelXmlNamespaceManager(xml.NameTable);
+            var nsmanager = new ExcelMLNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 
             ClearTemplate(xml);
@@ -43,10 +43,10 @@ namespace Bravo.Reporting.Office2003Xml
             return t;
         }
 
-        private static void WriteCompiledMainContent(ExcelXmlTemplate t, XmlDocument xml)
+        private static void WriteCompiledMainContent(ExcelMLTemplate t, XmlDocument xml)
         {
             using (var ms = new MemoryStream())
-            using (var writer = new ExcelXmlTextWriter(ms))
+            using (var writer = new ExcelMLTextWriter(ms))
             {
                 writer.Formatting = Formatting.None; //对于 Velocity 模板，最好格式化
                 xml.WriteTo(writer);

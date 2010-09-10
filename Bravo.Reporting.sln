@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bravo.Reporting.Test", "Bra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bravo.Reporting.Demo", "Bravo.Reporting.Demo\Bravo.Reporting.Demo.csproj", "{CA25D97B-0A99-4AE2-9493-79A8A538314F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{74EC18A8-E12B-4843-8BEF-F621C60B6D2A}"
+	ProjectSection(SolutionItems) = preProject
+		Bravo.Reporting.Test.nunit = Bravo.Reporting.Test.nunit
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,5 +33,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81} = {74EC18A8-E12B-4843-8BEF-F621C60B6D2A}
 	EndGlobalSection
 EndGlobal

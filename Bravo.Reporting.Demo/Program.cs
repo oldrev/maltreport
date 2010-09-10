@@ -65,7 +65,7 @@ namespace Bravo.Reporting.Demo
             }
 
             RenderTemplate<OdfDocument>(renderContext, "template2.ods", "result2.ods");
-            RenderTemplate<ExcelXmlDocument>(renderContext, "template3.xls", "result3.xls");
+            RenderTemplate<ExcelMLDocument>(renderContext, "template3.xls", "result3.xls");
             RenderTemplate<WordMLDocument>(renderContext, "template4.doc", "result4.doc");
 
             //编译报表用于把用户设计的原始报表文档转换为可以用于直接渲染的模板

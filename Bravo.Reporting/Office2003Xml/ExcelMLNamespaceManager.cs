@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal sealed class ExcelXmlNamespaceManager : XmlNamespaceManager
+    internal sealed class ExcelMLNamespaceManager : XmlNamespaceManager
     {
         public const string WorkbookNamespace = @"urn:schemas-microsoft-com:office:spreadsheet";
         public const string ONamespace = @"urn:schemas-microsoft-com:office:office";
@@ -14,7 +14,7 @@ namespace Bravo.Reporting.Office2003Xml
         public const string HtmlNamespace = @"http://www.w3.org/TR/REC-html40";
         public const string ExcelWorkbookNamespace = @"urn:schemas-microsoft-com:office:excel";
 
-        public ExcelXmlNamespaceManager(XmlNameTable xnt)
+        public ExcelMLNamespaceManager(XmlNameTable xnt)
             : base(xnt)
         {
         }

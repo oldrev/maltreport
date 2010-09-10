@@ -8,7 +8,7 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal class ExcelXmlTableNodeVisitor : IXmlNodeVisitor
+    internal class ExcelMLTableNodeVisitor : IXmlNodeVisitor
     {
         #region INodeVisitor 成员
 
@@ -18,14 +18,14 @@ namespace Bravo.Reporting.Office2003Xml
             Debug.Assert(node.Name == "Table");
 
             var table = (XmlElement)node;
-            if (table.HasAttribute(ExcelXmlDocument.ExpandedRowCountAttribute))
+            if (table.HasAttribute(ExcelMLDocument.ExpandedRowCountAttribute))
             {
-                table.RemoveAttribute(ExcelXmlDocument.ExpandedRowCountAttribute);
+                table.RemoveAttribute(ExcelMLDocument.ExpandedRowCountAttribute);
             }
 
-            if (table.HasAttribute(ExcelXmlDocument.ExpandedColumnCountAttribute))
+            if (table.HasAttribute(ExcelMLDocument.ExpandedColumnCountAttribute))
             {
-                table.RemoveAttribute(ExcelXmlDocument.ExpandedColumnCountAttribute);
+                table.RemoveAttribute(ExcelMLDocument.ExpandedColumnCountAttribute);
             }
         }
 
