@@ -26,6 +26,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"resources/odf_docs/template_ids.odt", ctx);
+            OdfTemplateTestHelper.AssertOpenDocumentContentWellFormed(result);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument((OdfDocument)result);
             var paras = xmldoc.GetElementsByTagName("text:p");
@@ -45,6 +46,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"resources/odf_docs/template_row_loop.odt", ctx);
+            OdfTemplateTestHelper.AssertOpenDocumentContentWellFormed(result);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
@@ -69,6 +71,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"resources/odf_docs/template_escape.odt", ctx);
+            OdfTemplateTestHelper.AssertOpenDocumentContentWellFormed(result);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
@@ -91,6 +94,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"resources/odf_docs/template_statement.odt", ctx);
+            OdfTemplateTestHelper.AssertOpenDocumentContentWellFormed(result);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 
@@ -117,6 +121,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"resources/odf_docs/template_image.odt", ctx);
+            OdfTemplateTestHelper.AssertOpenDocumentContentWellFormed(result);
 
             var manifestDoc = new XmlDocument();
             using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntryPath))

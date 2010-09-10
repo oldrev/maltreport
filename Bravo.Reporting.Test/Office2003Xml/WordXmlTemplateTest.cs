@@ -64,6 +64,7 @@ namespace Bravo.Reporting.Office2003Xml.Test
                 @"resources/word2003xml_docs/template_escape_url.xml", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLDocument)result);
+            AssertValidWordMLDocument(xmldoc);
 
             var body = xmldoc.GetElementsByTagName("w:body")[0];
             var bodyText = body.InnerText.Trim();

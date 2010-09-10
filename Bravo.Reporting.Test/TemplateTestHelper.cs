@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.IO;
 
+using Commons.Xml.Relaxng;
 using NUnit.Framework;
 
 using Bravo.Reporting.OpenDocument;
@@ -78,6 +79,48 @@ namespace Bravo.Reporting.Test
 
             Assert.AreEqual(0, errors);
             Assert.AreEqual(0, warnings);
+        }
+
+        public static void AssertValidXmlStreamViaRelaxng(Stream xmlStream, string rngFile)
+        {
+            Assert.IsTrue(RelaxngValidate(xmlStream, rngFile));
+        }
+
+        public static bool RelaxngValidate(Stream xmlStream, string rngFile)
+        {
+            // Grammar.
+            RelaxngPattern p = null;
+            using (XmlTextReader xtrRng = new XmlTextReader(rngFile))
+            {
+                p = RelaxngPattern.Read(xtrRng);
+                p.Compile();
+            }
+
+            // Validate instance.
+            using (XmlTextReader xtrXml = new XmlTextReader(xmlStream))
+            using (RelaxngValidatingReader vr = new RelaxngValidatingReader(xtrXml, p))
+            {
+                try
+                {
+                    while (!vr.EOF)
+                    {
+                        vr.Read();
+                    }
+                    // XML file is valid.
+                    return true;
+                }
+                catch (RelaxngException rex)
+                {
+                    // XML file not valid.
+                    Console.WriteLine("RELAX NG Validation: " + rex.Message);
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Bad XML file: " + ex.Message);
+                    return false;
+                }
+            }
         }
     }
 }

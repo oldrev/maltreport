@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-using Bravo.Reporting.OpenDocument;
+using NUnit.Framework;
+
+using Bravo.Reporting.Test;
 
 namespace Bravo.Reporting.OpenDocument.Test
 {
     public static class OdfTemplateTestHelper
     {
+
+        public const string OpenDocumentRngFile =
+            @"resources/schemas/opendocument/OpenDocument-v1.2-cd05-schema.rng";
+
         /// <summary>
         /// 一部执行模板编译、渲染并返回结果
         /// </summary>
@@ -29,6 +35,15 @@ namespace Bravo.Reporting.OpenDocument.Test
                 xmldoc.Load(inputStream);
             }
             return xmldoc;
+        }
+
+        public static void AssertOpenDocumentContentWellFormed(OdfDocument odf)
+        {
+            using (var inStream = odf.GetEntryInputStream(odf.MainContentEntryPath))
+            {
+                var validateResult = TemplateTestHelper.RelaxngValidate(inStream, OpenDocumentRngFile);
+                Assert.IsTrue(validateResult);
+            }
         }
     }
 }
