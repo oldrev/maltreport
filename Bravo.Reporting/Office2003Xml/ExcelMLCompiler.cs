@@ -16,14 +16,19 @@ namespace Bravo.Reporting.Office2003Xml
     {
         private const string HRefAttribute = "ss:HRef";
 
-        private static readonly Dictionary<string, IXmlNodeVisitor> visitors =
-            new Dictionary<string, IXmlNodeVisitor>()
+        private static readonly Dictionary<string, IXmlNodeProcessor> xmlNodeProcessors;
+
+        static ExcelMLCompiler()
+        {
+            xmlNodeProcessors = new Dictionary<string, IXmlNodeProcessor>()
             {
-                { "Table", new ExcelMLTableNodeVisitor() },
-                { "Row", new ExcelMLlRowNodeVisitor() },
-                { "Column", new ExcelMLColumnNodeVisitor() },
-                { "Cell", new ExcelMLCellNodeVisitor() },
+                { "Table", new ExcelMLTableNodeProcessor() },
+                { "Row", new ExcelMLlRowNodeProcessor() },
+                { "Column", new ExcelMLColumnNodeProcessor() },
+                { "Cell", new ExcelMLCellNodeProcessor() },
             };
+
+        }
 
         public static ITemplate Compile(ExcelMLDocument doc)
         {
@@ -65,7 +70,7 @@ namespace Bravo.Reporting.Office2003Xml
                 throw new TemplateException("无效的 Excel 2003 Xml 文件格式");
             }
 
-            var placeholders = FindAllPlaceholders(workbookNode);
+            var placeholders = FindAllPlaceholders(xml);
 
             foreach (XmlElement phe in placeholders)
             {
@@ -93,19 +98,19 @@ namespace Bravo.Reporting.Office2003Xml
             }
         }
 
-        private static void ClearTemplate(XmlNode doc)
+        private static void ClearTemplate(XmlNode node)
         {
-            //把所有的行数和列数设置去掉, Excel 会自动计算的
-            //ss:ExpandedColumnCount="5" ss:ExpandedRowCount="3"
-            var nodes = doc.SelectNodes("//*");
-            foreach (XmlElement e in nodes)
+            IXmlNodeProcessor visitor = null;
+            if (xmlNodeProcessors.TryGetValue(node.Name, out visitor))
             {
-                IXmlNodeVisitor visitor = null;
-                if (visitors.TryGetValue(e.Name, out visitor))
-                {
-                    visitor.ProcessNode(e);
-                }
+                visitor.ProcessNode(node);
             }
+
+            foreach (XmlNode child in node.ChildNodes)
+            {
+                ClearTemplate(child);
+            }
+
         }
 
         private static void ProcessReferenceTag(XmlElement phe, string value)
@@ -127,17 +132,17 @@ namespace Bravo.Reporting.Office2003Xml
             }
         }
 
-        private static List<XmlElement> FindAllPlaceholders(XmlNode doc)
+        private static List<XmlElement> FindAllPlaceholders(XmlDocument doc)
         {
-            var placeholders = new List<XmlElement>();
-            var allNodes = doc.SelectNodes("//*");
+            var placeholders = new List<XmlElement>(50);
+            var allNodes = doc.GetElementsByTagName("Cell");
 
             foreach (XmlElement e in allNodes)
             {
-                if (e.Name == "Cell" && e.HasAttribute(HRefAttribute))
+                if (e.HasAttribute(HRefAttribute))
                 {
                     var attr = e.GetAttribute(HRefAttribute);
-                    if (attr.StartsWith("rtl://", StringComparison.InvariantCulture))
+                    if (attr.StartsWith("rtl://", StringComparison.Ordinal))
                     {
                         placeholders.Add(e);
                     }

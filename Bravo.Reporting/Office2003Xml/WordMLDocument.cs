@@ -88,20 +88,17 @@ namespace Bravo.Reporting.Office2003Xml
             }
         }
 
-        private static List<XmlElement> FindAllPlaceholders(XmlNode doc)
+        private static List<XmlElement> FindAllPlaceholders(XmlDocument xml)
         {
             var placeholders = new List<XmlElement>();
-            var allNodes = doc.SelectNodes("//*");
+            var allNodes = xml.GetElementsByTagName(HlinkElement);
 
             foreach (XmlElement e in allNodes)
             {
-                if (e.Name == HlinkElement)
+                var attr = e.GetAttribute(DestAttribute);
+                if (attr.StartsWith("rtl://", StringComparison.Ordinal))
                 {
-                    var attr = e.GetAttribute(DestAttribute);
-                    if (attr.StartsWith("rtl://", StringComparison.Ordinal))
-                    {
-                        placeholders.Add(e);
-                    }
+                    placeholders.Add(e);
                 }
             }
 

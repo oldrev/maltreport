@@ -18,11 +18,13 @@ namespace Bravo.Reporting.OpenDocument
     {
         internal const string MimeTypeEntryPath = "mimetype";
         internal const string SettingsEntryPath = "settings.xml";
-
         public const string ManifestEntryPath = "META-INF/manifest.xml";
 
-        public const string PlaceHolderPattern =
-         @"//text:placeholder | //text:a[starts-with(@xlink:href, 'rtl://')]";
+        private const string TextPlaceholderElement = @"text:placeholder";
+        private const string DrawTextBoxElement = @"draw:text-box";
+        private const string TextAnchorElement = @"text:a";
+        private const string TextPlaceholderTypeAttribute = @"text:placeholder-type";
+        private const string TableRowElement = @"table:table-row";
 
         public static readonly Regex PlaceHolderValuePattern =
             new Regex(@"^<\s*(.*)\s*>$");
@@ -204,7 +206,7 @@ namespace Bravo.Reporting.OpenDocument
             nsmanager.LoadOpenDocumentNamespaces();
 
             //第1遍，先处理简单的Tag 替换
-            ClearTextTags(xml, nsmanager);
+            PreprocessElements(xml, nsmanager);
 
             //第2遍，处理表格循环
             ProcessTableRows(xml, nsmanager);
@@ -238,25 +240,42 @@ namespace Bravo.Reporting.OpenDocument
 
         private static void ProcessTableRows(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
-            var rowNodes = xml.SelectNodes("//table:table-row", nsmanager);
-            foreach (XmlElement row in rowNodes)
+            var rowElements = FindAllRowElements(xml);
+
+            foreach (XmlElement row in rowElements)
             {
-                var rowDirectiveNodes = new List<DirectiveElement>(5);
-
-                //检测一个行中的 table-cell 是否只包含 table:table-cell 和 report-directive 元素
+                //检测一个行中的 table-cell 是否只包含唯一的 report-directive 元素
                 //把其中的 cell 都去掉
-                FindDirectiveNodesInRow(row, rowDirectiveNodes);
-
-                if (rowDirectiveNodes.Count == 1)
-                {
-                    row.ParentNode.ReplaceChild(rowDirectiveNodes[0], row);
-                }
+                ProcessSingleTableRowElement(row);
             }
         }
 
-        private static void FindDirectiveNodesInRow(
-            XmlElement row, List<DirectiveElement> rowDirectiveNodes)
+        private static void ProcessSingleTableRowElement(XmlElement row)
         {
+            var rowDirectiveElements = FindDirectiveNodesInRow(row);
+
+            if (rowDirectiveElements.Count == 1)
+            {
+                row.ParentNode.ReplaceChild(rowDirectiveElements[0], row);
+            }
+        }
+
+        private static List<XmlElement> FindAllRowElements(XmlDocument xml)
+        {
+            var nodeList = xml.GetElementsByTagName(TableRowElement);
+            var rowNodes = new List<XmlElement>();
+
+            foreach (XmlElement rowEle in nodeList)
+            {
+                rowNodes.Add(rowEle);
+            }
+            return rowNodes;
+        }
+
+        private static List<DirectiveElement> FindDirectiveNodesInRow(
+            XmlElement row)
+        {
+            var rowDirectiveNodes = new List<DirectiveElement>(50);
             foreach (XmlElement subnode in row.ChildNodes)
             {
                 var se = subnode as DirectiveElement;
@@ -265,11 +284,13 @@ namespace Bravo.Reporting.OpenDocument
                     rowDirectiveNodes.Add(se);
                 }
             }
+            return rowDirectiveNodes;
         }
 
-        private static void ClearTextTags(XmlDocument xml, XmlNamespaceManager nsmanager)
+        private static void PreprocessElements(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
-            var placeholders = xml.SelectNodes(PlaceHolderPattern, nsmanager);
+            var placeholders = FindAllRtlElements(xml);
+
             foreach (XmlNode placeholder in placeholders)
             {
                 string value = ExtractTemplateExpression(placeholder);
@@ -289,6 +310,28 @@ namespace Bravo.Reporting.OpenDocument
                     throw new SyntaxErrorException();
                 }
             }
+        }
+
+        private static List<XmlElement> FindAllRtlElements(XmlDocument xml)
+        {
+            var placeholders = new List<XmlElement>();
+
+            var textPlaceholders = xml.GetElementsByTagName(TextPlaceholderElement);
+            foreach (XmlElement tpe in textPlaceholders)
+            {
+                placeholders.Add(tpe);
+            }
+
+            var textAnchors = xml.GetElementsByTagName(TextAnchorElement);
+            foreach (XmlElement ta in textAnchors)
+            {
+                var href = ta.GetAttribute("xlink:href");
+                if (href != null && href.Trim().StartsWith("rtl://", StringComparison.Ordinal))
+                {
+                    placeholders.Add(ta);
+                }
+            }
+            return placeholders;
         }
 
         private static string ExtractTemplateExpression(XmlNode placeholder)
@@ -335,7 +378,7 @@ namespace Bravo.Reporting.OpenDocument
 
             var ie = new ReferenceElement(xml, value);
 
-            if (placeholder.Name == "text:placeholder")
+            if (placeholder.Name == TextPlaceholderElement)
             {
                 ProcessPlaceHolderElement(placeholder, ie);
             }
@@ -347,7 +390,7 @@ namespace Bravo.Reporting.OpenDocument
 
         private static void ProcessPlaceHolderElement(XmlNode placeholder, ReferenceElement ie)
         {
-            var placeholderType = placeholder.Attributes["text:placeholder-type"]
+            var placeholderType = placeholder.Attributes[TextPlaceholderTypeAttribute]
                 .InnerText.Trim().ToLowerInvariant(); ;
             //处理图像占位符
 
@@ -372,8 +415,8 @@ namespace Bravo.Reporting.OpenDocument
             Debug.Assert(ie != null);
 
             //向上查找 drawbox
-            var drawboxNode = LookupAncestor(placeholder, "draw:text-box");
-            if (drawboxNode.Name != "draw:text-box")
+            var drawboxNode = LookupAncestor(placeholder, DrawTextBoxElement);
+            if (drawboxNode.Name != DrawTextBoxElement)
             {
                 throw new SyntaxErrorException("图像类型的占位符必须放在图文框中");
             }

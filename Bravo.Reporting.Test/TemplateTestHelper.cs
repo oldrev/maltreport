@@ -8,7 +8,9 @@ using System.IO;
 using Commons.Xml.Relaxng;
 using NUnit.Framework;
 
+using Bravo.Reporting;
 using Bravo.Reporting.OpenDocument;
+
 
 namespace Bravo.Reporting.Test
 {

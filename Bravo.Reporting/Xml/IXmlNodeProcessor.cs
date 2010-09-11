@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace Bravo.Reporting.Xml
 {
-    internal interface IXmlNodeVisitor
+    internal interface IXmlNodeProcessor
     {
         void ProcessNode(XmlNode node);
     }

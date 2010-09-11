@@ -8,7 +8,7 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.Office2003Xml
 {
-    internal class ExcelMLTableNodeVisitor : IXmlNodeVisitor
+    internal class ExcelMLTableNodeProcessor : IXmlNodeProcessor
     {
         #region INodeVisitor 成员
 
