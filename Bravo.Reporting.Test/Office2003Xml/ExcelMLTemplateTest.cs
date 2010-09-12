@@ -28,7 +28,6 @@ namespace Bravo.Reporting.Office2003Xml.Test
                 @"resources/excel2003xml_docs/template_row_loop.xml", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelMLDocument)result);
-            xmldoc.ShouldBeWellFormedExcelML();
 
             var rows = xmldoc.GetElementsByTagName("Row");
 
@@ -52,7 +51,6 @@ namespace Bravo.Reporting.Office2003Xml.Test
                 @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
-            xmldoc.ShouldBeWellFormedExcelML();
 
             var table = xmldoc.GetElementsByTagName("Table")[0];
 

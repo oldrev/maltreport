@@ -6,12 +6,12 @@
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:html="http://www.w3.org/TR/REC-html40">
  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
-  <Author>微软系统</Author>
-  <LastAuthor>微软系统</LastAuthor>
-  <Created>2010-09-03T01:43:50Z</Created>
-  <Company>微软中国</Company>
+  <Created>2010-09-12T07:19:16Z</Created>
   <Version>12.00</Version>
  </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <RemovePersonalInformation/>
+ </OfficeDocumentSettings>
  <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
   <WindowHeight>8040</WindowHeight>
   <WindowWidth>19200</WindowWidth>
@@ -33,7 +33,7 @@
    <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#0000FF"
     ss:Underline="Single"/>
   </Style>
-  <Style ss:ID="s66" ss:Parent="s62">
+  <Style ss:ID="m42260448" ss:Parent="s62">
    <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -43,7 +43,17 @@
    </Borders>
    <Protection/>
   </Style>
-  <Style ss:ID="s67">
+  <Style ss:ID="m42260468" ss:Parent="s62">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s71">
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -56,18 +66,18 @@
   <Table ss:ExpandedColumnCount="5" ss:ExpandedRowCount="3" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
    <Row ss:AutoFitHeight="0">
-    <Cell ss:MergeAcross="4" ss:StyleID="s66" ss:HRef="rtl:///#foreach($c in $chars)"><Data
+    <Cell ss:MergeAcross="4" ss:StyleID="m42260448" ss:HRef="rtl:///#foreach($c in $chars)"><Data
       ss:Type="String">#foreach($c in $chars)</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:StyleID="s67"><Data ss:Type="String">$c</Data></Cell>
-    <Cell ss:StyleID="s67"><Data ss:Type="String">$c</Data></Cell>
-    <Cell ss:StyleID="s67"><Data ss:Type="String">$c</Data></Cell>
-    <Cell ss:StyleID="s67"><Data ss:Type="String">$c</Data></Cell>
-    <Cell ss:StyleID="s67"><Data ss:Type="String">$c</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">$c</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">$c</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">$c</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">$c</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="String">$c</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:MergeAcross="4" ss:StyleID="s66" ss:HRef="rtl:///#end"><Data
+    <Cell ss:MergeAcross="4" ss:StyleID="m42260468" ss:HRef="rtl:///#end"><Data
       ss:Type="String">#end</Data></Cell>
    </Row>
   </Table>
