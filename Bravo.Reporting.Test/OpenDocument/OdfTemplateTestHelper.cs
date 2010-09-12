@@ -27,7 +27,7 @@ namespace Bravo.Reporting.OpenDocument.Test
             return (OdfDocument)odf.Compile().Render(context);
         }
 
-        public static XmlDocument GetContentDocument(OdfDocument odfTemplate)
+        public static XmlDocument GetContentDocument(this OdfDocument odfTemplate)
         {
             var xmldoc = new XmlDocument();
             using (var inputStream = odfTemplate.GetEntryInputStream(odfTemplate.MainContentEntryPath))
@@ -37,12 +37,11 @@ namespace Bravo.Reporting.OpenDocument.Test
             return xmldoc;
         }
 
-        public static void AssertOpenDocumentContentWellFormed(OdfDocument odf)
+        public static void ShouldBeWellFormedOdfContent(this OdfDocument odf)
         {
             using (var inStream = odf.GetEntryInputStream(odf.MainContentEntryPath))
             {
-                var validateResult = TemplateTestHelper.RelaxngValidate(inStream, OpenDocumentRngFile);
-                Assert.IsTrue(validateResult);
+                inStream.ShouldWellFormed(OpenDocumentRngFile);
             }
         }
     }

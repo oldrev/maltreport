@@ -25,7 +25,7 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var result = OdfTemplateTestHelper.RenderTemplate(
                 @"resources/odf_docs/template_column_loop.ods", ctx);
-            OdfTemplateTestHelper.AssertOpenDocumentContentWellFormed(result);
+            OdfTemplateTestHelper.ShouldBeWellFormedOdfContent(result);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);
 

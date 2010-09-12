@@ -41,7 +41,7 @@ namespace Bravo.Reporting.Test
             return xmldoc;
         }
 
-        public static void AddXmlSchema(XmlDocument xml,
+        private static void AddXmlSchema(XmlDocument xml,
             ValidationEventHandler validationEventHandler, string xsdFilePath)
         {
             XmlSchema wordnetSchema = null;
@@ -52,8 +52,8 @@ namespace Bravo.Reporting.Test
             xml.Schemas.Add(wordnetSchema);
         }
 
-        public static void AssertValidXmlDocument(
-            XmlDocument xml, IEnumerable<string> xsdFiles)
+        public static void ShouldWellFormed(
+            this XmlDocument xml, IEnumerable<string> xsdFiles)
         {
             xml.Schemas = new XmlSchemaSet(xml.NameTable);
 
@@ -76,19 +76,19 @@ namespace Bravo.Reporting.Test
 
             foreach (var xsdFile in xsdFiles)
             {
-                TemplateTestHelper.AddXmlSchema(xml, validationEventHandler, xsdFile);
+                AddXmlSchema(xml, validationEventHandler, xsdFile);
             }
 
             Assert.AreEqual(0, errors);
             Assert.AreEqual(0, warnings);
         }
 
-        public static void AssertValidXmlStreamViaRelaxng(Stream xmlStream, string rngFile)
+        public static void ShouldWellFormed(this Stream xmlStream, string rngFile)
         {
             Assert.IsTrue(RelaxngValidate(xmlStream, rngFile));
         }
 
-        public static bool RelaxngValidate(Stream xmlStream, string rngFile)
+        private static bool RelaxngValidate(Stream xmlStream, string rngFile)
         {
             // Grammar.
             RelaxngPattern p = null;
