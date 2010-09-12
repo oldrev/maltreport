@@ -66,5 +66,18 @@ namespace Bravo.Reporting.Office2003Xml.Test
 
         }
 
+        [Test(Description = "测试 Excel 2003 Xml 复杂模板的编译渲染")]
+        public void TestComplexTemplate()
+        {
+            var ctx = ContextDataFactory.CreateComplexDataContext();
+
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
+                @"resources/excel2003xml_docs/template_complex.xml", ctx);
+
+            var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
+            xmldoc.ShouldBeWellFormedExcelML();
+
+        }
+
     }
 }
