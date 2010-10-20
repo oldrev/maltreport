@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
+# SharpDevelop 3.2.0.5777
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bravo.Reporting", "Bravo.Reporting\Bravo.Reporting.csproj", "{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bravo.Reporting.Demo", "Bravo.Reporting.Demo\Bravo.Reporting.Demo.csproj", "{CA25D97B-0A99-4AE2-9493-79A8A538314F}"
@@ -31,13 +32,13 @@ Global
 		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81} = {74EC18A8-E12B-4843-8BEF-F621C60B6D2A}
-	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Bravo.Reporting.Demo\Bravo.Reporting.Demo.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81} = {74EC18A8-E12B-4843-8BEF-F621C60B6D2A}
 	EndGlobalSection
 EndGlobal
