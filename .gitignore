@@ -13,3 +13,4 @@ _ReSharper.*
 Ankh.NoLoad
 *.VisualState.xml
 TestResult.xml
+testresult.xml
