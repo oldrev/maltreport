@@ -45,21 +45,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Office2003Xml\ExcelMLDocument.cs" />
-    <Compile Include="Office2003Xml\ExcelMLNamespaceManager.cs" />
-    <Compile Include="Office2003Xml\ExcelMLTemplate.cs" />
-    <Compile Include="Office2003Xml\ExcelMLCompiler.cs" />
-    <Compile Include="Office2003Xml\ExcelMLTextWriter.cs" />
-    <Compile Include="Office2003Xml\WordMLDocument.cs" />
-    <Compile Include="Office2003Xml\SingleXmlDocumentBase.cs" />
-    <Compile Include="Office2003Xml\WordMLTemplate.cs" />
-    <Compile Include="Office2003Xml\WordMLNamespaceManager.cs" />
+    <Compile Include="OfficeXml\ExcelMLDocument.cs" />
+    <Compile Include="OfficeXml\ExcelMLNamespaceManager.cs" />
+    <Compile Include="OfficeXml\ExcelMLTemplate.cs" />
+    <Compile Include="OfficeXml\ExcelMLCompiler.cs" />
+    <Compile Include="OfficeXml\ExcelMLTextWriter.cs" />
+    <Compile Include="OfficeXml\WordMLDocument.cs" />
+    <Compile Include="OfficeXml\SingleXmlDocumentBase.cs" />
+    <Compile Include="OfficeXml\WordMLTemplate.cs" />
+    <Compile Include="OfficeXml\WordMLNamespaceManager.cs" />
     <Compile Include="UrlUtility.cs" />
     <Compile Include="Xml\IXmlNodeProcessor.cs" />
-    <Compile Include="Office2003Xml\ExcelMLlRowNodeProcessor.cs" />
-    <Compile Include="Office2003Xml\ExcelMLTableNodeProcessor.cs" />
-    <Compile Include="Office2003Xml\ExcelMLColumnNodeProcessor.cs" />
-    <Compile Include="Office2003Xml\ExcelMLCellNodeProcessor.cs" />
+    <Compile Include="OfficeXml\ExcelMLlRowNodeProcessor.cs" />
+    <Compile Include="OfficeXml\ExcelMLTableNodeProcessor.cs" />
+    <Compile Include="OfficeXml\ExcelMLColumnNodeProcessor.cs" />
+    <Compile Include="OfficeXml\ExcelMLCellNodeProcessor.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />

@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 using Bravo.Reporting.Test;
 
-namespace Bravo.Reporting.Office2003Xml.Test
+namespace Bravo.Reporting.OfficeXml.Test
 {
     [TestFixture(Description = "Word 2003 XML 格式模板的测试")]
     public sealed class WordMLTemplateTest

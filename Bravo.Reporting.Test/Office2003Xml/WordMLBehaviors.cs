@@ -6,7 +6,7 @@ using System.Xml;
 
 using Bravo.Reporting.Test;
 
-namespace Bravo.Reporting.Office2003Xml.Test
+namespace Bravo.Reporting.OfficeXml.Test
 {
     internal static class WordMLBehaviors
     {
