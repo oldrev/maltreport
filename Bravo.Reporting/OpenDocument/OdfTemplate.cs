@@ -57,7 +57,7 @@ namespace Bravo.Reporting.OpenDocument
             using (var ws = resultDocument.GetEntryOutputStream(resultDocument.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
-                //执行渲染
+                // Do the render
                 this.engine.Evaluate(context, reader, writer);
             }
 

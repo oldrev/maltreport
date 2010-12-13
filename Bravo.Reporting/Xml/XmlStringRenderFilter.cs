@@ -8,7 +8,7 @@ namespace Bravo.Reporting.Xml
 {
     internal class XmlStringRenderFilter : IRenderFilter
     {
-        #region IRenderFilter 成员
+        #region IRenderFilter Members
 
         public object Filter(object originalValue)
         {

@@ -31,7 +31,6 @@ namespace Bravo.Reporting.OpenDocument
             string filename = this.PutImage(image);
 
             return GetDrawImageElementXml(filename);
-
         }
 
         private static object GetDrawImageElementXml(string imagePath)

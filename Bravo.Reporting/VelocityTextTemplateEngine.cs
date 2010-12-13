@@ -57,7 +57,7 @@ namespace Bravo.Reporting
 			output.Flush ();
 			
 			if (!successed) {
-				throw new TemplateException ("文本模板渲染失败");
+				throw new TemplateException ("Failed to render template");
 			}
 		}
 

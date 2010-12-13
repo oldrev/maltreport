@@ -73,7 +73,7 @@ namespace Bravo.Reporting.OpenDocument
             //ODF 格式约定 mimetype 必须为第一个文件
             if (!this.entries.ContainsKey(MimeTypeEntryPath))
             {
-                throw new InvalidDataException("Can not found entry: 'mimetype'");
+                throw new InvalidDataException("Entry 'mimetype' not found");
             }
 
             using (var ze = new ZipFile())
