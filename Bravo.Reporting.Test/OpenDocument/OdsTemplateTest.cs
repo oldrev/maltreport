@@ -43,6 +43,10 @@ namespace Bravo.Reporting.OpenDocument.Test
             var row2 = rows[2];
             Assert.AreEqual(row2.ChildNodes.Count, 3);
 
+            var row4 = rows[4];
+            Assert.AreEqual(row4.ChildNodes.Count, 4);
+            Assert.IsTrue(row4.InnerText == "1234");
+
         }
     }
 }
