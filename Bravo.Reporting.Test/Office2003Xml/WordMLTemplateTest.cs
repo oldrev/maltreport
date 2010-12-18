@@ -6,18 +6,19 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 
-using NUnit.Framework;
+using Xunit;
 
 using Bravo.Reporting.Test;
 
 namespace Bravo.Reporting.OfficeXml.Test
 {
-    [TestFixture(Description = "Word 2003 XML 格式模板的测试")]
+    /// <summary>
+    /// "Word 2003 XML 格式模板的测试
+    /// </summary>
     public sealed class WordMLTemplateTest
     {
 
-
-        [Test(Description = "测试 Word 2003 Xml 的简单引用替换")]
+        [Fact(DisplayName = "测试 Word 2003 Xml 的简单引用替换")]
         public void TestReferenceReplacement()
         {
             var ctx = new Dictionary<string, object>()
@@ -35,10 +36,10 @@ namespace Bravo.Reporting.OfficeXml.Test
             var body = xmldoc.GetElementsByTagName("w:body")[0];
             var bodyText = body.InnerText.Trim();
 
-            Assert.AreEqual("TEST_HELLO_REFERENCE_WORLD_REPLACEMENT", bodyText);
+            Assert.Equal("TEST_HELLO_REFERENCE_WORLD_REPLACEMENT", bodyText);
         }
 
-        [Test(Description = "测试 Word 2003 Xml 的 RTL:// 链接 URL 转义")]
+        [Fact(DisplayName = "测试 Word 2003 Xml 的 RTL:// 链接 URL 转义")]
         public void TestEscapeUrl()
         {
             var ctx = new Dictionary<string, object>()
@@ -54,7 +55,7 @@ namespace Bravo.Reporting.OfficeXml.Test
             var body = xmldoc.GetElementsByTagName("w:body")[0];
             var bodyText = body.InnerText.Trim();
 
-            Assert.AreEqual("革命", bodyText);
+            Assert.Equal("革命", bodyText);
         }
 
     }
