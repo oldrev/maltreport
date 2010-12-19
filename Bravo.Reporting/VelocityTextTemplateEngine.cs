@@ -9,6 +9,7 @@ using NVelocity.App;
 using NVelocity.App.Events;
 using NVelocity;
 using NVelocity.Context;
+using Commons.Collections;
 
 namespace Bravo.Reporting
 {
@@ -27,7 +28,11 @@ namespace Bravo.Reporting
 			this.LogTag = logTag;
 			
 			this.engine = new VelocityEngine ();
-			this.engine.Init ();
+
+            var props = new ExtendedProperties();
+            //在这里注册 Log system
+            //props.AddProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,G);
+            this.engine.Init(props);
 		}
 
 		public string LogTag {
