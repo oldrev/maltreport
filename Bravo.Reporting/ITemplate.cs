@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Bravo.Reporting
 {
-    public interface ITemplate : IDocument
+    public interface ITemplate
     {
         IDocument Render(IDictionary<string, object> context);
     }
