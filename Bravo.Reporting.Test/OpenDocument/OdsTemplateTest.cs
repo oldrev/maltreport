@@ -13,7 +13,7 @@ namespace Bravo.Reporting.OpenDocument.Test
     public class OdsTemplateTest
     {
 
-        [Fact(DisplayName = "测试表格列进行循环填充")]
+        [Fact(DisplayName = "测试 ODF 表格列进行循环填充")]
         public void TestColumnLoop()
         {
             var ctx = new Dictionary<string, object>()

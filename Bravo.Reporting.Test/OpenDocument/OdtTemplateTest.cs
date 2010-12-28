@@ -16,7 +16,7 @@ namespace Bravo.Reporting.OpenDocument.Test
     /// </summary>
     public sealed class OdtTemplateTest
     {
-        [Fact(DisplayName = "测试简单的变量替换")]
+        [Fact(DisplayName = "测试 ODF 简单的变量替换")]
         public void TestIdsReplacement()
         {
             var ctx = new Dictionary<string, object>()
@@ -38,7 +38,7 @@ namespace Bravo.Reporting.OpenDocument.Test
             Assert.Equal("HELLO John Doe WORLDABCABC", p.InnerText);
         }
 
-        [Fact(DisplayName = "测试表格行进行循环填充")]
+        [Fact(DisplayName = "测试 ODF 表格行进行循环填充")]
         public void TestRowLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -62,7 +62,7 @@ namespace Bravo.Reporting.OpenDocument.Test
             Assert.Equal("F", row5Col0);
         }
 
-        [Fact(DisplayName = "测试对内容进行转义处理")]
+        [Fact(DisplayName = "测试 ODF 对内容进行转义处理")]
         public void TestEscape()
         {
             var ctx = new Dictionary<string, object>()
@@ -84,7 +84,7 @@ namespace Bravo.Reporting.OpenDocument.Test
             Assert.Equal("X > Y < Z &; & #end", p.InnerText);
         }
 
-        [Fact(DisplayName = "测试模板中的 VTL 语句")]
+        [Fact(DisplayName = "测试 ODF 模板中的 VTL 语句")]
         public void TestStatements()
         {
             var ctx = new Dictionary<string, object>()
@@ -113,7 +113,7 @@ namespace Bravo.Reporting.OpenDocument.Test
             Assert.Equal("TRUETAIL_STRING", p.InnerText);
         }
 
-        [Fact(DisplayName = "测试图像标记替换")]
+        [Fact(DisplayName = "测试 ODF 图像标记替换")]
         public void TestImage()
         {
             var ctx = new Dictionary<string, object>()
