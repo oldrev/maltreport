@@ -18,7 +18,7 @@ namespace Bravo.Reporting.Demo
             var dt = new DataTable("Employees");
 
             //从数据库里查询数据填充 DataTable
-            var connectionString = @"Data Source=Database\northwind.db;Version=3;";
+            var connectionString = @"Data Source=Database/northwind.db;Version=3;";
             using (var connection = new SQLiteConnection(connectionString))
             {
                 var adapter = new SQLiteDataAdapter();
@@ -65,8 +65,8 @@ namespace Bravo.Reporting.Demo
             }
 
             RenderTemplate<OdfDocument>(renderContext, "template2.ods", "result2.ods");
-            RenderTemplate<ExcelMLDocument>(renderContext, "template3.xls", "result3.xls");
-            RenderTemplate<WordMLDocument>(renderContext, "template4.doc", "result4.doc");
+            RenderTemplate<ExcelMLDocument>(renderContext, "template3.xls", "result3.xls.xml");
+            RenderTemplate<WordMLDocument>(renderContext, "template4.doc", "result4.doc.xml");
 
             //编译报表用于把用户设计的原始报表文档转换为可以用于直接渲染的模板
             //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
