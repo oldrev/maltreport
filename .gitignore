@@ -15,3 +15,5 @@ Ankh.NoLoad
 TestResult.xml
 testresult.xml
 test-results
+*.pidb
+*.userprefs
