@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 
-using Xunit;
+using NUnit.Framework;
 
 using Bravo.Reporting.OpenDocument;
 
@@ -14,9 +14,10 @@ namespace Bravo.Reporting.OpenDocument.Test
     /// <summary>
     /// ODT 格式模板的测试
     /// </summary>
+    [TestFixture]
     public sealed class OdtTemplateTest
     {
-        [Fact(DisplayName = "测试 ODF 简单的变量替换")]
+        [Test(Description = "测试 ODF 简单的变量替换")]
         public void TestIdsReplacement()
         {
             var ctx = new Dictionary<string, object>()
@@ -33,12 +34,12 @@ namespace Bravo.Reporting.OpenDocument.Test
             var xmldoc = result.GetContentDocument();
             var paras = xmldoc.GetElementsByTagName("text:p");
 
-            Assert.True(paras.Count >= 1);
+            Assert.IsTrue(paras.Count >= 1);
             var p = paras[0];
-            Assert.Equal("HELLO John Doe WORLDABCABC", p.InnerText);
+            Assert.AreEqual("HELLO John Doe WORLDABCABC", p.InnerText);
         }
 
-        [Fact(DisplayName = "测试 ODF 表格行进行循环填充")]
+        [Test(Description = "测试 ODF 表格行进行循环填充")]
         public void TestRowLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -54,15 +55,15 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var rows = xmldoc.GetElementsByTagName("table:table-row");
 
-            Assert.Equal(6, rows.Count);
+            Assert.AreEqual(6, rows.Count);
             var row0Col0 = rows[0].ChildNodes[0].InnerText;
             var row5Col0 = rows[5].ChildNodes[0].InnerText;
 
-            Assert.Equal("A", row0Col0);
-            Assert.Equal("F", row5Col0);
+            Assert.AreEqual("A", row0Col0);
+            Assert.AreEqual("F", row5Col0);
         }
 
-        [Fact(DisplayName = "测试 ODF 对内容进行转义处理")]
+        [Test(Description = "测试 ODF 对内容进行转义处理")]
         public void TestEscape()
         {
             var ctx = new Dictionary<string, object>()
@@ -79,12 +80,12 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var paras = xmldoc.GetElementsByTagName("text:p");
 
-            Assert.True(paras.Count >= 1);
+            Assert.IsTrue(paras.Count >= 1);
             var p = paras[0];
-            Assert.Equal("X > Y < Z &; & #end", p.InnerText);
+            Assert.AreEqual("X > Y < Z &; & #end", p.InnerText);
         }
 
-        [Fact(DisplayName = "测试 ODF 模板中的 VTL 语句")]
+        [Test(Description = "测试 ODF 模板中的 VTL 语句")]
         public void TestStatements()
         {
             var ctx = new Dictionary<string, object>()
@@ -102,18 +103,18 @@ namespace Bravo.Reporting.OpenDocument.Test
 
             var paras = xmldoc.GetElementsByTagName("text:p");
 
-            Assert.True(paras.Count >= 1);
+            Assert.IsTrue(paras.Count >= 1);
             var p = paras[0];
-            Assert.Equal("AABBCCDD", p.InnerText);
+            Assert.AreEqual("AABBCCDD", p.InnerText);
 
             p = paras[1];
-            Assert.Equal("TRUE", p.InnerText);
+            Assert.AreEqual("TRUE", p.InnerText);
 
             p = paras[2];
-            Assert.Equal("TRUETAIL_STRING", p.InnerText);
+            Assert.AreEqual("TRUETAIL_STRING", p.InnerText);
         }
 
-        [Fact(DisplayName = "测试 ODF 图像标记替换")]
+        [Test(Description = "测试 ODF 图像标记替换")]
         public void TestImage()
         {
             var ctx = new Dictionary<string, object>()
@@ -141,7 +142,7 @@ namespace Bravo.Reporting.OpenDocument.Test
                 }
             }
 
-            Assert.Equal(2, imageCount);
+            Assert.AreEqual(2, imageCount);
 
         }
 

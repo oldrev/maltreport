@@ -5,18 +5,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 
-using Xunit;
+using NUnit.Framework;
 
 using Bravo.Reporting.Test;
 
 namespace Bravo.Reporting.OfficeXml.Test
 {
     //"Excel 2003 XML 格式模板的测试"
+	[TestFixture]
     public sealed class ExcelMLTemplateTest
     {
 
 
-        [Fact(DisplayName = "测试 Excel 2003 XML 的简单行循环")]
+        [Test(Description = "测试 Excel 2003 XML 的简单行循环")]
         public void TestSimpleRowLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -31,15 +32,15 @@ namespace Bravo.Reporting.OfficeXml.Test
 
             var rows = xmldoc.GetElementsByTagName("Row");
 
-            Assert.Equal(6, rows.Count);
+            Assert.AreEqual(6, rows.Count);
             var row0 = rows[0].InnerText;
             var row5 = rows[5].InnerText;
 
-            Assert.Equal("AAAAA", row0);
-            Assert.Equal("FFFFF", row5);
+            Assert.AreEqual("AAAAA", row0);
+            Assert.AreEqual("FFFFF", row5);
         }
 
-        [Fact(DisplayName = "测试 Excel 2003 Xml 的简单列循环")]
+        [Test(Description = "测试 Excel 2003 Xml 的简单列循环")]
         public void TestSimpleColumnLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -54,17 +55,17 @@ namespace Bravo.Reporting.OfficeXml.Test
 
             var table = xmldoc.GetElementsByTagName("Table")[0];
 
-            Assert.Equal("JJJXYABCDEFZKKK", table.InnerText);
+            Assert.AreEqual("JJJXYABCDEFZKKK", table.InnerText);
 
             var rows = xmldoc.GetElementsByTagName("Row");
 
-            Assert.Equal("JJJ", rows[0].InnerText);
-            Assert.Equal("XYABCDEFZ", rows[1].InnerText);
-            Assert.Equal("KKK", rows[2].InnerText);
+            Assert.AreEqual("JJJ", rows[0].InnerText);
+            Assert.AreEqual("XYABCDEFZ", rows[1].InnerText);
+            Assert.AreEqual("KKK", rows[2].InnerText);
 
         }
 
-        [Fact(DisplayName = "测试 Excel 2003 Xml 复杂模板的编译渲染")]
+        [Test(Description = "测试 Excel 2003 Xml 复杂模板的编译渲染")]
         public void TestComplexTemplate()
         {
             var ctx = ContextDataFactory.CreateComplexDataContext();

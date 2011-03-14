@@ -6,7 +6,7 @@ using System.Xml.Schema;
 using System.IO;
 
 using Commons.Xml.Relaxng;
-using Xunit;
+using NUnit.Framework;
 
 using Bravo.Reporting;
 using Bravo.Reporting.OpenDocument;
@@ -79,13 +79,13 @@ namespace Bravo.Reporting.Test
                 AddXmlSchema(xml, validationEventHandler, xsdFile);
             }
 
-            Assert.Equal(0, errors);
-            Assert.Equal(0, warnings);
+            Assert.AreEqual(0, errors);
+            Assert.AreEqual(0, warnings);
         }
 
         public static void ShouldWellFormed(this Stream xmlStream, string rngFile)
         {
-            Assert.True(RelaxngValidate(xmlStream, rngFile));
+            Assert.IsTrue(RelaxngValidate(xmlStream, rngFile));
         }
 
         private static bool RelaxngValidate(Stream xmlStream, string rngFile)

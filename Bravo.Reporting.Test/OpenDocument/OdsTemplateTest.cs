@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 using System.Text;
 
-using Xunit;
+using NUnit.Framework;
 
 namespace Bravo.Reporting.OpenDocument.Test
 {
@@ -13,7 +13,7 @@ namespace Bravo.Reporting.OpenDocument.Test
     public class OdsTemplateTest
     {
 
-        [Fact(DisplayName = "测试 ODF 表格列进行循环填充")]
+        [Test(Description = "测试 ODF 表格列进行循环填充")]
         public void TestColumnLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -31,20 +31,20 @@ namespace Bravo.Reporting.OpenDocument.Test
             var rows = xmldoc.GetElementsByTagName("table:table-row");
             var row = rows[0];
 
-            Assert.True(row.InnerText == "ABCDEF");
+            Assert.AreEqual("ABCDEF", row.InnerText);
 
             Debug.WriteLine(string.Format(
                 "'template_column_loop.ods' 文件单元格数量：{0}",
                 row.ChildNodes.Count));
 
-            Assert.Equal(row.ChildNodes.Count, 6);
+            Assert.AreEqual(6, row.ChildNodes.Count);
 
             var row2 = rows[2];
-            Assert.Equal(row2.ChildNodes.Count, 3);
+            Assert.AreEqual(3, row2.ChildNodes.Count);
 
             var row4 = rows[4];
-            Assert.Equal(row4.ChildNodes.Count, 4);
-            Assert.Equal(row4.InnerText, "1234");
+            Assert.AreEqual(4, row4.ChildNodes.Count);
+            Assert.AreEqual("1234", row4.InnerText);
 
         }
     }
