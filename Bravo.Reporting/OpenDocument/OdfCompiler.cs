@@ -23,9 +23,9 @@ namespace Bravo.Reporting.OpenDocument
         private static readonly Regex HyperLinkValuePattern =
             new Regex(@"^rtl://(.*)\s*$");
 
-        public static ITemplate Compile(OdfDocument doc)
+        public static IDocument Compile(OdfDocument doc)
         {
-            var t = new OdfTemplate();
+            var t = new OdfDocument();
             doc.CopyTo(t);
 
             var xml = new XmlDocument();

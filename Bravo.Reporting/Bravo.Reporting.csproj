@@ -52,12 +52,10 @@
   <ItemGroup>
     <Compile Include="OfficeXml\ExcelMLDocument.cs" />
     <Compile Include="OfficeXml\ExcelMLNamespaceManager.cs" />
-    <Compile Include="OfficeXml\ExcelMLTemplate.cs" />
     <Compile Include="OfficeXml\ExcelMLCompiler.cs" />
     <Compile Include="OfficeXml\ExcelMLTextWriter.cs" />
-    <Compile Include="OfficeXml\WordMLDocument.cs" />
     <Compile Include="OfficeXml\SingleXmlDocumentBase.cs" />
-    <Compile Include="OfficeXml\WordMLTemplate.cs" />
+    <Compile Include="OfficeXml\WordMLDocument.cs" />
     <Compile Include="OfficeXml\WordMLNamespaceManager.cs" />
     <Compile Include="OpenDocument\OdfCompiler.cs" />
     <Compile Include="TemplateUtility.cs" />
@@ -70,7 +68,6 @@
     <Compile Include="Image.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />
-    <Compile Include="ITemplate.cs" />
     <Compile Include="ITextTemplateEngine.cs" />
     <Compile Include="OpenDocument\OdfDocument.cs" />
     <Compile Include="OpenDocument\OdfImageRenderFilter.cs" />
@@ -87,7 +84,6 @@
     <Compile Include="SyntaxErrorException.cs" />
     <Compile Include="ZipArchiveDocumentBase.cs" />
     <Compile Include="TemplateException.cs" />
-    <Compile Include="OpenDocument\OdfTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TODO.txt" />

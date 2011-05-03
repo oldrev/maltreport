@@ -15,6 +15,7 @@ namespace Bravo.Reporting
 
         byte[] GetBuffer();
 
-        ITemplate Compile();
+        IDocument Compile();
+        IDocument Render(IDictionary<string, object> context);
     }
 }

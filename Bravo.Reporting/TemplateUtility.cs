@@ -15,7 +15,7 @@ namespace Bravo.Reporting
                 IDictionary<string, object> ctx,
                 string templateFileName, string resultFileName)
             where DocType : IDocument, new()
-            where TempType : ITemplate
+            where TempType : IDocument
         {
             var doc = new DocType();
             using (var ts = File.OpenRead(templateFileName))
@@ -35,7 +35,7 @@ namespace Bravo.Reporting
                 IDictionary<string, object> ctx,
                 string templateFileName, string resultFileName)
         {
-            RenderTemplateFile<OdfDocument, OdfTemplate>(
+            RenderTemplateFile<OdfDocument, OdfDocument>(
                 ctx, templateFileName, resultFileName);
         }
 
@@ -43,7 +43,7 @@ namespace Bravo.Reporting
                 IDictionary<string, object> ctx,
                 string templateFileName, string resultFileName)
         {
-            RenderTemplateFile<ExcelMLDocument, ExcelMLTemplate>(
+            RenderTemplateFile<ExcelMLDocument, ExcelMLDocument>(
                 ctx, templateFileName, resultFileName);
         }
     }

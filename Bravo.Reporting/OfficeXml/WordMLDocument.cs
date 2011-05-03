@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 
+using Bravo.Reporting.Xml;
+
 namespace Bravo.Reporting.OfficeXml
 {
     public class WordMLDocument : SingleXmlDocumentBase
@@ -16,13 +18,17 @@ namespace Bravo.Reporting.OfficeXml
         private const string HlinkElement = "w:hlink";
         private const string BookMarkElement = "w:bookmark";
 
+        private ITextTemplateEngine engine;
+
         public WordMLDocument()
         {
+            this.engine = new VelocityTextTemplateEngine("WordXmlTemplate");
+            this.engine.RegisterFilter(typeof(string), new XmlStringRenderFilter());
         }
 
-        public override ITemplate Compile()
+        public override IDocument Compile()
         {
-            var t = new WordMLTemplate();
+            var t = new WordMLDocument();
             t.LoadFromDocument(this);
             var xml = t.GetXmlDocument();
 
@@ -38,7 +44,7 @@ namespace Bravo.Reporting.OfficeXml
             return t;
         }
 
-        private static void WriteCompiledMainContent(WordMLTemplate t, XmlDocument xml)
+        private static void WriteCompiledMainContent(WordMLDocument t, XmlDocument xml)
         {
             using (var ms = new MemoryStream())
             using (var writer = new XmlTextWriter(ms, Encoding.UTF8))
@@ -115,6 +121,46 @@ namespace Bravo.Reporting.OfficeXml
             rEle.AppendChild(tEle);
             tEle.AppendChild(refEle);
             placeholderElement.ParentNode.ReplaceChild(rEle, placeholderElement);
+        }
+
+
+        #region ITemplate 接口实现
+
+        public override IDocument Render(IDictionary<string, object> context)
+        {
+            Debug.Assert(this.engine != null);
+
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var resultDocument = (WordMLDocument)this.Clone();
+
+            //执行主要内容的渲染过程
+            using (var inStream = this.GetInputStream())
+            using (var reader = new StreamReader(inStream, Encoding.UTF8))
+            using (var ws = new MemoryStream())
+            using (var writer = new StreamWriter(ws))
+            {
+                //执行渲染
+                this.engine.Evaluate(context, reader, writer);
+                writer.Flush();
+                ws.Flush();
+                resultDocument.PutBuffer(ws.ToArray());
+            }
+
+            return resultDocument;
+        }
+
+        #endregion
+
+        internal void LoadFromDocument(WordMLDocument doc)
+        {
+            var buf = doc.GetBuffer();
+            var newBuf = new byte[buf.Length];
+            Buffer.BlockCopy(buf, 0, newBuf, 0, buf.Length);
+            this.PutBuffer(newBuf);
         }
     }
 }

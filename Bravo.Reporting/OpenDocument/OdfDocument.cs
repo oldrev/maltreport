@@ -184,7 +184,7 @@ namespace Bravo.Reporting.OpenDocument
 
         public override string MainContentEntryPath { get { return "content.xml"; } }
 
-        public override ITemplate Compile()
+        public override IDocument Compile()
         {
             return OdfCompiler.Compile(this);
         }
@@ -208,6 +208,50 @@ namespace Bravo.Reporting.OpenDocument
                 xml.WriteTo(writer);
             }
         }
+
+        private ITextTemplateEngine engine = new VelocityTextTemplateEngine("OdfTemplate");
+
+        private void ResetTextEngine(IDictionary<Image, string> userImages, OdfDocument resultDocument)
+        {
+            Debug.Assert(this.engine != null);
+            Debug.Assert(userImages != null);
+            Debug.Assert(resultDocument != null);
+
+            this.engine.Reset();
+            this.engine.RegisterFilter(typeof(string), new XmlStringRenderFilter());
+            this.engine.RegisterFilter(typeof(Image), new OdfImageRenderFilter(userImages, resultDocument));
+        }
+
+        #region ITemplate 接口实现
+
+        public override IDocument Render(IDictionary<string, object> context)
+        {
+            Debug.Assert(this.engine != null);
+
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            var userImages = new Dictionary<Image, string>();
+
+            var resultDocument = (OdfDocument)this.Clone();
+
+            this.ResetTextEngine(userImages, resultDocument);
+
+            using (var inStream = resultDocument.GetEntryInputStream(resultDocument.MainContentEntryPath))
+            using (var reader = new StreamReader(inStream, Encoding.UTF8))
+            using (var ws = resultDocument.GetEntryOutputStream(resultDocument.MainContentEntryPath))
+            using (var writer = new StreamWriter(ws))
+            {
+                // Do the render
+                this.engine.Evaluate(context, reader, writer);
+            }
+
+            return resultDocument;
+        }
+
+        #endregion
 
 
     }

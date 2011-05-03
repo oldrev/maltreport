@@ -30,9 +30,9 @@ namespace Bravo.Reporting.OfficeXml
 
         }
 
-        public static ITemplate Compile(ExcelMLDocument doc)
+        public static IDocument Compile(ExcelMLDocument doc)
         {
-            var t = new ExcelMLTemplate();
+            var t = new ExcelMLDocument();
             t.LoadFromDocument(doc);
             var xml = t.GetXmlDocument();
 
@@ -48,7 +48,7 @@ namespace Bravo.Reporting.OfficeXml
             return t;
         }
 
-        private static void WriteCompiledMainContent(ExcelMLTemplate t, XmlDocument xml)
+        private static void WriteCompiledMainContent(ExcelMLDocument t, XmlDocument xml)
         {
             using (var ms = new MemoryStream())
             using (var writer = new ExcelMLTextWriter(ms))

@@ -43,7 +43,8 @@ namespace Bravo.Reporting.OfficeXml
             outStream.Write(this.data, 0, this.data.Length);
         }
 
-        public abstract ITemplate Compile();
+        public abstract IDocument Compile();
+        public abstract IDocument Render(IDictionary<string, object> context);
 
         #region IDocument 成员
 
@@ -105,5 +106,7 @@ namespace Bravo.Reporting.OfficeXml
 
             this.data = buffer;
         }
+
+       
     }
 }
