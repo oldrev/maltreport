@@ -6,6 +6,8 @@ namespace Bravo.Reporting
 {
     internal sealed class VelocityEscapeTool
     {
+        private static readonly VelocityEscapeTool s_instance = new VelocityEscapeTool();
+
         public const string DefaultKey = "esc";
 
         public static char D { get { return '$'; } }
@@ -31,5 +33,7 @@ namespace Bravo.Reporting
 
             return str.Replace("#", "${" + DefaultKey + ".h}");
         }
+
+        public static VelocityEscapeTool Instance { get { return s_instance; } }
     }
 }

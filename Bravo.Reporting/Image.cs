@@ -7,106 +7,116 @@ using System.Globalization;
 
 namespace Bravo.Reporting
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class Image : IEquatable<Image>
-	{
-		private Guid id;
-		private string extName;
-		private byte[] data;
-		private string documentFileName;
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Image : IEquatable<Image>
+    {
+        private readonly Guid id;
+        private readonly string extName;
+        private readonly byte[] data;
+        private readonly string documentFileName;
 
-		public Image (string extensionName, byte[] imageData)
-		{
-			if (string.IsNullOrEmpty (extensionName)) {
-				throw new ArgumentNullException ("extensionName");
-			}
-			
-			if (imageData == null || imageData.Length <= 0) {
-				throw new ArgumentNullException ("imageData");
-			}
-			
-			this.Id = Guid.NewGuid ();
-			this.ExtensionName = extensionName.ToLowerInvariant ();
-			this.data = imageData;
-			this.SetDocumentFileName ();
-		}
+        public Image(string extensionName, byte[] imageData)
+        {
+            if (string.IsNullOrEmpty(extensionName))
+            {
+                throw new ArgumentNullException("extensionName");
+            }
 
-		public Image (string imagePath)
-		{
-			if (string.IsNullOrEmpty (imagePath)) {
-				throw new ArgumentNullException ("imagePath");
-			}
-			
-			this.Id = Guid.NewGuid ();
-			this.ExtensionName = Path.GetExtension (imagePath).Substring (1).ToLowerInvariant ();
-			this.data = File.ReadAllBytes (imagePath);
-			this.SetDocumentFileName ();
-		}
+            if (imageData == null || imageData.Length <= 0)
+            {
+                throw new ArgumentNullException("imageData");
+            }
 
-		private void SetDocumentFileName ()
-		{
-			this.documentFileName = this.Id.ToString ("N").ToUpperInvariant () + "." + this.ExtensionName.ToLowerInvariant ();
-		}
+            this.id = Guid.NewGuid();
+            this.extName = extensionName.ToLowerInvariant();
+            this.data = imageData;
+            this.documentFileName = this.MakeDocumentFileName();
+        }
 
-		public Guid Id {
-			get { return this.id; }
-			private set { this.id = value; }
-		}
+        public Image(string imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath))
+            {
+                throw new ArgumentNullException("imagePath");
+            }
 
-		public string ExtensionName {
-			get { return this.extName; }
-			private set { this.extName = value; }
-		}
+            this.id = Guid.NewGuid();
+            this.extName = Path.GetExtension(imagePath).Substring(1).ToLowerInvariant();
+            this.data = File.ReadAllBytes(imagePath);
+            this.documentFileName = this.MakeDocumentFileName();
+        }
 
-		public byte[] GetData ()
-		{
-			Debug.Assert (this.data != null);
-			return this.data;
-		}
+        private string MakeDocumentFileName()
+        {
+            return this.Id.ToString("N").ToUpperInvariant() + "." + 
+                this.ExtensionName.ToLowerInvariant();
+        }
 
-		public int DataSize {
-			get {
-				Debug.Assert (this.data != null);
-				return this.data.Length;
-			}
-		}
+        public Guid Id
+        {
+            get { return this.id; }
+        }
 
-		public string DocumentFileName {
-			get { return this.documentFileName; }
-		}
+        public string ExtensionName
+        {
+            get { return this.extName; }
+        }
 
-		public override bool Equals (object obj)
-		{
-			if (ReferenceEquals (this, obj)) {
-				return true;
-			}
-			
-			var rhs = obj as Image;
-			if (rhs == null) {
-				return false;
-			}
-			
-			if (this.Id == rhs.Id) {
-				return true;
-			}
-			
-			return false;
-		}
+        public byte[] GetData()
+        {
+            Debug.Assert(this.data != null);
+            return this.data;
+        }
 
-		public override int GetHashCode ()
-		{
-			return this.Id.GetHashCode ();
-		}
+        public int DataSize
+        {
+            get
+            {
+                Debug.Assert(this.data != null);
+                return this.data.Length;
+            }
+        }
 
-		#region IEquatable<Image> 成员
+        public string DocumentFileName
+        {
+            get { return this.documentFileName; }
+        }
 
-		public bool Equals (Image other)
-		{
-			return other.Id == this.Id;
-		}
-		
-		#endregion
-	}
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            var rhs = obj as Image;
+            if (rhs == null)
+            {
+                return false;
+            }
+
+            if (this.Id == rhs.Id)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
+
+        #region IEquatable<Image> 成员
+
+        public bool Equals(Image other)
+        {
+            return other.Id == this.Id;
+        }
+
+        #endregion
+    }
 }

@@ -54,7 +54,7 @@
     <Compile Include="OfficeXml\ExcelMLNamespaceManager.cs" />
     <Compile Include="OfficeXml\ExcelMLCompiler.cs" />
     <Compile Include="OfficeXml\ExcelMLTextWriter.cs" />
-    <Compile Include="OfficeXml\SingleXmlDocumentBase.cs" />
+    <Compile Include="OfficeXml\AbstractSingleXmlDocument.cs" />
     <Compile Include="OfficeXml\WordMLDocument.cs" />
     <Compile Include="OfficeXml\WordMLNamespaceManager.cs" />
     <Compile Include="OpenDocument\OdfCompiler.cs" />

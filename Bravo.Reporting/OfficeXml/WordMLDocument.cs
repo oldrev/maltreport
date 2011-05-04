@@ -12,7 +12,7 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.OfficeXml
 {
-    public class WordMLDocument : SingleXmlDocumentBase
+    public class WordMLDocument : AbstractSingleXmlDocument
     {
         private const string DestAttribute = "w:dest";
         private const string HlinkElement = "w:hlink";
@@ -138,7 +138,7 @@ namespace Bravo.Reporting.OfficeXml
             var resultDocument = (WordMLDocument)this.Clone();
 
             //执行主要内容的渲染过程
-            using (var inStream = this.GetInputStream())
+            using (var inStream = new MemoryStream(base.GetBuffer(), false))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
             using (var ws = new MemoryStream())
             using (var writer = new StreamWriter(ws))

@@ -12,7 +12,7 @@ using Bravo.Reporting.Test;
 namespace Bravo.Reporting.OfficeXml.Test
 {
     //"Excel 2003 XML 格式模板的测试"
-	[TestFixture]
+    [TestFixture]
     public sealed class ExcelMLTemplateTest
     {
 
@@ -76,6 +76,28 @@ namespace Bravo.Reporting.OfficeXml.Test
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
             xmldoc.ShouldBeWellFormedExcelML();
 
+        }
+
+
+        public static string ToUpper(string s)
+        {
+            return s.ToUpper();
+        }
+
+        [Test(Description = "测试执行提供的函数")]
+        public void TestUserFunction()
+        {
+            var ctx = new Dictionary<string, object>()
+            {
+            };
+
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
+                @"resources/excel2003xml_docs/function.xml", ctx);
+
+            var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
+            var table = xmldoc.GetElementsByTagName("Table")[0];
+
+            Assert.AreEqual("ABCD", table.InnerText);
         }
 
     }

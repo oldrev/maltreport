@@ -226,7 +226,7 @@ namespace Bravo.Reporting.OpenDocument
             var drawboxNode = LookupAncestor(placeholder, DrawTextBoxElement);
             if (drawboxNode.Name != DrawTextBoxElement)
             {
-                throw new SyntaxErrorException("图像类型的占位符必须放在图文框中");
+                throw new TemplateException("The placeholder of image must be in a 'frame'");
             }
 
             drawboxNode.ParentNode.ReplaceChild(ie, drawboxNode);

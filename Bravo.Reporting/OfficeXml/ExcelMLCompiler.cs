@@ -32,6 +32,11 @@ namespace Bravo.Reporting.OfficeXml
 
         public static IDocument Compile(ExcelMLDocument doc)
         {
+            if (doc == null)
+            {
+                throw new ArgumentNullException("doc");
+            }
+
             var t = new ExcelMLDocument();
             t.LoadFromDocument(doc);
             var xml = t.GetXmlDocument();
@@ -50,6 +55,9 @@ namespace Bravo.Reporting.OfficeXml
 
         private static void WriteCompiledMainContent(ExcelMLDocument t, XmlDocument xml)
         {
+            Debug.Assert(t != null);
+            Debug.Assert(xml != null);
+
             using (var ms = new MemoryStream())
             using (var writer = new ExcelMLTextWriter(ms))
             {
@@ -63,11 +71,13 @@ namespace Bravo.Reporting.OfficeXml
 
         private static void ProcessPlaceHolders(XmlDocument xml)
         {
+            Debug.Assert(xml != null);
+
             var workbookNode = FindFirstChildNode(xml, "Workbook");
 
             if (workbookNode == null)
             {
-                throw new TemplateException("无效的 Excel 2003 Xml 文件格式");
+                throw new TemplateException("Invalid document format of Excel 2003 Xml");
             }
 
             var placeholders = FindAllPlaceholders(xml);
@@ -100,6 +110,8 @@ namespace Bravo.Reporting.OfficeXml
 
         private static void ClearTemplate(XmlNode node)
         {
+            Debug.Assert(node != null);
+
             IXmlNodeProcessor visitor = null;
             if (xmlNodeProcessors.TryGetValue(node.Name, out visitor))
             {
@@ -115,12 +127,19 @@ namespace Bravo.Reporting.OfficeXml
 
         private static void ProcessReferenceTag(XmlElement phe, string value)
         {
+            Debug.Assert(phe != null);
+            Debug.Assert(!string.IsNullOrEmpty(value));
+
             phe.RemoveAttribute(HRefAttribute);
             phe.InnerText = value;
         }
 
         private static void ProcessDirectiveTag(XmlDocument xml, XmlElement phe, string value)
         {
+            Debug.Assert(xml != null);
+            Debug.Assert(phe != null);
+            Debug.Assert(!string.IsNullOrEmpty(value));
+
             var se = new DirectiveElement(xml, value);
             if (phe.ParentNode.ChildNodes.Count == 1)
             {
@@ -134,6 +153,8 @@ namespace Bravo.Reporting.OfficeXml
 
         private static List<XmlElement> FindAllPlaceholders(XmlDocument doc)
         {
+            Debug.Assert(doc != null);
+
             var placeholders = new List<XmlElement>(50);
             var allNodes = doc.GetElementsByTagName("Cell");
 

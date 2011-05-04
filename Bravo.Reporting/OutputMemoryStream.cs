@@ -14,8 +14,8 @@ namespace Bravo.Reporting
     /// </summary>
     internal sealed class OutputMemoryStream : MemoryStream
     {
-        private string name;
-        private IDictionary<string, byte[]> entries;
+        private readonly string name;
+        private readonly IDictionary<string, byte[]> entries;
 
         public OutputMemoryStream(string name, IDictionary<string, byte[]> entries)
         {

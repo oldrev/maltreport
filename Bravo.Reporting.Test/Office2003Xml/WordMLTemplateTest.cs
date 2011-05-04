@@ -40,6 +40,7 @@ namespace Bravo.Reporting.OfficeXml.Test
             Assert.AreEqual("TEST_HELLO_REFERENCE_WORLD_REPLACEMENT", bodyText);
         }
 
+
         [Test(Description = "测试 Word 2003 Xml 的 RTL:// 链接 URL 转义")]
         public void TestEscapeUrl()
         {

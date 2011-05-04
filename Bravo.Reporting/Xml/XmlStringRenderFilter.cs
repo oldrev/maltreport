@@ -6,14 +6,14 @@ using System.Diagnostics;
 
 namespace Bravo.Reporting.Xml
 {
-    internal class XmlStringRenderFilter : IRenderFilter
+    internal sealed class XmlStringRenderFilter : IRenderFilter
     {
         #region IRenderFilter Members
 
         public object Filter(object originalValue)
         {
+            Debug.Assert(originalValue is string);
             var originalStr = originalValue as string;
-            Debug.Assert(originalStr != null);
             return SecurityElement.Escape(originalStr);
         }
 

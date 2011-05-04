@@ -12,7 +12,7 @@ using Bravo.Reporting.Xml;
 
 namespace Bravo.Reporting.OfficeXml
 {
-    public class ExcelMLDocument : SingleXmlDocumentBase
+    public class ExcelMLDocument : AbstractSingleXmlDocument
     {
         public const string IndexAttribute = "ss:Index";
         public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
@@ -42,6 +42,7 @@ namespace Bravo.Reporting.OfficeXml
 
         public override IDocument Render(IDictionary<string, object> context)
         {
+            Debug.Assert(context != null);
             Debug.Assert(this.engine != null);
 
             if (context == null)
@@ -52,7 +53,7 @@ namespace Bravo.Reporting.OfficeXml
             var resultDocument = (ExcelMLDocument)this.Clone();
 
             //执行主要内容的渲染过程
-            using (var inStream = this.GetInputStream())
+            using (var inStream = new MemoryStream(base.GetBuffer(), false))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
             using (var ws = new MemoryStream())
             using (var writer = new StreamWriter(ws))
@@ -71,6 +72,8 @@ namespace Bravo.Reporting.OfficeXml
 
         internal void LoadFromDocument(ExcelMLDocument doc)
         {
+            Debug.Assert(doc != null);
+
             var buf = doc.GetBuffer();
             var newBuf = new byte[buf.Length];
             Buffer.BlockCopy(buf, 0, newBuf, 0, buf.Length);

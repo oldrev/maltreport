@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace Bravo.Reporting.OfficeXml
 {
-    public abstract class SingleXmlDocumentBase : IDocument
+    public abstract class AbstractSingleXmlDocument : IDocument
     {
         private byte[] data;
 
@@ -76,7 +76,7 @@ namespace Bravo.Reporting.OfficeXml
 
         public virtual object Clone()
         {
-            var o = (SingleXmlDocumentBase)Activator.CreateInstance(this.GetType());
+            var o = (AbstractSingleXmlDocument)Activator.CreateInstance(this.GetType());
             o.PutBuffer(this.data);
             return o;
         }
@@ -93,11 +93,6 @@ namespace Bravo.Reporting.OfficeXml
                 xmldoc.Load(ms);
             }
             return xmldoc;
-        }
-
-        internal MemoryStream GetInputStream()
-        {
-            return new MemoryStream(this.data, false);
         }
 
         internal void PutBuffer(byte[] buffer)
