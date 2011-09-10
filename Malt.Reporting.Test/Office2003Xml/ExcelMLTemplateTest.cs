@@ -15,6 +15,13 @@ namespace Malt.Reporting.OfficeXml.Test
     [TestFixture]
     public sealed class ExcelMLTemplateTest
     {
+		public sealed class FunctionsProvider
+		{
+			public string ToUpper(string s)
+			{
+				return s.ToUpper();
+			}
+		}
 
 
         [Test(Description = "测试 Excel 2003 XML 的简单行循环")]
@@ -78,17 +85,12 @@ namespace Malt.Reporting.OfficeXml.Test
 
         }
 
-
-        public static string ToUpper(string s)
-        {
-            return s.ToUpper();
-        }
-
         [Test(Description = "测试执行提供的函数")]
         public void TestUserFunction()
-        {
+        {					
             var ctx = new Dictionary<string, object>()
             {
+				{ "functions", new FunctionsProvider() },
             };
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
