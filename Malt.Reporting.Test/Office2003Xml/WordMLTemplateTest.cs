@@ -22,8 +22,7 @@ namespace Malt.Reporting.OfficeXml.Test
         [Test(Description = "测试 Word 2003 Xml 的简单引用替换")]
         public void TestReferenceReplacement()
         {
-            var ctx = new Dictionary<string, object>()
-            {
+            var ctx = new Dictionary<string, object>() {
                 {"var1", "_HELLO_" },
                 {"var2", "_WORLD_" },
             };

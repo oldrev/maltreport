@@ -7,13 +7,12 @@ using Malt.Reporting.Test.Models;
 
 namespace Malt.Reporting.Test
 {
-    internal static class ContextDataFactory
-    {
+	internal static class ContextDataFactory
+	{
 
-        public static IDictionary<string, object> CreateComplexDataContext()
-        {
-            var ctx = new Dictionary<string, object>()
-            {
+		public static IDictionary<string, object> CreateComplexDataContext ()
+		{
+			var ctx = new Dictionary<string, object> () {
                 { "var1", "Hello" },
                 { "var2", "World" },
                 { "stringArray", "The quick brown fox jumps over the lazy dog".Split(' ') },
@@ -23,8 +22,8 @@ namespace Malt.Reporting.Test
                 { "image1", "resources/go-home.PNG" },
             };
 
-            return ctx;
+			return ctx;
 
-        }
-    }
+		}
+	}
 }

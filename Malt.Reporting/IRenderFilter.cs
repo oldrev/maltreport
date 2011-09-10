@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Malt.Reporting
 {
-    internal interface IRenderFilter
-    {
-        object Filter(object originalValue);
-    }
+	internal interface IRenderFilter
+	{
+		object Filter (object originalValue);
+	}
 }

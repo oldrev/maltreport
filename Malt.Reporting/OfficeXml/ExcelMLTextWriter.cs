@@ -6,35 +6,34 @@ using System.IO;
 
 namespace Malt.Reporting.OfficeXml
 {
-    internal class ExcelMLTextWriter : XmlTextWriter
-    {
-        private string currentElementName;
+	internal class ExcelMLTextWriter : XmlTextWriter
+	{
+		private string currentElementName;
 
-        public ExcelMLTextWriter(Stream inStream)
+		public ExcelMLTextWriter (Stream inStream)
             : base(inStream, Encoding.UTF8)
-        {
-        }
+		{
+		}
 
-        public override void WriteStartElement(string prefix, string localName, string ns)
-        {
-            currentElementName = localName;
-            base.WriteStartElement(prefix, localName, ns);
-        }
+		public override void WriteStartElement (string prefix, string localName, string ns)
+		{
+			currentElementName = localName;
+			base.WriteStartElement (prefix, localName, ns);
+		}
 
-        /// <summary>
-        /// 只允许 Cell 或 Data 中存在 Velocity 的 #directive
-        /// </summary>
-        /// <param name="text"></param>
-        public override void WriteString(string text)
-        {
-            if (text != null &&
+		/// <summary>
+		/// 只允许 Cell 或 Data 中存在 Velocity 的 #directive
+		/// </summary>
+		/// <param name="text"></param>
+		public override void WriteString (string text)
+		{
+			if (text != null &&
                 this.currentElementName != "Cell" &&
-                this.currentElementName != "Data")
-            {
-                text = VelocityEscapeTool.EscapeDirective(text);
-            }
+                this.currentElementName != "Data") {
+				text = VelocityEscapeTool.EscapeDirective (text);
+			}
 
-            base.WriteString(text);
-        }
-    }
+			base.WriteString (text);
+		}
+	}
 }

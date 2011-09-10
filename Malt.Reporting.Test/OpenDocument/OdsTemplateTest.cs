@@ -16,8 +16,7 @@ namespace Malt.Reporting.OpenDocument.Test
         [Test(Description = "测试 ODF 表格列进行循环填充")]
         public void TestColumnLoop()
         {
-            var ctx = new Dictionary<string, object>()
-            {
+            var ctx = new Dictionary<string, object>() {
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
                 {"numbers", new int[] {1, 2, 3, } },
             };

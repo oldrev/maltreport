@@ -11,24 +11,23 @@ using Malt.Reporting.OfficeXml;
 
 namespace Malt.Reporting.Demo
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var dt = new DataTable("Employees");
+	class Program
+	{
+		static void Main (string[] args)
+		{
+			var dt = new DataTable ("Employees");
 
-            //从数据库里查询数据填充 DataTable
-            var connectionString = @"Data Source=Database/northwind.db;Version=3;";
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                var adapter = new SQLiteDataAdapter();
-                adapter.SelectCommand = new SQLiteCommand(
+			//从数据库里查询数据填充 DataTable
+			var connectionString = @"Data Source=Database/northwind.db;Version=3;";
+			using (var connection = new SQLiteConnection(connectionString)) {
+				var adapter = new SQLiteDataAdapter ();
+				adapter.SelectCommand = new SQLiteCommand (
                     "SELECT * FROM Employees", connection);
-                adapter.FillSchema(dt, SchemaType.Source);
-                adapter.Fill(dt);
-            }
+				adapter.FillSchema (dt, SchemaType.Source);
+				adapter.Fill (dt);
+			}
 
-            var renderContext = new Dictionary<string, object>()
+			var renderContext = new Dictionary<string, object> ()
             {
                 //传递简单的类型
                 {"title", "公司雇员一览表"},
@@ -51,48 +50,46 @@ namespace Malt.Reporting.Demo
                 {"now", DateTime.Now}, //任何类型都可以传给模板
             };
 
-            //Malt.Reporting 文档生成三部曲：
-            var odt = new OdfDocument();
-            //1. 加载用户创建的模板文档
-            odt.Load("template1.odt");
-            //2. 编译模板，编译结果 template1 可以保存到磁盘上避免多次编译
-            var template1 = odt.Compile();
-            //3. 按照用户提供的上下文数据渲染模板得到结果
-            var result1 = template1.Render(renderContext);
-            using (var resultFile = File.Open("result1.odt", FileMode.Create, FileAccess.ReadWrite))
-            {
-                result1.Save(resultFile);
-            }
+			//Malt.Reporting 文档生成三部曲：
+			var odt = new OdfDocument ();
+			//1. 加载用户创建的模板文档
+			odt.Load ("template1.odt");
+			//2. 编译模板，编译结果 template1 可以保存到磁盘上避免多次编译
+			var template1 = odt.Compile ();
+			//3. 按照用户提供的上下文数据渲染模板得到结果
+			var result1 = template1.Render (renderContext);
+			using (var resultFile = File.Open("result1.odt", FileMode.Create, FileAccess.ReadWrite)) {
+				result1.Save (resultFile);
+			}
 
-            RenderTemplate<OdfDocument>(renderContext, "template2.ods", "result2.ods");
-            RenderTemplate<ExcelMLDocument>(renderContext, "template3.xls", "result3.xls.xml");
-            RenderTemplate<WordMLDocument>(renderContext, "template4.doc", "result4.doc.xml");
+			RenderTemplate<OdfDocument> (renderContext, "template2.ods", "result2.ods");
+			RenderTemplate<ExcelMLDocument> (renderContext, "template3.xls", "result3.xls.xml");
+			RenderTemplate<WordMLDocument> (renderContext, "template4.doc", "result4.doc.xml");
 
-            //编译报表用于把用户设计的原始报表文档转换为可以用于直接渲染的模板
-            //编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
-            //模板编译后的结果可以保存在磁盘上用于多次渲染
+			//编译报表用于把用户设计的原始报表文档转换为可以用于直接渲染的模板
+			//编译的结果可以缓存在内存中也可以保存在文件系统中多次使用
+			//模板编译后的结果可以保存在磁盘上用于多次渲染
 
-            Console.WriteLine("成功完成模板渲染");
+			Console.WriteLine ("成功完成模板渲染");
 
-            Console.ReadKey();
-        }
+			Console.ReadKey ();
+		}
 
-        private static void RenderTemplate<T>(
+		private static void RenderTemplate<T> (
             IDictionary<string, object> ctx, 
             string templateFileName,
             string resultFileName)
             where T : IDocument, new()
-        {
-            Console.WriteLine("正在生成模板 '{0}' ...", resultFileName);
-            var doc = new T();
-            doc.Load(templateFileName);
-            var t = doc.Compile();
-            var result3 = t.Render(ctx);
-            using (var resultFile3 = File.Open(
-                resultFileName, FileMode.Create, FileAccess.ReadWrite))
-            {
-                result3.Save(resultFile3);
-            }
-        }
-    }
+		{
+			Console.WriteLine ("正在生成模板 '{0}' ...", resultFileName);
+			var doc = new T ();
+			doc.Load (templateFileName);
+			var t = doc.Compile ();
+			var result3 = t.Render (ctx);
+			using (var resultFile3 = File.Open(
+                resultFileName, FileMode.Create, FileAccess.ReadWrite)) {
+				result3.Save (resultFile3);
+			}
+		}
+	}
 }

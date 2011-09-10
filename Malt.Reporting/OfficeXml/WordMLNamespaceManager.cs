@@ -7,20 +7,20 @@ using System.Xml;
 
 namespace Malt.Reporting.OfficeXml
 {
-    internal sealed class WordMLNamespaceManager : XmlNamespaceManager
-    {
-        public const string WNamespace = @"http://schemas.microsoft.com/office/word/2003/wordml";
-        public const string ONamespace = @"urn:schemas-microsoft-com:office:office";
+	internal sealed class WordMLNamespaceManager : XmlNamespaceManager
+	{
+		public const string WNamespace = @"http://schemas.microsoft.com/office/word/2003/wordml";
+		public const string ONamespace = @"urn:schemas-microsoft-com:office:office";
 
-        public WordMLNamespaceManager(XmlNameTable xnt)
+		public WordMLNamespaceManager (XmlNameTable xnt)
             : base(xnt)
-        {
-        }
+		{
+		}
 
-        public void LoadOpenDocumentNamespaces()
-        {
-            this.AddNamespace("w", WNamespace);
-            this.AddNamespace("o", ONamespace);
-        }
-    }
+		public void LoadOpenDocumentNamespaces ()
+		{
+			this.AddNamespace ("w", WNamespace);
+			this.AddNamespace ("o", ONamespace);
+		}
+	}
 }

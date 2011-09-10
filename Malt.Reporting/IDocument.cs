@@ -5,17 +5,20 @@ using System.IO;
 
 namespace Malt.Reporting
 {
-    public interface IDocument : ICloneable
-    {
-        void Save(Stream outStream);
-        void Save(string path);
+	public interface IDocument : ICloneable
+	{
+		void Save (Stream outStream);
+		
+		void Save (string path);
 
-        void Load(Stream inStream);
-        void Load(string path);
+		void Load (Stream inStream);
+		
+		void Load (string path);
 
-        byte[] GetBuffer();
+		byte[] GetBuffer ();
 
-        IDocument Compile();
-        IDocument Render(IDictionary<string, object> context);
-    }
+		IDocument Compile ();
+		
+		IDocument Render (IDictionary<string, object> context);
+	}
 }

@@ -9,42 +9,40 @@ using Malt.Reporting.OpenDocument;
 
 namespace Malt.Reporting
 {
-    public static class TemplateUtility
-    {
-        private static void RenderTemplateFile<DocType, TempType>(
+	public static class TemplateUtility
+	{
+		private static void RenderTemplateFile<DocType, TempType> (
                 IDictionary<string, object> ctx,
                 string templateFileName, string resultFileName)
             where DocType : IDocument, new()
             where TempType : IDocument
-        {
-            var doc = new DocType();
-            using (var ts = File.OpenRead(templateFileName))
-            {
-                doc.Load(ts);
-                var t = doc.Compile();
-                var result3 = t.Render(ctx);
-                using (var resultFile3 = File.Open(
-                    resultFileName, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    result3.Save(resultFile3);
-                }
-            }
-        }
+		{
+			var doc = new DocType ();
+			using (var ts = File.OpenRead(templateFileName)) {
+				doc.Load (ts);
+				var t = doc.Compile ();
+				var result3 = t.Render (ctx);
+				using (var resultFile3 = File.Open(
+                    resultFileName, FileMode.Create, FileAccess.ReadWrite)) {
+					result3.Save (resultFile3);
+				}
+			}
+		}
 
-        public static void RenderOdfTemplate(
+		public static void RenderOdfTemplate (
                 IDictionary<string, object> ctx,
                 string templateFileName, string resultFileName)
-        {
-            RenderTemplateFile<OdfDocument, OdfDocument>(
+		{
+			RenderTemplateFile<OdfDocument, OdfDocument> (
                 ctx, templateFileName, resultFileName);
-        }
+		}
 
-        public static void RenderExcelTemplate(
+		public static void RenderExcelTemplate (
                 IDictionary<string, object> ctx,
                 string templateFileName, string resultFileName)
-        {
-            RenderTemplateFile<ExcelMLDocument, ExcelMLDocument>(
+		{
+			RenderTemplateFile<ExcelMLDocument, ExcelMLDocument> (
                 ctx, templateFileName, resultFileName);
-        }
-    }
+		}
+	}
 }

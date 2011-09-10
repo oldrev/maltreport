@@ -13,133 +13,119 @@ using Commons.Collections;
 
 namespace Malt.Reporting
 {
-    internal sealed class VelocityTextTemplateEngine : ITextTemplateEngine
-    {
-        private readonly string logTag;
-        private readonly VelocityEngine engine = new VelocityEngine();
-        private readonly IDictionary<Type, IRenderFilter> filters = new Dictionary<Type, IRenderFilter>();
+	internal sealed class VelocityTextTemplateEngine : ITextTemplateEngine
+	{
+		private readonly string logTag;
+		private readonly VelocityEngine engine = new VelocityEngine ();
+		private readonly IDictionary<Type, IRenderFilter> filters = new Dictionary<Type, IRenderFilter> ();
 
-        public VelocityTextTemplateEngine(string logTag)
-        {
-            if (string.IsNullOrEmpty(logTag))
-            {
-                throw new ArgumentNullException("logTag");
-            }
+		public VelocityTextTemplateEngine (string logTag)
+		{
+			if (string.IsNullOrEmpty (logTag)) {
+				throw new ArgumentNullException ("logTag");
+			}
 
-            this.logTag = logTag;
-            var props = new ExtendedProperties();
-            //Register Log System here
-            //props.AddProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,G);
-            this.engine.Init(props);
-        }
+			this.logTag = logTag;
+			var props = new ExtendedProperties ();
+			//Register Log System here
+			//props.AddProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,G);
+			this.engine.Init (props);
+		}
 
-        public string LogTag
-        {
-            get { return this.logTag; }
-        }
+		public string LogTag {
+			get { return this.logTag; }
+		}
 
-        public void Evaluate(IDictionary<string, object> context, TextReader input, TextWriter output)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+		public void Evaluate (IDictionary<string, object> context, TextReader input, TextWriter output)
+		{
+			if (context == null) {
+				throw new ArgumentNullException ("context");
+			}
 
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
+			if (input == null) {
+				throw new ArgumentNullException ("input");
+			}
 
 
-            if (output == null)
-            {
-                throw new ArgumentNullException("output");
-            }
+			if (output == null) {
+				throw new ArgumentNullException ("output");
+			}
 
-            var vctx = this.CreateVelocityContext(context);
+			var vctx = this.CreateVelocityContext (context);
 
-            //执行渲染
-            var successed = this.engine.Evaluate(vctx, output, "VelocityTextTemplateEngine", input);
-            output.Flush();
+			//执行渲染
+			var successed = this.engine.Evaluate (vctx, output, "VelocityTextTemplateEngine", input);
+			output.Flush ();
 
-            if (!successed)
-            {
-                throw new TemplateException("Failed to render template");
-            }
-        }
+			if (!successed) {
+				throw new TemplateException ("Failed to render template");
+			}
+		}
 
-        public void RegisterFilter(Type t, IRenderFilter filter)
-        {
-            if (t == null)
-            {
-                throw new ArgumentNullException("t");
-            }
+		public void RegisterFilter (Type t, IRenderFilter filter)
+		{
+			if (t == null) {
+				throw new ArgumentNullException ("t");
+			}
 
-            if (filter == null)
-            {
-                throw new ArgumentNullException("filter");
-            }
+			if (filter == null) {
+				throw new ArgumentNullException ("filter");
+			}
 
-            if (this.filters.ContainsKey(t))
-            {
-                throw new ArgumentException("Duplicated type: " + t.Name);
-            }
+			if (this.filters.ContainsKey (t)) {
+				throw new ArgumentException ("Duplicated type: " + t.Name);
+			}
 
-            this.filters[t] = filter;
-        }
+			this.filters [t] = filter;
+		}
 
-        public void Reset()
-        {
-            this.filters.Clear();
-        }
+		public void Reset ()
+		{
+			this.filters.Clear ();
+		}
 
-        private VelocityContext CreateVelocityContext(IDictionary<string, object> context)
-        {
-            Debug.Assert(context != null);
+		private VelocityContext CreateVelocityContext (IDictionary<string, object> context)
+		{
+			Debug.Assert (context != null);
 
-            var vctx = new VelocityContext();
-            EventCartridge eventCart = new EventCartridge();
-            eventCart.ReferenceInsertion += this.OnReferenceInsertion;
-            vctx.AttachEventCartridge(eventCart);
+			var vctx = new VelocityContext ();
+			EventCartridge eventCart = new EventCartridge ();
+			eventCart.ReferenceInsertion += this.OnReferenceInsertion;
+			vctx.AttachEventCartridge (eventCart);
 
-            //添加转义工具
-            vctx.Put(VelocityEscapeTool.DefaultKey, VelocityEscapeTool.Instance);
+			//添加转义工具
+			vctx.Put (VelocityEscapeTool.DefaultKey, VelocityEscapeTool.Instance);
 
-            foreach (var item in context)
-            {
-                vctx.Put(item.Key, item.Value);
-            }
-            return vctx;
-        }
+			foreach (var item in context) {
+				vctx.Put (item.Key, item.Value);
+			}
+			return vctx;
+		}
 
-        void OnReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
-        {
-            Debug.Assert(sender != null);
-            Debug.Assert(e != null);
+		void OnReferenceInsertion (object sender, ReferenceInsertionEventArgs e)
+		{
+			Debug.Assert (sender != null);
+			Debug.Assert (e != null);
 
-            if (e.OriginalValue != null)
-            {
-                this.DoFilter(e);
-            }
-            else
-            {
-                e.NewValue = string.Empty;
-            }
-        }
+			if (e.OriginalValue != null) {
+				this.DoFilter (e);
+			} else {
+				e.NewValue = string.Empty;
+			}
+		}
 
-        private void DoFilter(ReferenceInsertionEventArgs e)
-        {
-            Debug.Assert(e != null);
+		private void DoFilter (ReferenceInsertionEventArgs e)
+		{
+			Debug.Assert (e != null);
 
-            var t = e.OriginalValue.GetType();
-            IRenderFilter filter = null;
-            var hasFilter = this.filters.TryGetValue(t, out filter);
-            if (hasFilter)
-            {
-                Debug.Assert(filter != null);
-                e.NewValue = filter.Filter(e.OriginalValue);
-            }
-        }
+			var t = e.OriginalValue.GetType ();
+			IRenderFilter filter = null;
+			var hasFilter = this.filters.TryGetValue (t, out filter);
+			if (hasFilter) {
+				Debug.Assert (filter != null);
+				e.NewValue = filter.Filter (e.OriginalValue);
+			}
+		}
 
-    }
+	}
 }

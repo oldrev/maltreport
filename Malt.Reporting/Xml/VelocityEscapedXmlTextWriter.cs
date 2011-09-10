@@ -6,31 +6,30 @@ using System.IO;
 
 namespace Malt.Reporting.Xml
 {
-    internal class VelocityEscapedXmlTextWriter : XmlTextWriter
-    {
-        public VelocityEscapedXmlTextWriter(Stream inStream)
+	internal class VelocityEscapedXmlTextWriter : XmlTextWriter
+	{
+		public VelocityEscapedXmlTextWriter (Stream inStream)
             : base(inStream, Encoding.UTF8)
-        {
-        }
+		{
+		}
 
-        public override void WriteStartElement(string prefix, string localName, string ns)
-        {
-            base.WriteStartElement(prefix, localName, ns);
-        }
+		public override void WriteStartElement (string prefix, string localName, string ns)
+		{
+			base.WriteStartElement (prefix, localName, ns);
+		}
 
-        public override void WriteEndElement()
-        {
-            base.WriteEndElement();
-        }
+		public override void WriteEndElement ()
+		{
+			base.WriteEndElement ();
+		}
 
-        public override void WriteString(string text)
-        {
-            if (text != null)
-            {
-                text = VelocityEscapeTool.EscapeDirective(text);
-            }
+		public override void WriteString (string text)
+		{
+			if (text != null) {
+				text = VelocityEscapeTool.EscapeDirective (text);
+			}
 
-            base.WriteString(text);
-        }
-    }
+			base.WriteString (text);
+		}
+	}
 }

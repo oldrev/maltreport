@@ -6,17 +6,17 @@ using System.Diagnostics;
 
 namespace Malt.Reporting.Xml
 {
-    internal sealed class XmlStringRenderFilter : IRenderFilter
-    {
+	internal sealed class XmlStringRenderFilter : IRenderFilter
+	{
         #region IRenderFilter Members
 
-        public object Filter(object originalValue)
-        {
-            Debug.Assert(originalValue is string);
-            var originalStr = originalValue as string;
-            return SecurityElement.Escape(originalStr);
-        }
+		public object Filter (object originalValue)
+		{
+			Debug.Assert (originalValue is string);
+			var originalStr = originalValue as string;
+			return SecurityElement.Escape (originalStr);
+		}
 
         #endregion
-    }
+	}
 }

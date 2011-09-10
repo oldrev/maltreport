@@ -20,8 +20,7 @@ namespace Malt.Reporting.OpenDocument.Test
         [Test(Description = "测试 ODF 简单的变量替换")]
         public void TestIdsReplacement()
         {
-            var ctx = new Dictionary<string, object>()
-            {
+            var ctx = new Dictionary<string, object>() {
                 {"name", "John Doe"},
                 {"varNull", null },
                 {"varEmpty", string.Empty },
@@ -42,8 +41,7 @@ namespace Malt.Reporting.OpenDocument.Test
         [Test(Description = "测试 ODF 表格行进行循环填充")]
         public void TestRowLoop()
         {
-            var ctx = new Dictionary<string, object>()
-            {
+            var ctx = new Dictionary<string, object>() {
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
             };
 
@@ -66,8 +64,7 @@ namespace Malt.Reporting.OpenDocument.Test
         [Test(Description = "测试 ODF 对内容进行转义处理")]
         public void TestEscape()
         {
-            var ctx = new Dictionary<string, object>()
-            {
+            var ctx = new Dictionary<string, object>() {
                 { "gt", ">" },
                 { "lt", "<" },
             };
@@ -88,8 +85,7 @@ namespace Malt.Reporting.OpenDocument.Test
         [Test(Description = "测试 ODF 模板中的 VTL 语句")]
         public void TestStatements()
         {
-            var ctx = new Dictionary<string, object>()
-            {
+            var ctx = new Dictionary<string, object>() {
                 { "chars", new char[] {'A', 'B', 'C', 'D'} },
                 { "cond1", true },
                 { "n", 123 },
@@ -117,8 +113,7 @@ namespace Malt.Reporting.OpenDocument.Test
         [Test(Description = "测试 ODF 图像标记替换")]
         public void TestImage()
         {
-            var ctx = new Dictionary<string, object>()
-            {
+            var ctx = new Dictionary<string, object>() {
                 { "image1", new Image("png", File.ReadAllBytes("resources/go-home.PNG")) },
             };
 
@@ -127,17 +122,14 @@ namespace Malt.Reporting.OpenDocument.Test
             result.ShouldBeWellFormedOdfContent();
 
             var manifestDoc = new XmlDocument();
-            using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntryPath))
-            {
+            using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntryPath)) {
                 manifestDoc.Load(s);
             }
 
             var mediaType = "manifest:media-type";
             var imageCount = 0;
-            foreach (XmlElement e in manifestDoc.GetElementsByTagName("manifest:file-entry"))
-            {
-                if (e.HasAttribute(mediaType) && e.GetAttribute(mediaType) == "image/png")
-                {
+            foreach (XmlElement e in manifestDoc.GetElementsByTagName("manifest:file-entry")) {
+                if (e.HasAttribute(mediaType) && e.GetAttribute(mediaType) == "image/png") {
                     imageCount++;
                 }
             }

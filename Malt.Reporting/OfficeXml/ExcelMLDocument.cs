@@ -1,6 +1,5 @@
 ﻿//作者：李维
 //创建时间：2010-09-03
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,26 +11,25 @@ using Malt.Reporting.Xml;
 
 namespace Malt.Reporting.OfficeXml
 {
-    public class ExcelMLDocument : AbstractSingleXmlDocument
-    {
-        public const string IndexAttribute = "ss:Index";
-        public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
-        public const string ExpandedRowCountAttribute = "ss:ExpandedRowCount";
-        public const string FormatAttribute = "ss:Format";
-        public const string TypeAttribute = "ss:Type";
+	public class ExcelMLDocument : AbstractSingleXmlDocument
+	{
+		public const string IndexAttribute = "ss:Index";
+		public const string ExpandedColumnCountAttribute = "ss:ExpandedColumnCount";
+		public const string ExpandedRowCountAttribute = "ss:ExpandedRowCount";
+		public const string FormatAttribute = "ss:Format";
+		public const string TypeAttribute = "ss:Type";
+		private ITextTemplateEngine engine;
 
-        private ITextTemplateEngine engine;
+		public ExcelMLDocument ()
+		{
+			this.engine = new VelocityTextTemplateEngine ("ExcelXmlTemplate");
+			this.engine.RegisterFilter (typeof(string), new XmlStringRenderFilter ());
+		}
 
-        public ExcelMLDocument()
-        {
-            this.engine = new VelocityTextTemplateEngine("ExcelXmlTemplate");
-            this.engine.RegisterFilter(typeof(string), new XmlStringRenderFilter());
-        }
-
-        public override IDocument Compile()
-        {
-            return ExcelMLCompiler.Compile(this);
-        }
+		public override IDocument Compile ()
+		{
+			return ExcelMLCompiler.Compile (this);
+		}
 
         #region IDocument 成员
 
@@ -40,46 +38,44 @@ namespace Malt.Reporting.OfficeXml
 
         #region ITemplate 接口实现
 
-        public override IDocument Render(IDictionary<string, object> context)
-        {
-            Debug.Assert(context != null);
-            Debug.Assert(this.engine != null);
+		public override IDocument Render (IDictionary<string, object> context)
+		{
+			Debug.Assert (context != null);
+			Debug.Assert (this.engine != null);
 
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+			if (context == null) {
+				throw new ArgumentNullException ("context");
+			}
 
-            var resultDocument = (ExcelMLDocument)this.Clone();
+			var resultDocument = (ExcelMLDocument)this.Clone ();
 
-            //执行主要内容的渲染过程
-            using (var inStream = new MemoryStream(base.GetBuffer(), false))
-            using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = new MemoryStream())
-            using (var writer = new StreamWriter(ws))
-            {
-                //执行渲染
-                this.engine.Evaluate(context, reader, writer);
-                writer.Flush();
-                ws.Flush();
-                resultDocument.PutBuffer(ws.ToArray());
-            }
+			//执行主要内容的渲染过程
+			using (var inStream = new MemoryStream(base.GetBuffer(), false))
+			using (var reader = new StreamReader(inStream, Encoding.UTF8))
+			using (var ws = new MemoryStream())
+			using (var writer = new StreamWriter(ws)) {
+				//执行渲染
+				this.engine.Evaluate (context, reader, writer);
+				writer.Flush ();
+				ws.Flush ();
+				resultDocument.PutBuffer (ws.ToArray ());
+			}
 
-            return resultDocument;
-        }
+			return resultDocument;
+		}
 
         #endregion
 
-        internal void LoadFromDocument(ExcelMLDocument doc)
-        {
-            Debug.Assert(doc != null);
+		internal void LoadFromDocument (ExcelMLDocument doc)
+		{
+			Debug.Assert (doc != null);
 
-            var buf = doc.GetBuffer();
-            var newBuf = new byte[buf.Length];
-            Buffer.BlockCopy(buf, 0, newBuf, 0, buf.Length);
-            this.PutBuffer(newBuf);
-        }
+			var buf = doc.GetBuffer ();
+			var newBuf = new byte[buf.Length];
+			Buffer.BlockCopy (buf, 0, newBuf, 0, buf.Length);
+			this.PutBuffer (newBuf);
+		}
 
 
-    }
+	}
 }
