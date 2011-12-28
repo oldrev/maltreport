@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 using Malt.Reporting.Test;
 
-namespace Malt.Reporting.OfficeXml.Test
+namespace Malt.Reporting.OfficeXml
 {
     //"Excel 2003 XML 格式模板的测试"
     [TestFixture]
@@ -32,10 +32,10 @@ namespace Malt.Reporting.OfficeXml.Test
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
             };
 
-            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
                 @"resources/excel2003xml_docs/template_row_loop.xml", ctx);
 
-            var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelMLDocument)result);
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelMLTemplate)result);
 
             var rows = xmldoc.GetElementsByTagName("Row");
 
@@ -55,7 +55,7 @@ namespace Malt.Reporting.OfficeXml.Test
                 {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
             };
 
-            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
                 @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
@@ -77,7 +77,7 @@ namespace Malt.Reporting.OfficeXml.Test
         {
             var ctx = ContextDataFactory.CreateComplexDataContext();
 
-            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
                 @"resources/excel2003xml_docs/template_complex.xml", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
@@ -93,7 +93,7 @@ namespace Malt.Reporting.OfficeXml.Test
 				{ "functions", new FunctionsProvider() },
             };
 
-            var result = TemplateTestHelper.RenderTemplate<ExcelMLDocument>(
+            var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
                 @"resources/excel2003xml_docs/function.xml", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);

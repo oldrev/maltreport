@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -23,7 +23,7 @@ namespace Malt.Reporting.OfficeXml
                 cell.FirstChild.Name == "Data" &&
                 cell.FirstChild.InnerText == "#VALUE!") {
 				var data = (XmlElement)cell.FirstChild;
-				data.SetAttribute (ExcelMLDocument.TypeAttribute, "String");
+				data.SetAttribute (ExcelMLTemplate.TypeAttribute, "String");
 				data.InnerText = "";
 			}
 

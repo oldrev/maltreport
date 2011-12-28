@@ -1,4 +1,4 @@
-﻿//作者：李维
+//作者：李维
 //创建时间：2010-09-03
 using System;
 using System.Collections.Generic;
@@ -29,13 +29,13 @@ namespace Malt.Reporting.OfficeXml
 
 		}
 
-		public static IDocument Compile (ExcelMLDocument doc)
+		public static ITemplate Compile (ExcelMLTemplate doc)
 		{
 			if (doc == null) {
 				throw new ArgumentNullException ("doc");
 			}
 
-			var t = new ExcelMLDocument ();
+			var t = new ExcelMLTemplate ();
 			t.LoadFromDocument (doc);
 			var xml = t.GetXmlDocument ();
 
@@ -51,7 +51,7 @@ namespace Malt.Reporting.OfficeXml
 			return t;
 		}
 
-		private static void WriteCompiledMainContent (ExcelMLDocument t, XmlDocument xml)
+		private static void WriteCompiledMainContent (ExcelMLTemplate t, XmlDocument xml)
 		{
 			Debug.Assert (t != null);
 			Debug.Assert (xml != null);

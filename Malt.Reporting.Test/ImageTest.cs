@@ -5,7 +5,7 @@ using System.IO;
 
 using NUnit.Framework;
 
-namespace Malt.Reporting.Test
+namespace Malt.Reporting
 {
 	[TestFixture]
     public class ImageTest

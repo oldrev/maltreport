@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 using Malt.Reporting.OpenDocument;
 
-namespace Malt.Reporting.OpenDocument.Test
+namespace Malt.Reporting.OpenDocument
 {
     /// <summary>
     /// ODT 格式模板的测试
@@ -122,7 +122,7 @@ namespace Malt.Reporting.OpenDocument.Test
             result.ShouldBeWellFormedOdfContent();
 
             var manifestDoc = new XmlDocument();
-            using (var s = result.GetEntryInputStream(OdfDocument.ManifestEntryPath)) {
+            using (var s = result.GetEntryInputStream(OdfTemplate.ManifestEntryPath)) {
                 manifestDoc.Load(s);
             }
 
