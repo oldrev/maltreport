@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 using Malt.Reporting.Test;
 
-namespace Malt.Reporting.OfficeXml.Test
+namespace Malt.Reporting.OfficeXml
 {
     /// <summary>
     /// "Word 2003 XML 格式模板的测试
@@ -27,10 +27,10 @@ namespace Malt.Reporting.OfficeXml.Test
                 {"var2", "_WORLD_" },
             };
 
-            var result = TemplateTestHelper.RenderTemplate<WordMLDocument>(
+            var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
                 @"resources/word2003xml_docs/template_reference_replacement.xml", ctx);
 
-            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLDocument)result);
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
             xmldoc.ShouldBeWellFormedWordML();
 
             var body = xmldoc.GetElementsByTagName("w:body")[0];
@@ -47,10 +47,10 @@ namespace Malt.Reporting.OfficeXml.Test
             {
             };
 
-            var result = TemplateTestHelper.RenderTemplate<WordMLDocument>(
+            var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
                 @"resources/word2003xml_docs/template_escape_url.xml", ctx);
 
-            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLDocument)result);
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
             xmldoc.ShouldBeWellFormedWordML();
 
             var body = xmldoc.GetElementsByTagName("w:body")[0];

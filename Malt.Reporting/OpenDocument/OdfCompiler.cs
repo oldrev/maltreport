@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -21,9 +21,9 @@ namespace Malt.Reporting.OpenDocument
 		private static readonly Regex HyperLinkValuePattern =
             new Regex (@"^rtl://(.*)\s*$");
 
-		public static IDocument Compile (OdfDocument doc)
+		public static ITemplate Compile (OdfTemplate doc)
 		{
-			var t = new OdfDocument ();
+			var t = new OdfTemplate ();
 			doc.CopyTo (t);
 
 			var xml = new XmlDocument ();

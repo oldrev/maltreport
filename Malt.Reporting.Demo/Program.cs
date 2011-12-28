@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -51,10 +51,10 @@ namespace Malt.Reporting.Demo
                 {"now", DateTime.Now}, //DateTime is ok too
             };
 
-            RenderTemplate<OdfDocument>(renderContext, "template1.odt", "result1.odt");
-            RenderTemplate<OdfDocument>(renderContext, "template2.ods", "result2.ods");
-            RenderTemplate<ExcelMLDocument>(renderContext, "template3.xls", "result3.xls.xml");
-            RenderTemplate<WordMLDocument>(renderContext, "template4.doc", "result4.doc.xml");
+            RenderTemplate<OdfTemplate>(renderContext, "template1.odt", "result1.odt");
+            RenderTemplate<OdfTemplate>(renderContext, "template2.ods", "result2.ods");
+            RenderTemplate<ExcelMLTemplate>(renderContext, "template3.xls", "result3.xls.xml");
+            RenderTemplate<WordMLTemplate>(renderContext, "template4.doc", "result4.doc.xml");
 
             Console.WriteLine("All done. Press any key to exit...");
 
@@ -65,19 +65,19 @@ namespace Malt.Reporting.Demo
             IDictionary<string, object> ctx,
             string templateFileName,
             string resultFileName)
-            where T : IDocument, new()
+            where T : ITemplate, new()
         {
             Console.WriteLine("Generating '{0}' ...", resultFileName);
             //3 steps to render a template:
             var doc = new T();
             doc.Load(templateFileName); //Step 1: load the template file
             var t = doc.Compile(); //Step 2: compile the template
-            var result3 = t.Render(ctx); //Step 3: Render template with user data
+            t.Render(ctx); //Step 3: Render template with user data
             using (var resultFile3 = File.Open(
                 resultFileName, FileMode.Create, FileAccess.ReadWrite))
             {
                 //Finally, save it into a file
-                result3.Save(resultFile3);
+                t.Save(resultFile3);
             }
         }
     }

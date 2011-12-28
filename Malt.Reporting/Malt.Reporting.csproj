@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Malt.Reporting</RootNamespace>
     <AssemblyName>Malt.Reporting</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
     </TargetFrameworkSubset>
@@ -33,32 +32,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="log4net">
       <HintPath>..\Lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="System">
-    </Reference>
-    <Reference Include="System.Data">
-    </Reference>
-    <Reference Include="System.Xml">
-    </Reference>
-    <Reference Include="Ionic.Zip.Reduced, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\Lib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
-    <Reference Include="NVelocity, Version=1.1.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="NVelocity">
       <HintPath>..\Lib\NVelocity.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OfficeXml\ExcelMLDocument.cs" />
     <Compile Include="OfficeXml\ExcelMLNamespaceManager.cs" />
     <Compile Include="OfficeXml\ExcelMLCompiler.cs" />
     <Compile Include="OfficeXml\ExcelMLTextWriter.cs" />
-    <Compile Include="OfficeXml\AbstractSingleXmlDocument.cs" />
-    <Compile Include="OfficeXml\WordMLDocument.cs" />
     <Compile Include="OfficeXml\WordMLNamespaceManager.cs" />
     <Compile Include="OpenDocument\OdfCompiler.cs" />
     <Compile Include="TemplateUtility.cs" />
@@ -69,10 +59,8 @@
     <Compile Include="OfficeXml\ExcelMLColumnNodeProcessor.cs" />
     <Compile Include="OfficeXml\ExcelMLCellNodeProcessor.cs" />
     <Compile Include="Image.cs" />
-    <Compile Include="IDocument.cs" />
     <Compile Include="IRenderFilter.cs" />
     <Compile Include="ITextTemplateEngine.cs" />
-    <Compile Include="OpenDocument\OdfDocument.cs" />
     <Compile Include="OpenDocument\OdfImageRenderFilter.cs" />
     <Compile Include="OpenDocument\OdfNamespaceManager.cs" />
     <Compile Include="OpenDocument\OdfManifestDocument.cs" />
@@ -85,8 +73,13 @@
     <Compile Include="Xml\ReferenceElement.cs" />
     <Compile Include="Xml\DirectiveElement.cs" />
     <Compile Include="SyntaxErrorException.cs" />
-    <Compile Include="ZipArchiveDocumentBase.cs" />
     <Compile Include="TemplateException.cs" />
+    <Compile Include="AbstractZipBasedTemplate.cs" />
+    <Compile Include="ITemplate.cs" />
+    <Compile Include="OpenDocument\OdfTemplate.cs" />
+    <Compile Include="OfficeXml\ExcelMLTemplate.cs" />
+    <Compile Include="OfficeXml\AbstractXmlBasedTemplate.cs" />
+    <Compile Include="OfficeXml\WordMLTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TODO.txt" />

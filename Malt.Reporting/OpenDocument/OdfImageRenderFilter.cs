@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -11,9 +11,9 @@ namespace Malt.Reporting.OpenDocument
 	internal class OdfImageRenderFilter : IRenderFilter
 	{
 		private IDictionary<Image, string> userImages;
-		private OdfDocument resultDocument;
+		private OdfTemplate resultDocument;
 
-		public OdfImageRenderFilter (IDictionary<Image, string> userImages, OdfDocument odfDoc)
+		public OdfImageRenderFilter (IDictionary<Image, string> userImages, OdfTemplate odfDoc)
 		{
 			Debug.Assert (userImages != null);
 			Debug.Assert (odfDoc != null);

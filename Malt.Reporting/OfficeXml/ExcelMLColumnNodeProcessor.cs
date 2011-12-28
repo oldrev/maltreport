@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -19,8 +19,8 @@ namespace Malt.Reporting.OfficeXml
 
 			var column = (XmlElement)node;
 
-			if (column.HasAttribute (ExcelMLDocument.IndexAttribute)) {
-				column.RemoveAttribute (ExcelMLDocument.IndexAttribute);
+			if (column.HasAttribute (ExcelMLTemplate.IndexAttribute)) {
+				column.RemoveAttribute (ExcelMLTemplate.IndexAttribute);
 			}
 		}
 
