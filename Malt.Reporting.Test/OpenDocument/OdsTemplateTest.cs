@@ -7,7 +7,7 @@ using System.Text;
 
 using NUnit.Framework;
 
-namespace Malt.Reporting.OpenDocument.Test
+namespace Malt.Reporting.OpenDocument
 {
 
     public class OdsTemplateTest

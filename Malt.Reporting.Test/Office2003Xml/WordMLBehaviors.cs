@@ -6,7 +6,7 @@ using System.Xml;
 
 using Malt.Reporting.Test;
 
-namespace Malt.Reporting.OfficeXml.Test
+namespace Malt.Reporting.OfficeXml
 {
 	internal static class WordMLBehaviors
 	{

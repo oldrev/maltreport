@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Malt.Reporting.Test.Models;
+using Malt.Reporting.Models;
 
-namespace Malt.Reporting.Test
+namespace Malt.Reporting
 {
 	internal static class ContextDataFactory
 	{

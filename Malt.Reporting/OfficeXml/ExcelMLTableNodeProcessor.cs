@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -18,12 +18,12 @@ namespace Malt.Reporting.OfficeXml
 			Debug.Assert (node.Name == "Table");
 
 			var table = (XmlElement)node;
-			if (table.HasAttribute (ExcelMLDocument.ExpandedRowCountAttribute)) {
-				table.RemoveAttribute (ExcelMLDocument.ExpandedRowCountAttribute);
+			if (table.HasAttribute (ExcelMLTemplate.ExpandedRowCountAttribute)) {
+				table.RemoveAttribute (ExcelMLTemplate.ExpandedRowCountAttribute);
 			}
 
-			if (table.HasAttribute (ExcelMLDocument.ExpandedColumnCountAttribute)) {
-				table.RemoveAttribute (ExcelMLDocument.ExpandedColumnCountAttribute);
+			if (table.HasAttribute (ExcelMLTemplate.ExpandedColumnCountAttribute)) {
+				table.RemoveAttribute (ExcelMLTemplate.ExpandedColumnCountAttribute);
 			}
 		}
 
