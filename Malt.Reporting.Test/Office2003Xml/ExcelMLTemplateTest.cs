@@ -33,7 +33,7 @@ namespace Malt.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/template_row_loop.xml", ctx);
+                @"resources/excel2003xml_docs/template_row_loop.xls", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelMLTemplate)result);
 
@@ -56,7 +56,7 @@ namespace Malt.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/template_column_loop.xml", ctx);
+                @"resources/excel2003xml_docs/template_column_loop.xls", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
 
@@ -78,7 +78,7 @@ namespace Malt.Reporting.OfficeXml
             var ctx = ContextDataFactory.CreateComplexDataContext();
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/template_complex.xml", ctx);
+                @"resources/excel2003xml_docs/template_complex.xls", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
             xmldoc.ShouldBeWellFormedExcelML();
@@ -94,7 +94,7 @@ namespace Malt.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/function.xml", ctx);
+                @"resources/excel2003xml_docs/function.xls", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
             var table = xmldoc.GetElementsByTagName("Table")[0];

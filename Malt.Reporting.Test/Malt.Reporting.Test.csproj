@@ -8,9 +8,8 @@
     <ProjectGuid>{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Malt.Reporting.Test</RootNamespace>
+    <RootNamespace>Malt.Reporting</RootNamespace>
     <AssemblyName>Malt.Reporting.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,20 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System">
-    </Reference>
-    <Reference Include="System.Core">
-    </Reference>
-    <Reference Include="System.Data">
-    </Reference>
-    <Reference Include="System.Xml">
-    </Reference>
-    <Reference Include="Commons.Xml.Relaxng, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Commons.Xml.Relaxng">
       <HintPath>..\Lib\Commons.Xml.Relaxng.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.5.9.10348, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="nunit.framework">
       <HintPath>..\Lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -63,9 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\excel2003xml_docs\template_row_loop.xml">
+    <None Include="resources\excel2003xml_docs\template_row_loop.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="Malt.Reporting.Test.nunit" />
     <None Include="resources\odf_docs\template_column_loop.ods">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -165,27 +158,27 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\excel2003xml_docs\function.xml">
+    <None Include="resources\excel2003xml_docs\function.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\excel2003xml_docs\template_column_loop.xml">
+    </None>
+    <None Include="resources\excel2003xml_docs\template_column_loop.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\excel2003xml_docs\template_complex.xml">
+    </None>
+    <None Include="resources\excel2003xml_docs\template_complex.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="resources\go-home.PNG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\word2003xml_docs\template_reference_replacement.xml">
+    <None Include="resources\word2003xml_docs\template_reference_replacement.doc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\word2003xml_docs\template_escape_url.xml">
+    </None>
+    <None Include="resources\word2003xml_docs\template_escape_url.doc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\word2003xml_docs\template_row_loop.xml">
+    </None>
+    <None Include="resources\word2003xml_docs\template_row_loop.doc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

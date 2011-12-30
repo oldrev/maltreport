@@ -23,9 +23,9 @@ namespace Malt.Reporting.OpenDocument
         {
             var odf = new OdfTemplate();
             odf.Load(odfPath);
-            var compiledTemplate = odf.Compile();
-			compiledTemplate.Render(context);
-            return compiledTemplate as OdfTemplate;
+            odf.Compile();
+            var resultDoc = odf.Render(context);
+            return resultDoc as OdfTemplate;
         }
 
         public static XmlDocument GetContentDocument(this OdfTemplate odfTemplate)

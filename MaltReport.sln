@@ -27,7 +27,7 @@ Global
 		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Malt.Reporting.Demo\Malt.Reporting.Demo.csproj
+		StartupItem = Malt.Reporting.Test\Malt.Reporting.Test.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

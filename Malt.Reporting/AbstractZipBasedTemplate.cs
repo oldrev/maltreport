@@ -119,9 +119,9 @@ namespace Malt.Reporting
 
 		public abstract string AddImage (Image img);
 
-		public abstract ITemplate Compile ();
+		public abstract void Compile ();
 
-		public abstract void Render (IDictionary<string, object> context);
+		public abstract IDocument Render (IDictionary<string, object> context);
 
 		protected static void CopyStream (Stream src, Stream dest)
 		{

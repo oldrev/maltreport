@@ -20,7 +20,7 @@ namespace Malt.Reporting
             Assert.AreEqual(File.ReadAllBytes(ImagePath), img1.GetData());
         }
 
-        [Test(Description = "测试 Image 类的相等性比较")]
+        [Test]
         public void TestImageEquals()
         {
             var img1 = new Image(ImagePath);
@@ -34,8 +34,8 @@ namespace Malt.Reporting
 
             Assert.AreSame(img1, img3);
 
-            Assert.IsFalse(img1.Equals(img2));
-            Assert.IsTrue(img1.Equals(img3));
+            Assert.That(!img1.Equals(img2));
+            Assert.That(img1.Equals(img3));
 
         }
     }
