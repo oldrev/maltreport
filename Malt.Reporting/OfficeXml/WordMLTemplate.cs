@@ -24,11 +24,9 @@ namespace Malt.Reporting.OfficeXml
             this.engine.RegisterFilter(typeof(string), new XmlStringRenderFilter());
         }
 
-        public override ITemplate Compile()
+        public override void Compile()
         {
-            var t = new WordMLTemplate();
-            t.LoadFromDocument(this);
-            var xml = t.GetXmlDocument();
+            var xml = this.GetXmlDocument();
 
             var nsmanager = new WordMLNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
@@ -37,9 +35,7 @@ namespace Malt.Reporting.OfficeXml
             ProcessPlaceHolders(xml);
 
 
-            WriteCompiledMainContent(t, xml);
-
-            return t;
+            WriteCompiledMainContent(this, xml);
         }
 
         private static void WriteCompiledMainContent(WordMLTemplate t, XmlDocument xml)
@@ -123,7 +119,7 @@ namespace Malt.Reporting.OfficeXml
 
         #region ITemplate 接口实现
 
-        public override void Render(IDictionary<string, object> context)
+        public override IDocument Render(IDictionary<string, object> context)
         {
             Debug.Assert(this.engine != null);
 
@@ -142,7 +138,9 @@ namespace Malt.Reporting.OfficeXml
                 this.engine.Evaluate(context, reader, writer);
                 writer.Flush();
                 ws.Flush();
-                this.PutBuffer(ws.ToArray());
+                var resultDoc = new WordMLTemplate();
+                resultDoc.PutBuffer(ws.ToArray());
+                return resultDoc;
             }
         }
 

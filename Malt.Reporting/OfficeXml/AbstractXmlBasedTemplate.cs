@@ -39,9 +39,9 @@ namespace Malt.Reporting.OfficeXml
 			outStream.Write (this.data, 0, this.data.Length);
 		}
 
-		public abstract ITemplate Compile ()
+		public abstract void Compile ()
 ;
-		public abstract void Render (IDictionary<string, object> context);
+		public abstract IDocument Render (IDictionary<string, object> context);
 
         #region IDocument 成员
 

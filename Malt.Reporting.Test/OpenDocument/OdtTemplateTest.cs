@@ -110,8 +110,8 @@ namespace Malt.Reporting.OpenDocument
             Assert.AreEqual("TRUETAIL_STRING", p.InnerText);
         }
 
-        [Test(Description = "测试 ODF 图像标记替换")]
-        public void TestImage()
+        [Test]
+        public void UseImageShouldBeOk()
         {
             var ctx = new Dictionary<string, object>() {
                 { "image1", new Image("png", File.ReadAllBytes("resources/go-home.PNG")) },
@@ -135,7 +135,6 @@ namespace Malt.Reporting.OpenDocument
             }
 
             Assert.AreEqual(2, imageCount);
-
         }
 
     }

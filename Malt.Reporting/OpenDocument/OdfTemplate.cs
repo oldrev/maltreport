@@ -184,9 +184,9 @@ namespace Malt.Reporting.OpenDocument
 
         public override string MainContentEntryPath { get { return "content.xml"; } }
 
-        public override ITemplate Compile()
+        public override void Compile()
         {
-            return OdfCompiler.Compile(this);
+            OdfCompiler.Compile(this);
         }
 
         #region ICloneable 接口
@@ -225,7 +225,7 @@ namespace Malt.Reporting.OpenDocument
 
         #region ITemplate 接口实现
 
-        public override void Render(IDictionary<string, object> context)
+        public override IDocument Render(IDictionary<string, object> context)
         {
             Debug.Assert(this.engine != null);
 
@@ -234,18 +234,22 @@ namespace Malt.Reporting.OpenDocument
                 throw new ArgumentNullException("context");
             }
 
+            var resultDoc = new OdfTemplate();
+            this.CopyTo(resultDoc);
+
             var userImages = new Dictionary<Image, string>();
 
-            this.ResetTextEngine(userImages, this);
+            this.ResetTextEngine(userImages, resultDoc);
 
             using (var inStream = this.GetEntryInputStream(this.MainContentEntryPath))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = this.GetEntryOutputStream(this.MainContentEntryPath))
+            using (var ws = resultDoc.GetEntryOutputStream(resultDoc.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
-                // Do the render
                 this.engine.Evaluate(context, reader, writer);
             }
+
+            return resultDoc;
 
         }
 

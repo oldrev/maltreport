@@ -20,18 +20,18 @@ namespace Malt.Reporting.Test
         /// </summary>
         /// <param name="odfPath"></param>
         /// <returns></returns>
-        public static ITemplate RenderTemplate<T>(string tmpPath, IDictionary<string, object> context)
+        public static IDocument RenderTemplate<T>(string tmpPath, IDictionary<string, object> context)
             where T : ITemplate, new()
         {
             var t = new T();
             t.Load(tmpPath);
-            var compiledTemplate = t.Compile();
-			compiledTemplate.Render(context);
-            return compiledTemplate;
+            t.Compile();
+            var resultDoc = t.Render(context);
+            return resultDoc;
         }
 
         public static XmlDocument GetlXmlDocument<T>(T singleXmlDoc)
-            where T : ITemplate
+            where T : IDocument
         {
             var xmldoc = new XmlDocument();
             using (var ms = new MemoryStream(singleXmlDoc.GetBuffer()))

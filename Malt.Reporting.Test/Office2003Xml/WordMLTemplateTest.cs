@@ -19,7 +19,8 @@ namespace Malt.Reporting.OfficeXml
     public sealed class WordMLTemplateTest
     {
 
-        [Test(Description = "测试 Word 2003 Xml 的简单引用替换")]
+        [Ignore]
+        //[Test]
         public void TestReferenceReplacement()
         {
             var ctx = new Dictionary<string, object>() {
@@ -28,7 +29,7 @@ namespace Malt.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
-                @"resources/word2003xml_docs/template_reference_replacement.xml", ctx);
+                @"resources/word2003xml_docs/template_reference_replacement.doc", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
             xmldoc.ShouldBeWellFormedWordML();
@@ -48,7 +49,7 @@ namespace Malt.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
-                @"resources/word2003xml_docs/template_escape_url.xml", ctx);
+                @"resources/word2003xml_docs/template_escape_url.doc", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
             xmldoc.ShouldBeWellFormedWordML();

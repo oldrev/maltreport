@@ -14,37 +14,41 @@ namespace Malt.Reporting
         private static void RenderTemplateFile<DocType, TempType>(
                 IDictionary<string, object> ctx,
                 string templateFileName, string resultFileName)
-            where DocType : ITemplate, new()
-            where TempType : ITemplate
+            where DocType : IDocument, new()
+            where TempType : ITemplate, new()
         {
-            var doc = new DocType();
+            var template = new TempType();
             using (var ts = File.OpenRead(templateFileName))
             {
-                doc.Load(ts);
-                var t = doc.Compile();
-                t.Render(ctx);
+                template.Load(ts);
+                template.Compile();
+                var resultDoc = template.Render(ctx);
                 using (var resultFile3 = File.Open(
                     resultFileName, FileMode.Create, FileAccess.ReadWrite))
                 {
-                    t.Save(resultFile3);
+                    resultDoc.Save(resultFile3);
                 }
             }
         }
 
-        public static void RenderOdfTemplate(
-                IDictionary<string, object> ctx,
-                string templateFileName, string resultFileName)
+        public static void RenderTemplateFile(
+            IDictionary<string, object> ctx, string templatePath, Stream outStream)
         {
-            RenderTemplateFile<OdfTemplate, OdfTemplate>(
-                ctx, templateFileName, resultFileName);
+            var template = TemplateFactory.CreateTemplateByFileName(templatePath);
+            template.Load(templatePath);
+            template.Compile();
+            var resultDoc = template.Render(ctx);
+            resultDoc.Save(outStream);
         }
 
-        public static void RenderExcelTemplate(
-                IDictionary<string, object> ctx,
-                string templateFileName, string resultFileName)
+        public static void RenderTemplateFile(
+            IDictionary<string, object> ctx, string templatePath, string resultPath)
         {
-            RenderTemplateFile<ExcelMLTemplate, ExcelMLTemplate>(
-                ctx, templateFileName, resultFileName);
+            using (var fs = File.OpenWrite(resultPath))
+            {
+                RenderTemplateFile(ctx, templatePath, fs);
+            }
         }
+
     }
 }
