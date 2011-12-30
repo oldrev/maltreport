@@ -39,10 +39,11 @@ namespace Malt.Reporting.Demo
                 {"orm_employees",
                     new List<Employee>()
                     {
-                        new Employee("John Doe", "Address 1", 22),
-                        new Employee("Sid", "Address 2", 27),
-                        new Employee("Squeeze", "Address 3", 33),
-                        new Employee("Lenny", "Address 4", 19),
+                        new Employee("Micheal Scott", "Address 1", 22),
+                        new Employee("Andy Bernard", "Address 3", 33),
+                        new Employee("Dwight Shurte", "Address 1", 22),
+                        new Employee("Jim Halpert", "Address 2", 27),
+                        new Employee("Pam Beesly", "Address 4", 19),
                     }
                 },
 
@@ -69,15 +70,15 @@ namespace Malt.Reporting.Demo
         {
             Console.WriteLine("Generating '{0}' ...", resultFileName);
             //3 steps to render a template:
-            var doc = new T();
-            doc.Load(templateFileName); //Step 1: load the template file
-            var t = doc.Compile(); //Step 2: compile the template
-            t.Render(ctx); //Step 3: Render template with user data
+            var template = new T();
+            template.Load(templateFileName); //Step 1: load the template file
+            template.Compile(); //Step 2: compile the template
+            var resultDoc = template.Render(ctx); //Step 3: Render template with user data
             using (var resultFile3 = File.Open(
                 resultFileName, FileMode.Create, FileAccess.ReadWrite))
             {
                 //Finally, save it into a file
-                t.Save(resultFile3);
+                resultDoc.Save(resultFile3);
             }
         }
     }
