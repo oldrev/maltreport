@@ -31,9 +31,7 @@ namespace Malt.Reporting.OfficeXml
             var nsmanager = new WordMLNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 
-            //TODO: 这里执行编译
-            ProcessPlaceHolders(xml);
-
+            ProcessPlaceholders(xml);
 
             WriteCompiledMainContent(this, xml);
         }
@@ -51,7 +49,7 @@ namespace Malt.Reporting.OfficeXml
             }
         }
 
-        private static void ProcessPlaceHolders(XmlDocument xml)
+        private static void ProcessPlaceholders(XmlDocument xml)
         {
             var placeholders = FindAllPlaceholders(xml);
 
@@ -74,7 +72,7 @@ namespace Malt.Reporting.OfficeXml
 
                 if (value[0] == '#')
                 {
-                    throw new NotImplementedException();
+                    ProcessDirectiveTag(xml, phe, value);
                 }
                 else if (value[0] == '$')
                 {
@@ -86,6 +84,17 @@ namespace Malt.Reporting.OfficeXml
                 }
 
             }
+        }
+
+        private static void ProcessDirectiveTag(
+            XmlDocument xml, XmlElement placeholderNode, string value)
+        {
+            Debug.Assert(xml != null);
+            Debug.Assert(placeholderNode != null);
+            Debug.Assert(!string.IsNullOrEmpty(value));
+
+            var directive = new DirectiveElement(xml, value);
+            directive.ReduceTagByDirective(placeholderNode);
         }
 
         private static List<XmlElement> FindAllPlaceholders(XmlDocument xml)
@@ -154,5 +163,7 @@ namespace Malt.Reporting.OfficeXml
             Buffer.BlockCopy(buf, 0, newBuf, 0, buf.Length);
             this.PutBuffer(newBuf);
         }
+
+
     }
 }
