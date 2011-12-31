@@ -41,7 +41,7 @@ namespace Malt.Reporting.OfficeXml
         }
 
 
-        [Test(Description = "测试 Word 2003 Xml 的 RTL:// 链接 URL 转义")]
+        [Test]
         public void TestEscapeUrl()
         {
             var ctx = new Dictionary<string, object>()
@@ -58,6 +58,29 @@ namespace Malt.Reporting.OfficeXml
             var bodyText = body.InnerText.Trim();
 
             Assert.AreEqual("革命", bodyText);
+        }
+
+        [Test]
+        public void TestSimpleRowLoop()
+        {
+            var ctx = new Dictionary<string, object>()
+            {
+                {"chars", new char[] {'A', 'B', 'C', 'D', 'E', 'F'} },
+            };
+
+            var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
+                @"resources/word2003xml_docs/template_row_loop.doc", ctx);
+
+            var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
+
+            var rows = xmldoc.GetElementsByTagName("w:tr");
+
+            Assert.AreEqual(6, rows.Count);
+            var row0 = rows[0].InnerText;
+            var row5 = rows[5].InnerText;
+
+            Assert.AreEqual("AAAAA", row0);
+            Assert.AreEqual("FFFFF", row5);
         }
 
     }

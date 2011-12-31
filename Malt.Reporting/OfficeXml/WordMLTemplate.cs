@@ -74,7 +74,7 @@ namespace Malt.Reporting.OfficeXml
 
                 if (value[0] == '#')
                 {
-                    throw new NotImplementedException();
+                    ProcessDirectiveTag(xml, phe, value);
                 }
                 else if (value[0] == '$')
                 {
@@ -85,6 +85,24 @@ namespace Malt.Reporting.OfficeXml
                     throw new SyntaxErrorException(attr);
                 }
 
+            }
+        }
+
+        private static void ProcessDirectiveTag(XmlDocument xml, XmlElement phe, string value)
+        {
+            Debug.Assert(xml != null);
+            Debug.Assert(phe != null);
+            Debug.Assert(!string.IsNullOrEmpty(value));
+
+            var se = new DirectiveElement(xml, value);
+            Debug.Assert(false, phe.InnerXml);
+            if (phe.ParentNode.ChildNodes.Count == 1)
+            {
+                phe.ParentNode.ParentNode.ReplaceChild(se, phe.ParentNode);
+            }
+            else
+            {
+                phe.ParentNode.ReplaceChild(se, phe);
             }
         }
 
