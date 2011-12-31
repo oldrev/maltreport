@@ -72,6 +72,7 @@ namespace Malt.Reporting.OfficeXml
                 @"resources/word2003xml_docs/template_row_loop.doc", ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
+            xmldoc.ShouldBeWellFormedWordML();
 
             var rows = xmldoc.GetElementsByTagName("w:tr");
 

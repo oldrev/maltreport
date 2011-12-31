@@ -104,7 +104,8 @@ namespace Malt.Reporting.OpenDocument
                 else if (value[0] == '#')
                 {
                     var directiveNode = new DirectiveElement(xml, value);
-                    ReduceTag(directiveNode, placeholder);
+                    directiveNode.ReduceTagByCount(placeholder);                        
+                    //ReduceTag(directiveNode, placeholder);
                 }
                 else
                 {
@@ -217,7 +218,7 @@ namespace Malt.Reporting.OpenDocument
             Debug.Assert(ie != null);
 
             //向上查找 drawbox
-            var drawboxNode = LookupAncestor(placeholder, DrawTextBoxElement);
+            var drawboxNode = placeholder.LookupAncestor(DrawTextBoxElement);
             if (drawboxNode.Name != DrawTextBoxElement)
             {
                 throw new TemplateException("The placeholder of image must be in a 'frame'");
@@ -226,41 +227,8 @@ namespace Malt.Reporting.OpenDocument
             drawboxNode.ParentNode.ReplaceChild(ie, drawboxNode);
         }
 
-        /// <summary>
-        /// 化简 Tag
-        /// </summary>
-        /// <param name="newNode"></param>
-        /// <param name="placeholder"></param>
-        private static void ReduceTag(XmlNode newNode, XmlNode placeholder)
-        {
-            //如果上级节点只包含 placeholder 这个节点的话，那么上级也是没用的
-            //以此类推，直到上级节点包含其他类型的节点或者上级节点是单元格为止
+    
 
-            XmlNode ancestor = placeholder;
-            while (ancestor.ParentNode.ChildNodes.Count == 1)
-            {
-                ancestor = ancestor.ParentNode;
-            }
-
-            ancestor.ParentNode.ReplaceChild(newNode, ancestor);
-        }
-
-        /// <summary>
-        /// 查找祖先元素
-        /// </summary>
-        /// <param name="ancestorName"></param>
-        /// <param name="node"></param>
-        private static XmlNode LookupAncestor(XmlNode node, string ancestorName)
-        {
-            XmlNode ancestor = node;
-            while (ancestor.ParentNode.ChildNodes.Count == 1 &&
-                ancestor.Name != ancestorName)
-            {
-                ancestor = ancestor.ParentNode;
-            }
-
-            return ancestor;
-        }
         #endregion
     }
 }

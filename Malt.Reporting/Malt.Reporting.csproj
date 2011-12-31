@@ -72,6 +72,7 @@
     <Compile Include="VelocityEscapeTool.cs" />
     <Compile Include="VelocityTextTemplateEngine.cs" />
     <Compile Include="Xml\VelocityEscapedXmlTextWriter.cs" />
+    <Compile Include="Xml\XmlExtensions.cs" />
     <Compile Include="Xml\XmlStringRenderFilter.cs" />
     <Compile Include="Xml\ReferenceElement.cs" />
     <Compile Include="Xml\DirectiveElement.cs" />
