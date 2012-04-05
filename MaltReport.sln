@@ -1,35 +1,69 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Malt.Reporting", "Malt.Reporting\Malt.Reporting.csproj", "{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting", "Sandwych.Reporting\Sandwych.Reporting.csproj", "{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Malt.Reporting.Demo", "Malt.Reporting.Demo\Malt.Reporting.Demo.csproj", "{CA25D97B-0A99-4AE2-9493-79A8A538314F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting.Demo", "Sandwych.Reporting.Demo\Sandwych.Reporting.Demo.csproj", "{CA25D97B-0A99-4AE2-9493-79A8A538314F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Malt.Reporting.Test", "Malt.Reporting.Test\Malt.Reporting.Test.csproj", "{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting.Test", "Sandwych.Reporting.Test\Sandwych.Reporting.Test.csproj", "{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting.JODConverterDemo", "Sandwych.Reporting.JODConverterDemo\Sandwych.Reporting.JODConverterDemo.csproj", "{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Malt.Reporting.Test\Malt.Reporting.Test.csproj
+		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CA25D97B-0A99-4AE2-9493-79A8A538314F}.Release|x86.ActiveCfg = Release|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}.Release|x86.ActiveCfg = Release|Any CPU
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Debug|x86.ActiveCfg = Debug|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Debug|x86.Build.0 = Debug|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Release|Any CPU.ActiveCfg = Release|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Release|x86.ActiveCfg = Release|x86
+		{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Malt.Reporting.Test\Malt.Reporting.Test.csproj
 	EndGlobalSection
 EndGlobal
