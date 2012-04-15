@@ -35,7 +35,7 @@ namespace Sandwych.Reporting.JODConverterDemo
             var converter = new OfficeDocumentConverter(officeManager);
 
             //Do some document converting job
-            converter.convert(new java.io.File("demo.odt"), new java.io.File("test.pdf"));
+            converter.convert(new java.io.File("test.odt"), new java.io.File("test.pdf"));
 
             officeManager.stop();
             Console.ReadKey();
