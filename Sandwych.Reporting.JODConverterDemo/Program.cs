@@ -15,12 +15,12 @@ namespace Sandwych.Reporting.JODConverterDemo
         static void Main(string[] args)
         {
             //Make sure your LibreOffice/OpenOffice home is correct
-            var officeHome = "C:\\libreoffice3.5";
+            var officeHome = @"C:\LibreOffice3.5";
 
             var officePaths =
                 Path.Combine(officeHome, "URE", "bin") + ";" + Path.Combine(officeHome, "program");
             var path = Environment.GetEnvironmentVariable("PATH");
-            path += officePaths;
+            path += ";" + officePaths;
             Environment.SetEnvironmentVariable("PATH", path);
 
             var officeManager = new DefaultOfficeManagerConfiguration()
