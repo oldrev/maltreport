@@ -20,7 +20,11 @@ namespace Sandwych.Reporting.JODConverterDemo
             var officePaths =
                 Path.Combine(officeHome, "URE", "bin") + ";" + Path.Combine(officeHome, "program");
             var path = Environment.GetEnvironmentVariable("PATH");
-            path += ";" + officePaths;
+            if (!path.EndsWith(";"))
+            {
+                path += ';';
+            }
+            path += officePaths;
             Environment.SetEnvironmentVariable("PATH", path);
 
             var officeManager = new DefaultOfficeManagerConfiguration()
@@ -30,10 +34,8 @@ namespace Sandwych.Reporting.JODConverterDemo
             officeManager.start();
             var converter = new OfficeDocumentConverter(officeManager);
 
-
             //Do some document converting job
             converter.convert(new java.io.File("demo.odt"), new java.io.File("test.pdf"));
-
 
             officeManager.stop();
             Console.ReadKey();
