@@ -9,12 +9,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过下列属性集
 // 控制。更改这些属性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Malt.Reporting")]
+[assembly: AssemblyTitle("MaltReport")]
 [assembly: AssemblyDescription("An OpenDocument/MS-Excel Document Generator for .Net")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Malt Software Studio")]
-[assembly: AssemblyProduct("Malt.Reporting")]
-[assembly: AssemblyCopyright("Copyright © 2010-TODAY by Wei Li")]
+[assembly: AssemblyCompany("Sandwych Consulting LLC.")]
+[assembly: AssemblyProduct("MaltReport")]
+[assembly: AssemblyCopyright("Copyright © 2013 Sandwych Consulting Kunming LLC.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

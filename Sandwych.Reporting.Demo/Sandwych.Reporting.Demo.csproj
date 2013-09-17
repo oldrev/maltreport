@@ -30,12 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Community.CsharpSqlite, Version=3.7.7.1, Culture=neutral, PublicKeyToken=a6e4873496fdc8b5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Community.CsharpSqlite.SQLiteClient.3.7.7.2\lib\net40\Community.CsharpSqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Community.CsharpSqlite.SQLiteClient, Version=3.7.7.1, Culture=neutral, PublicKeyToken=1ce56be3f3a785b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Community.CsharpSqlite.SQLiteClient.3.7.7.2\lib\net40\Community.CsharpSqlite.SQLiteClient.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Community.CsharpSqlite.SQLiteClient">
-      <HintPath>..\Lib\Community.CsharpSqlite.SQLiteClient.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Employee.cs" />
@@ -46,6 +51,7 @@
     <None Include="Database\northwind.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="template1.odt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
