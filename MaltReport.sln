@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting", "Sandwych.Reporting\Sandwych.Reporting.csproj", "{6A523E9E-CDE3-4666-911A-3E002EB8E8CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting.Demo", "Sandwych.Reporting.Demo\Sandwych.Reporting.Demo.csproj", "{CA25D97B-0A99-4AE2-9493-79A8A538314F}"
@@ -8,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting.Test", "Sandwych.Reporting.Test\Sandwych.Reporting.Test.csproj", "{C85B8282-0D79-4CAD-9AAD-393DB71C2D81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting.JODConverterDemo", "Sandwych.Reporting.JODConverterDemo\Sandwych.Reporting.JODConverterDemo.csproj", "{2AFA8FE7-CD20-4C4C-A10D-1E31C784213A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4D70D47-6A83-4D41-A350-F63E4AC297FB}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
