@@ -8,7 +8,6 @@ namespace Sandwych.Reporting
 {
     internal static class TemplateFactory
     {
-        //硬编码，但是简单 :)，没必要引入 MEF 等
         private readonly static IDictionary<string, Func<ITemplate>> ExtensionCreatorMapping =
             new Dictionary<string, Func<ITemplate>>()
             {

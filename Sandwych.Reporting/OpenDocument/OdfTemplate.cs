@@ -7,8 +7,8 @@ using System.IO;
 using System.Diagnostics;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.IO.Compression;
 
-using Ionic.Zip;
 
 using Sandwych.Reporting.Xml;
 
@@ -40,13 +40,14 @@ namespace Sandwych.Reporting.OpenDocument
             this.entries.Clear();
 
             //把 zip 的内容加载到内存
-            using (var zf = ZipFile.Read(inStream))
+            using (var archive = new ZipArchive(inStream, ZipArchiveMode.Read))
             {
-                foreach (ZipEntry ze in zf)
+                foreach (ZipArchiveEntry ze in archive.Entries)
                 {
-                    using (var ws = this.GetEntryOutputStream(ze.FileName))
+                    using (var ws = this.GetEntryOutputStream(ze.FullName))
+                    using (var zs = ze.Open())
                     {
-                        ze.Extract(ws);
+                        zs.CopyTo(ws);
                     }
                 }
             }
@@ -65,7 +66,7 @@ namespace Sandwych.Reporting.OpenDocument
                 throw new InvalidDataException("Entry 'mimetype' not found");
             }
 
-            using (var ze = new ZipFile())
+            using (var ze = new ZipArchive(outStream, ZipArchiveMode.Create))
             {
                 this.AppendZipEntry(ze, MimeTypeEntryPath);
 
@@ -78,34 +79,35 @@ namespace Sandwych.Reporting.OpenDocument
 
                     this.AppendZipEntry(ze, item.Key);
                 }
-
-                ze.Save(outStream);
             }
         }
 
-        private void AppendZipEntry(ZipFile zf, string name)
+        private void AppendZipEntry(ZipArchive archive, string name)
         {
-            Debug.Assert(zf != null);
+            Debug.Assert(archive != null);
             Debug.Assert(!string.IsNullOrEmpty(name));
             Debug.Assert(this.entries.ContainsKey(name));
 
             var data = this.entries[name];
-            var ze = zf.AddEntry(name, data);
 
             var extensionName = Path.GetExtension(name).ToUpperInvariant();
-
+            var cl = CompressionLevel.Fastest;
             switch (extensionName)
             {
                 case "JPEG":
                 case "JPG":
                 case "PNG":
-                    ze.CompressionMethod = CompressionMethod.None;
+                    cl = CompressionLevel.NoCompression;
                     break;
 
                 default:
-                    ze.CompressionMethod = CompressionMethod.Deflate;
-                    ze.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
+                    cl = CompressionLevel.Optimal;
                     break;
+            }
+            var zae = archive.CreateEntry(name, cl);
+            using (var zs = zae.Open())
+            {
+                zs.Write(data, 0, data.Length);
             }
         }
 

@@ -19,7 +19,6 @@ namespace Sandwych.Reporting.OfficeXml
     public sealed class WordMLTemplateTest
     {
 
-        [Ignore]
         //[Test]
         public void TestReferenceReplacement()
         {
