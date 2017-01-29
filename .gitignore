@@ -17,3 +17,5 @@ testresult.xml
 test-results
 *.pidb
 *.userprefs
+packages/
+*.nupkg
