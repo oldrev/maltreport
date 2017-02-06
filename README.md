@@ -14,12 +14,12 @@ I do not have too much time working with the document, so to learn the usage of 
 
 ##Installation
 
-MaltReport can be installed from [NuGet](https://www.nuget.org/packages/Sandwych.Reporting)
+MaltReport can be installed from [NuGet](https://www.nuget.org/packages/MaltReport2)
 
 or type following commands in the NuGet Console:
 
 ```
-PM> Install-Package Sandwych.Reporting
+PM> Install-Package MaltReport2
 ```
 
 * Copyright (C) 2009 Wei "oldrev" Li
