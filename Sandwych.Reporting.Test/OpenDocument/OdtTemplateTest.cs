@@ -114,8 +114,9 @@ namespace Sandwych.Reporting.OpenDocument
         [Test]
         public void UseImageShouldBeOk()
         {
+            var image1Path = TemplateTestHelper.GetTestResourceAbsolutleFilePath("resources/go-home.PNG");
             var ctx = new Dictionary<string, object>() {
-                { "image1", new Image("png", File.ReadAllBytes("resources/go-home.PNG")) },
+                { "image1", new Image("png", File.ReadAllBytes(image1Path)) },
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(

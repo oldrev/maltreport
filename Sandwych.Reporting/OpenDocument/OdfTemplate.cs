@@ -65,24 +65,20 @@ namespace Sandwych.Reporting.OpenDocument
                 throw new ArgumentNullException("outStream");
             }
 
-            //ODF 格式约定 mimetype 必须为第一个文件
+            //ODF 格式约定 mimetype 必须为 ZIP 包里的第一个文件
             if (!this.entries.ContainsKey(MimeTypeEntryPath))
             {
                 throw new InvalidDataException("Entry 'mimetype' not found");
             }
 
-            using (var ze = new ZipArchive(outStream, ZipArchiveMode.Create))
+            using (var zip = new ZipArchive(outStream, ZipArchiveMode.Create))
             {
-                this.AppendZipEntry(ze, MimeTypeEntryPath);
+                this.AppendZipEntry(zip, MimeTypeEntryPath);
+                this.entries.Remove(MimeTypeEntryPath);
 
                 foreach (var item in this.entries)
                 {
-                    if (item.Key == MimeTypeEntryPath)
-                    {
-                        continue;
-                    }
-
-                    this.AppendZipEntry(ze, item.Key);
+                    this.AppendZipEntry(zip, item.Key);
                 }
             }
         }
@@ -102,11 +98,13 @@ namespace Sandwych.Reporting.OpenDocument
                 case "JPEG":
                 case "JPG":
                 case "PNG":
+                case "MP3":
+                case "MP4":
                     cl = CompressionLevel.NoCompression;
                     break;
 
                 default:
-                    cl = CompressionLevel.Optimal;
+                    cl = CompressionLevel.Fastest;
                     break;
             }
             var zae = archive.CreateEntry(name, cl);
