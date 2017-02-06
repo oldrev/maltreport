@@ -42,7 +42,7 @@ namespace Sandwych.Reporting
 
 		public abstract Stream GetEntryInputStream (string entryPath);
 
-		public abstract Stream GetEntryOutputStream (string entryPath);
+		public abstract Stream AquireEntryOutputStream (string entryPath);
 
 		public abstract string MainContentEntryPath { get; }
 
@@ -76,7 +76,7 @@ namespace Sandwych.Reporting
 				throw new ArgumentNullException ("entryPath");
 			}
 
-			return new StreamWriter (this.GetEntryOutputStream (entryPath));
+			return new StreamWriter (this.AquireEntryOutputStream (entryPath));
 		}
 
 		internal void WriteXmlEntry (string entryPath, XmlDocument xml)
@@ -89,7 +89,7 @@ namespace Sandwych.Reporting
 				throw new ArgumentNullException ("entryPath");
 			}
 
-			using (var cos = this.GetEntryOutputStream(entryPath))
+			using (var cos = this.AquireEntryOutputStream(entryPath))
 			using (var writer = new XmlTextWriter(cos, Encoding.UTF8)) {
 				writer.Formatting = Formatting.None; //对于 Velocity 模板，最好格式化
 				xml.WriteTo (writer);
@@ -151,7 +151,7 @@ namespace Sandwych.Reporting
 
 			foreach (var item in this.EntryPaths) {
 				using (var inStream = this.GetEntryInputStream(item))
-				using (var outStream = destDoc.GetEntryOutputStream(item)) {
+				using (var outStream = destDoc.AquireEntryOutputStream(item)) {
 					CopyStream (inStream, outStream);
 				}
 			}

@@ -44,10 +44,15 @@ namespace Sandwych.Reporting.OpenDocument
             {
                 foreach (ZipArchiveEntry ze in archive.Entries)
                 {
-                    using (var ws = this.GetEntryOutputStream(ze.FullName))
                     using (var zs = ze.Open())
                     {
-                        zs.CopyTo(ws);
+                        var buf = new byte[ze.Length];
+                        var nread = zs.Read(buf, 0, (int)ze.Length);
+                        if (nread != ze.Length)
+                        {
+                            throw new IOException("Failed to read zip entry: " + ze.FullName);
+                        }
+                        this.entries[ze.FullName] = buf;
                     }
                 }
             }
@@ -132,16 +137,13 @@ namespace Sandwych.Reporting.OpenDocument
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public override Stream GetEntryOutputStream(string entryPath)
+        public override Stream AquireEntryOutputStream(string entryPath)
         {
             if (string.IsNullOrEmpty(entryPath))
             {
                 throw new ArgumentNullException("entryPath");
             }
-
             var oms = new OutputMemoryStream(entryPath, this.entries);
-            this.entries[entryPath] = oms.ToArray();
-
             return oms;
         }
 
@@ -162,7 +164,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
 
             var fullPath = "Pictures/" + img.DocumentFileName;
-            using (var outStream = this.GetEntryOutputStream(fullPath))
+            using (var outStream = this.AquireEntryOutputStream(fullPath))
             {
                 outStream.Write(img.GetData(), 0, img.DataSize);
             }
@@ -176,7 +178,7 @@ namespace Sandwych.Reporting.OpenDocument
             manifestDoc.AppendImageFileEntry(img.ExtensionName, fullPath);
             manifestDoc.CreatePicturesEntryElement();
 
-            using (var manifestOutStream = this.GetEntryOutputStream(OdfTemplate.ManifestEntryPath))
+            using (var manifestOutStream = this.AquireEntryOutputStream(OdfTemplate.ManifestEntryPath))
             {
                 manifestDoc.Save(manifestOutStream);
             }
@@ -204,7 +206,7 @@ namespace Sandwych.Reporting.OpenDocument
         internal void WriteXmlContent(XmlDocument xml)
         {
             //把编译后的 XmlDocument 写入
-            using (var cos = this.GetEntryOutputStream(this.MainContentEntryPath))
+            using (var cos = this.AquireEntryOutputStream(this.MainContentEntryPath))
             using (var writer = new VelocityEscapedXmlTextWriter(cos))
             {
                 writer.Formatting = Formatting.None; //对于 Velocity 模板，最好格式化
@@ -245,7 +247,7 @@ namespace Sandwych.Reporting.OpenDocument
 
             using (var inStream = this.GetEntryInputStream(this.MainContentEntryPath))
             using (var reader = new StreamReader(inStream, Encoding.UTF8))
-            using (var ws = resultDoc.GetEntryOutputStream(resultDoc.MainContentEntryPath))
+            using (var ws = resultDoc.AquireEntryOutputStream(resultDoc.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
                 this.engine.Evaluate(context, reader, writer);
