@@ -8,9 +8,9 @@ using Sandwych.Reporting.Test;
 
 namespace Sandwych.Reporting.OfficeXml
 {
-	internal static class ExcelMLBehaviors
-	{
-		static readonly string[] ExcelML2003SchemaFiles = new string[] 
+    internal static class ExcelMLBehaviors
+    {
+        static readonly string[] ExcelML2003SchemaFiles = new string[]
         {
             @"resources/schemas/excel2003/c.xsd",
             @"resources/schemas/excel2003/dt.xsd",
@@ -27,14 +27,14 @@ namespace Sandwych.Reporting.OfficeXml
             @"resources/schemas/excel2003/vml.xsd",
         };
 
-		/// <summary>
-		/// 通过微软提供的 Excel 2003 XML 架构文件来检查生成的
-		/// Excel 文档结构的有效性
-		/// </summary>
-		/// <param name="xml"></param>
-		public static void ShouldBeWellFormedExcelML (this XmlDocument xml)
-		{
-			xml.ShouldWellFormed (ExcelML2003SchemaFiles);
-		}
-	}
+        /// <summary>
+        /// 通过微软提供的 Excel 2003 XML 架构文件来检查生成的
+        /// Excel 文档结构的有效性
+        /// </summary>
+        /// <param name="xml"></param>
+        public static void ShouldBeWellFormedExcelML(this XmlDocument xml)
+        {
+            xml.ShouldWellFormed(ExcelML2003SchemaFiles.Select(x => TemplateTestHelper.GetTestResourceAbsolutleFilePath(x)).ToArray());
+        }
+    }
 }

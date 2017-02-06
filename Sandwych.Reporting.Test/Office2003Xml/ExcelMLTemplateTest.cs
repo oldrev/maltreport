@@ -15,13 +15,13 @@ namespace Sandwych.Reporting.OfficeXml
     [TestFixture]
     public sealed class ExcelMLTemplateTest
     {
-		public sealed class FunctionsProvider
-		{
-			public string ToUpper(string s)
-			{
-				return s.ToUpper();
-			}
-		}
+        public sealed class FunctionsProvider
+        {
+            public string ToUpper(string s)
+            {
+                return s.ToUpper();
+            }
+        }
 
 
         [Test(Description = "测试 Excel 2003 XML 的简单行循环")]
@@ -33,7 +33,7 @@ namespace Sandwych.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/template_row_loop.xls", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/excel2003xml_docs/template_row_loop.xls"), ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((ExcelMLTemplate)result);
 
@@ -56,7 +56,7 @@ namespace Sandwych.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/template_column_loop.xls", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/excel2003xml_docs/template_column_loop.xls"), ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
 
@@ -78,7 +78,7 @@ namespace Sandwych.Reporting.OfficeXml
             var ctx = ContextDataFactory.CreateComplexDataContext();
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/template_complex.xls", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/excel2003xml_docs/template_complex.xls"), ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
             xmldoc.ShouldBeWellFormedExcelML();
@@ -87,14 +87,14 @@ namespace Sandwych.Reporting.OfficeXml
 
         [Test(Description = "测试执行提供的函数")]
         public void TestUserFunction()
-        {					
+        {
             var ctx = new Dictionary<string, object>()
             {
-				{ "functions", new FunctionsProvider() },
+                { "functions", new FunctionsProvider() },
             };
 
             var result = TemplateTestHelper.RenderTemplate<ExcelMLTemplate>(
-                @"resources/excel2003xml_docs/function.xls", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/excel2003xml_docs/function.xls"), ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument(result);
             var table = xmldoc.GetElementsByTagName("Table")[0];

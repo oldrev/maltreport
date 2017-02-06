@@ -8,6 +8,7 @@ using System.Xml;
 using NUnit.Framework;
 
 using Sandwych.Reporting.OpenDocument;
+using Sandwych.Reporting.Test;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -27,7 +28,7 @@ namespace Sandwych.Reporting.OpenDocument
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"resources/odf_docs/template_ids.odt", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/odf_docs/template_ids.odt"), ctx);
             result.ShouldBeWellFormedOdfContent();
 
             var xmldoc = result.GetContentDocument();
@@ -46,7 +47,7 @@ namespace Sandwych.Reporting.OpenDocument
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"resources/odf_docs/template_row_loop.odt", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/odf_docs/template_row_loop.odt"), ctx);
             result.ShouldBeWellFormedOdfContent();
 
             var xmldoc = result.GetContentDocument();
@@ -70,7 +71,7 @@ namespace Sandwych.Reporting.OpenDocument
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"resources/odf_docs/template_escape.odt", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/odf_docs/template_escape.odt"), ctx);
             result.ShouldBeWellFormedOdfContent();
 
             var xmldoc = result.GetContentDocument();
@@ -92,7 +93,7 @@ namespace Sandwych.Reporting.OpenDocument
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"resources/odf_docs/template_statement.odt", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/odf_docs/template_statement.odt"), ctx);
             result.ShouldBeWellFormedOdfContent();
 
             var xmldoc = result.GetContentDocument();
@@ -118,18 +119,21 @@ namespace Sandwych.Reporting.OpenDocument
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"resources/odf_docs/template_image.odt", ctx);
+               TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/odf_docs/template_image.odt"), ctx);
             result.ShouldBeWellFormedOdfContent();
 
             var manifestDoc = new XmlDocument();
-            using (var s = result.GetEntryInputStream(OdfTemplate.ManifestEntryPath)) {
+            using (var s = result.GetEntryInputStream(OdfTemplate.ManifestEntryPath))
+            {
                 manifestDoc.Load(s);
             }
 
             var mediaType = "manifest:media-type";
             var imageCount = 0;
-            foreach (XmlElement e in manifestDoc.GetElementsByTagName("manifest:file-entry")) {
-                if (e.HasAttribute(mediaType) && e.GetAttribute(mediaType) == "image/png") {
+            foreach (XmlElement e in manifestDoc.GetElementsByTagName("manifest:file-entry"))
+            {
+                if (e.HasAttribute(mediaType) && e.GetAttribute(mediaType) == "image/png")
+                {
                     imageCount++;
                 }
             }

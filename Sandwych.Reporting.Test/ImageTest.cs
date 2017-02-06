@@ -4,13 +4,14 @@ using System.Text;
 using System.IO;
 
 using NUnit.Framework;
+using Sandwych.Reporting.Test;
 
 namespace Sandwych.Reporting
 {
-	[TestFixture]
+    [TestFixture]
     public class ImageTest
     {
-        const string ImagePath = "resources/go-home.PNG";
+        readonly static string ImagePath = TemplateTestHelper.GetTestResourceAbsolutleFilePath("resources/go-home.PNG");
 
         [Test]
         public void TestConstructor()

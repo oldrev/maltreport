@@ -28,7 +28,7 @@ namespace Sandwych.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
-                @"resources/word2003xml_docs/template_reference_replacement.doc", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/word2003xml_docs/template_reference_replacement.doc"), ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
             xmldoc.ShouldBeWellFormedWordML();
@@ -48,7 +48,7 @@ namespace Sandwych.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
-                @"resources/word2003xml_docs/template_escape_url.doc", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/word2003xml_docs/template_escape_url.doc"), ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
             xmldoc.ShouldBeWellFormedWordML();
@@ -68,7 +68,7 @@ namespace Sandwych.Reporting.OfficeXml
             };
 
             var result = TemplateTestHelper.RenderTemplate<WordMLTemplate>(
-                @"resources/word2003xml_docs/template_row_loop.doc", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/word2003xml_docs/template_row_loop.doc"), ctx);
 
             var xmldoc = TemplateTestHelper.GetlXmlDocument((WordMLTemplate)result);
             xmldoc.ShouldBeWellFormedWordML();

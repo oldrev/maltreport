@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.IO;
+using System.Reflection;
 
 using Commons.Xml.Relaxng;
 using NUnit.Framework;
@@ -40,6 +41,12 @@ namespace Sandwych.Reporting.Test
             }
 
             return xmldoc;
+        }
+
+        public static string GetTestResourceAbsolutleFilePath(string relativePath)
+        {
+            var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return Path.Combine(currentDir, relativePath);
         }
 
         private static void AddXmlSchema(XmlDocument xml,
@@ -89,11 +96,12 @@ namespace Sandwych.Reporting.Test
             Assert.IsTrue(RelaxngValidate(xmlStream, rngFile));
         }
 
-        private static bool RelaxngValidate(Stream xmlStream, string rngFile)
+        private static bool RelaxngValidate(Stream xmlStream, string rngPath)
         {
+
             // Grammar.
             RelaxngPattern p = null;
-            using (XmlTextReader xtrRng = new XmlTextReader(rngFile))
+            using (XmlTextReader xtrRng = new XmlTextReader(rngPath))
             {
                 p = RelaxngPattern.Read(xtrRng);
                 p.Compile();

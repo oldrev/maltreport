@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text;
 
 using NUnit.Framework;
+using Sandwych.Reporting.Test;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -22,7 +23,7 @@ namespace Sandwych.Reporting.OpenDocument
             };
 
             var result = OdfTemplateTestHelper.RenderTemplate(
-                @"resources/odf_docs/template_column_loop.ods", ctx);
+                TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/odf_docs/template_column_loop.ods"), ctx);
             OdfTemplateTestHelper.ShouldBeWellFormedOdfContent(result);
 
             var xmldoc = OdfTemplateTestHelper.GetContentDocument(result);

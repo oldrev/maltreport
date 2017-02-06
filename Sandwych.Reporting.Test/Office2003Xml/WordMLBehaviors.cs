@@ -8,9 +8,9 @@ using Sandwych.Reporting.Test;
 
 namespace Sandwych.Reporting.OfficeXml
 {
-	internal static class WordMLBehaviors
-	{
-		static readonly string[] WordML2003SchemaFiles = new string[] 
+    internal static class WordMLBehaviors
+    {
+        static readonly string[] WordML2003SchemaFiles = new string[]
         {
                 @"resources/schemas/word2003/wordnet.xsd",
                 @"resources/schemas/word2003/wordnetaux.xsd",
@@ -22,9 +22,9 @@ namespace Sandwych.Reporting.OfficeXml
                 @"resources/schemas/word2003/w10.xsd",
         };
 
-		public static void ShouldBeWellFormedWordML (this XmlDocument xml)
-		{
-			xml.ShouldWellFormed (WordML2003SchemaFiles);
-		}
-	}
+        public static void ShouldBeWellFormedWordML(this XmlDocument xml)
+        {
+            xml.ShouldWellFormed(WordML2003SchemaFiles.Select(x => TemplateTestHelper.GetTestResourceAbsolutleFilePath(x)));
+        }
+    }
 }

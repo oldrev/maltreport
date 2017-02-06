@@ -10,9 +10,8 @@ namespace Sandwych.Reporting.OpenDocument
 {
     public static class OdfTemplateTestHelper
     {
-
-        public const string OpenDocumentRngFile =
-            @"resources/schemas/opendocument/OpenDocument-v1.2-cd05-schema.rng";
+        public readonly static string OpenDocumentRngFile =
+            TemplateTestHelper.GetTestResourceAbsolutleFilePath(@"resources/schemas/opendocument/OpenDocument-v1.2-cd05-schema.rng");
 
         /// <summary>
         /// 一部执行模板编译、渲染并返回结果
