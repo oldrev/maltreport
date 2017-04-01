@@ -10,11 +10,10 @@ using Sandwych.Reporting.Test;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-
+    [Category("OpenDocument/ODS")]
     public class OdsTemplateTest
     {
-
-        [Test(Description = "测试 ODF 表格列进行循环填充")]
+        [Test]
         public void TestColumnLoop()
         {
             var ctx = new Dictionary<string, object>() {

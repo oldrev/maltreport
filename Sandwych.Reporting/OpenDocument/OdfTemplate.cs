@@ -14,7 +14,7 @@ using Sandwych.Reporting.Xml;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    public class OdfTemplate : AbstractZipBasedTemplate
+    public class OdfTemplate : AbstractZippedTemplate
     {
         internal const string MimeTypeEntryPath = "mimetype";
         internal const string SettingsEntryPath = "settings.xml";

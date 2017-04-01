@@ -13,6 +13,7 @@ namespace Sandwych.Reporting.OfficeXml
 {
     //"Excel 2003 XML 格式模板的测试"
     [TestFixture]
+    [Category("MSOffice2003/Excel")]
     public sealed class ExcelMLTemplateTest
     {
         public sealed class FunctionsProvider
@@ -24,7 +25,7 @@ namespace Sandwych.Reporting.OfficeXml
         }
 
 
-        [Test(Description = "测试 Excel 2003 XML 的简单行循环")]
+        [Test]
         public void TestSimpleRowLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -47,7 +48,7 @@ namespace Sandwych.Reporting.OfficeXml
             Assert.AreEqual("FFFFF", row5);
         }
 
-        [Test(Description = "测试 Excel 2003 Xml 的简单列循环")]
+        [Test]
         public void TestSimpleColumnLoop()
         {
             var ctx = new Dictionary<string, object>()
@@ -72,7 +73,7 @@ namespace Sandwych.Reporting.OfficeXml
 
         }
 
-        [Test(Description = "测试 Excel 2003 Xml 复杂模板的编译渲染")]
+        [Test]
         public void TestComplexTemplate()
         {
             var ctx = ContextDataFactory.CreateComplexDataContext();
@@ -85,7 +86,7 @@ namespace Sandwych.Reporting.OfficeXml
 
         }
 
-        [Test(Description = "测试执行提供的函数")]
+        [Test]
         public void TestUserFunction()
         {
             var ctx = new Dictionary<string, object>()

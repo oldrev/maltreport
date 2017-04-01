@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace Sandwych.Reporting
 {
-	public abstract class AbstractZipBasedTemplate : ITemplate
+	public abstract class AbstractZippedTemplate : ITemplate
 	{
 
         #region Members of ITemplate
@@ -143,7 +143,7 @@ namespace Sandwych.Reporting
 
 		public abstract object Clone ();
 
-		public void CopyTo (AbstractZipBasedTemplate destDoc)
+		public void CopyTo (AbstractZippedTemplate destDoc)
 		{
 			if (destDoc == null) {
 				throw new ArgumentNullException ("destDoc");

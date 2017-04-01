@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="DocumentGenerationEngine.cs" />
     <Compile Include="IDocument.cs" />
     <Compile Include="OfficeXml\ExcelMLNamespaceManager.cs" />
     <Compile Include="OfficeXml\ExcelMLCompiler.cs" />
@@ -54,6 +56,8 @@
     <Compile Include="OpenDocument\OdfCompiler.cs" />
     <Compile Include="TemplateFactory.cs" />
     <Compile Include="TemplateUtility.cs" />
+    <Compile Include="Textilize\DefaultIsoDateTimeOffsetRenderFilter.cs" />
+    <Compile Include="Textilize\DefaultIsoDateTimeRenderFilter.cs" />
     <Compile Include="UrlUtility.cs" />
     <Compile Include="Xml\IXmlNodeProcessor.cs" />
     <Compile Include="OfficeXml\ExcelMLlRowNodeProcessor.cs" />
@@ -77,7 +81,7 @@
     <Compile Include="Xml\DirectiveElement.cs" />
     <Compile Include="SyntaxErrorException.cs" />
     <Compile Include="TemplateException.cs" />
-    <Compile Include="AbstractZipBasedTemplate.cs" />
+    <Compile Include="AbstractZippedTemplate.cs" />
     <Compile Include="ITemplate.cs" />
     <Compile Include="OpenDocument\OdfTemplate.cs" />
     <Compile Include="OfficeXml\ExcelMLTemplate.cs" />

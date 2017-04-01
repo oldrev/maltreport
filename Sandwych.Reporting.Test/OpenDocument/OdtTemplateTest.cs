@@ -15,10 +15,10 @@ namespace Sandwych.Reporting.OpenDocument
     /// <summary>
     /// ODT 格式模板的测试
     /// </summary>
-    [TestFixture]
+    [Category("OpenDocument/ODT")]
     public sealed class OdtTemplateTest
     {
-        [Test(Description = "测试 ODF 简单的变量替换")]
+        [Test]
         public void TestIdsReplacement()
         {
             var ctx = new Dictionary<string, object>() {
@@ -39,7 +39,7 @@ namespace Sandwych.Reporting.OpenDocument
             Assert.AreEqual("HELLO John Doe WORLDABCABC", p.InnerText);
         }
 
-        [Test(Description = "测试 ODF 表格行进行循环填充")]
+        [Test]
         public void TestRowLoop()
         {
             var ctx = new Dictionary<string, object>() {
@@ -62,7 +62,7 @@ namespace Sandwych.Reporting.OpenDocument
             Assert.AreEqual("F", row5Col0);
         }
 
-        [Test(Description = "测试 ODF 对内容进行转义处理")]
+        [Test]
         public void TestEscape()
         {
             var ctx = new Dictionary<string, object>() {
@@ -83,7 +83,7 @@ namespace Sandwych.Reporting.OpenDocument
             Assert.AreEqual("X > Y < Z &; & #end", p.InnerText);
         }
 
-        [Test(Description = "测试 ODF 模板中的 VTL 语句")]
+        [Test]
         public void TestStatements()
         {
             var ctx = new Dictionary<string, object>() {

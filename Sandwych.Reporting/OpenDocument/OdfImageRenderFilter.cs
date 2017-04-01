@@ -8,71 +8,73 @@ using System.Globalization;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-	internal class OdfImageRenderFilter : IRenderFilter
-	{
-		private IDictionary<Image, string> userImages;
-		private OdfTemplate resultDocument;
+    internal class OdfImageRenderFilter : IRenderFilter
+    {
+        private IDictionary<Image, string> userImages;
+        private OdfTemplate resultDocument;
 
-		public OdfImageRenderFilter (IDictionary<Image, string> userImages, OdfTemplate odfDoc)
-		{
-			Debug.Assert (userImages != null);
-			Debug.Assert (odfDoc != null);
+        public OdfImageRenderFilter(IDictionary<Image, string> userImages, OdfTemplate odfDoc)
+        {
+            Debug.Assert(userImages != null);
+            Debug.Assert(odfDoc != null);
 
-			this.userImages = userImages;
-			this.resultDocument = odfDoc;
-		}
+            this.userImages = userImages;
+            this.resultDocument = odfDoc;
+        }
 
         #region IRenderFilter 成员
 
-		public object Filter (object originalValue)
-		{
-			var image = (Image)originalValue;
+        public string Filter(object originalValue)
+        {
+            var image = (Image)originalValue;
 
-			string filename = this.PutImage (image);
+            string filename = this.PutImage(image);
 
-			return GetDrawImageElementXml (filename);
-		}
+            return GetDrawImageElementXml(filename);
+        }
 
-		private static object GetDrawImageElementXml (string imagePath)
-		{
-			using (var ws = new StringWriter(CultureInfo.InvariantCulture))
-			using (var xw = new XmlTextWriter(ws)) {
-				WriteDrawImageElement (xw, imagePath);
-				xw.Flush ();
+        private static string GetDrawImageElementXml(string imagePath)
+        {
+            using (var ws = new StringWriter(CultureInfo.InvariantCulture))
+            using (var xw = new XmlTextWriter(ws))
+            {
+                WriteDrawImageElement(xw, imagePath);
+                xw.Flush();
 
-				return ws.ToString ();
-			}
-		}
+                return ws.ToString();
+            }
+        }
 
-		private static void WriteDrawImageElement (XmlWriter xw, string imagePath)
-		{
-			Debug.Assert (!string.IsNullOrEmpty (imagePath));
-			Debug.Assert (xw != null);
+        private static void WriteDrawImageElement(XmlWriter xw, string imagePath)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(imagePath));
+            Debug.Assert(xw != null);
 
-			xw.WriteStartElement ("draw:image");
-			xw.WriteAttributeString ("xlink:href", imagePath);
-			xw.WriteAttributeString ("xlink:type", "simple");
-			xw.WriteAttributeString ("xlink:show", "embed");
-			xw.WriteAttributeString ("xlink:actuate", "onLoad");
-			xw.WriteEndElement ();
-		}
+            xw.WriteStartElement("draw:image");
+            xw.WriteAttributeString("xlink:href", imagePath);
+            xw.WriteAttributeString("xlink:type", "simple");
+            xw.WriteAttributeString("xlink:show", "embed");
+            xw.WriteAttributeString("xlink:actuate", "onLoad");
+            xw.WriteEndElement();
+        }
 
         #endregion
 
-		private string PutImage (Image image)
-		{
-			Debug.Assert (image != null);
+        private string PutImage(Image image)
+        {
+            Debug.Assert(image != null);
 
-			string filename = null;
-			var hasImage = this.userImages.TryGetValue (image, out filename);
+            string filename = null;
+            var hasImage = this.userImages.TryGetValue(image, out filename);
 
-			if (!hasImage) {
-				filename = this.resultDocument.AddImage (image);
-				this.userImages [image] = filename;
-			}
+            if (!hasImage)
+            {
+                filename = this.resultDocument.AddImage(image);
+                this.userImages[image] = filename;
+            }
 
-			return filename;
-		}
+            return filename;
+        }
 
-	}
+    }
 }

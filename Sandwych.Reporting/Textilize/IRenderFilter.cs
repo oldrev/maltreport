@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Sandwych.Reporting
 {
-	internal interface IRenderFilter
-	{
-		object Filter (object originalValue);
-	}
+    public interface IRenderFilter
+    {
+        string Filter(object originalValue);
+    }
 }

@@ -9,6 +9,7 @@ using Sandwych.Reporting.Test;
 namespace Sandwych.Reporting
 {
     [TestFixture]
+    [Category("Common")]
     public class ImageTest
     {
         readonly static string ImagePath = TemplateTestHelper.GetTestResourceAbsolutleFilePath("resources/go-home.PNG");

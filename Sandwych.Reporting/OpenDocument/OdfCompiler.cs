@@ -17,9 +17,9 @@ namespace Sandwych.Reporting.OpenDocument
         private const string TextPlaceholderTypeAttribute = @"text:placeholder-type";
         private const string TableRowElement = @"table:table-row";
         private static readonly Regex PlaceHolderValuePattern =
-            new Regex(@"^<\s*(.*)\s*>$");
+            new Regex(@"^<\s*(.*)\s*>$", RegexOptions.Compiled);
         private static readonly Regex HyperLinkValuePattern =
-            new Regex(@"^rtl://(.*)\s*$");
+            new Regex(@"^rtl://(.*)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static void Compile(OdfTemplate template)
         {
@@ -104,7 +104,7 @@ namespace Sandwych.Reporting.OpenDocument
                 else if (value[0] == '#')
                 {
                     var directiveNode = new DirectiveElement(xml, value);
-                    directiveNode.ReduceTagByCount(placeholder);                        
+                    directiveNode.ReduceTagByCount(placeholder);
                     //ReduceTag(directiveNode, placeholder);
                 }
                 else
@@ -227,7 +227,7 @@ namespace Sandwych.Reporting.OpenDocument
             drawboxNode.ParentNode.ReplaceChild(ie, drawboxNode);
         }
 
-    
+
 
         #endregion
     }

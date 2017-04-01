@@ -16,10 +16,11 @@ namespace Sandwych.Reporting.OfficeXml
     /// "Word 2003 XML 格式模板的测试
     /// </summary>
     [TestFixture]
+    [Category("MSOffice2003/Word")]
     public sealed class WordMLTemplateTest
     {
 
-        //[Test]
+        [Test]
         public void TestReferenceReplacement()
         {
             var ctx = new Dictionary<string, object>() {
@@ -41,7 +42,7 @@ namespace Sandwych.Reporting.OfficeXml
 
 
         [Test]
-        public void TestEscapeUrl()
+        public void Url_placeholder_in_Word2003_should_be_ok()
         {
             var ctx = new Dictionary<string, object>()
             {
