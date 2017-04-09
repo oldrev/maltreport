@@ -1,4 +1,4 @@
-#MaltReport
+# MaltReport
 
 MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, it is inspired by the excellent [Relatorio Project](http://relatorio.openhex.org/).
 
@@ -10,17 +10,21 @@ we can use LibreOffice and MS-Word/Excel as WYSIWYG report development tools.
 I do not have too much time working with the document, so to learn the usage of MaltReport please see the Sandwych.Reporting.Demo project.
 
 
-#Getting Started
+# Getting Started
 
-##Installation
+## Installation
 
-MaltReport can be installed from [NuGet](https://www.nuget.org/packages/MaltReport2)
-
-or type following commands in the NuGet Console:
+MaltReport can be installed from [NuGet](https://www.nuget.org/packages/MaltReport2) or type following commands in the NuGet Console:
 
 ```
 PM> Install-Package MaltReport2
 ```
+
+## License
+
+MaltReport is licensed in the MIT license.
+
+Author: Wei "oldrev" Li <oldrev<at>gmail.com>
 
 * Copyright (C) 2009 Wei "oldrev" Li
 * Copyright (C) 2010-2016 Sandwych Consulting LLC.
