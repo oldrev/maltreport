@@ -36,7 +36,7 @@ PM> Install-Package MaltReport2
 
 ## Demo & Usage:
 
-### Step 1: Organize your Data into an IDictionary<string,object>
+### Step 1: Organize your data into an IDictionary<string,object>
 
 ```csharp
 
