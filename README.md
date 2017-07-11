@@ -81,7 +81,7 @@ template.Compile(); //Compile template
 var resultDoc = template.Render(ctx); //Render template with data
 
 //Save output to a DOC file
-using (var resultFile3 = File.Open("c:\\tmp\\result.doc", FileMode.Create, FileAccess.ReadWrite)) { 
+using (var resultFile3 = File.Open(@"c:\tmp\result.doc", FileMode.Create, FileAccess.ReadWrite)) { 
     resultDoc.Save(resultFile3);
 }
 ```
