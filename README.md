@@ -7,7 +7,7 @@ MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET an
 
 There is a brief introduction in Chinese: [MaltReport2 中文使用简介](http://www.cnblogs.com/oldrev/p/maltreport2_intro.html)
 
-MaltReport DO NOT requires MS-Office or LibreOffice to render report, instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it fast & reliable. 
+MaltReport **DO NOT REQUIRES** MS-Office or LibreOffice to render report, instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fast & reliable. 
 
 The template of your report is just a normal document created with LibreOffice or MS-Word/MS-Excel (ODT/ODS and XLS/DOC are fully supported), 
 we can use LibreOffice and MS-Word/Excel as WYSIWYG report development tools.
@@ -36,7 +36,7 @@ PM> Install-Package MaltReport2
 
 ## Demo & Usage:
 
-### Step 1: Organize your Data into a IDictionary<string,object>
+### Step 1: Organize your Data into an IDictionary<string,object>
 
 ```csharp
 
