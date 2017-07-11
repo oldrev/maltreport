@@ -5,7 +5,7 @@
 
 MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, it is inspired by the excellent [Relatorio Project](http://relatorio.openhex.org/).
 
-There is a brief introduction in Chinese: [MaltReport2 中文使用简介](http://www.cnblogs.com/oldrev/p/maltreport2_intro.html)
+There is a briefly introduction in Chinese: [MaltReport2 中文使用简介](http://www.cnblogs.com/oldrev/p/maltreport2_intro.html)
 
 MaltReport **DO NOT REQUIRES** MS-Office or LibreOffice to render report, on the contrary, MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fast & reliable. 
 
