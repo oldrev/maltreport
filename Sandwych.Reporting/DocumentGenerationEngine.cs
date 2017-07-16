@@ -10,7 +10,7 @@ namespace Sandwych.Reporting
 
     public class DocumentGenerationEngine
     {
-        public readonly Configuration _configuration;
+        private readonly Configuration _configuration;
 
         public DocumentGenerationEngine(Configuration configuration)
         {
