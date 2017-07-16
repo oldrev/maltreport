@@ -19,3 +19,7 @@ test-results
 *.userprefs
 packages/
 *.nupkg
+
+/tools/
+/artifacts/
+/build/

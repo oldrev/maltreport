@@ -31,7 +31,4 @@
 
   </metadata>
 
-  <files>
-    <file src="..\MaltReport\Sandwych.Reporting\bin\Release\Sandwych.Reporting.*" target="lib\net45" />
-  </files>
 </package>
