@@ -148,7 +148,7 @@ Task("Appveyor-Upload-Artifacts")
 });
 Task("Appveyor")
     .WithCriteria(() => AppVeyor.IsRunningOnAppVeyor)
-    .IsDependentOn("Pack");
+    .IsDependentOn("Pack")
     .IsDependentOn("AppVeyor-Update-Build-Number")
     .IsDependentOn("AppVeyor-Upload-Artifacts");
 
