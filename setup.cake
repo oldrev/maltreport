@@ -2,6 +2,8 @@
 #tool nuget:?package=OpenCover
 #tool nuget:?package=Codecov
 #addin nuget:?package=Cake.Figlet
+#addin "Cake.DocFx"
+#tool "docfx.console"
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -94,6 +96,18 @@ Task("Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
+});
+
+
+Task("Document").Does(() => DocFxBuild("./docs/docfx.json"));
+
+
+Task("ServeDocument").Does(() => { 
+    var settings = new DocFxBuildSettings {
+        Serve = true,
+    };
+    DocFxBuild("./docs/docfx.json", settings);
+    
 });
 
 
