@@ -128,6 +128,31 @@ Task("Pack").IsDependentOn("Tests").Does(() =>
      NuGetPack("./MaltReport2.nuspec", nuGetPackSettings);
 });
 
+//AppVeyor Stuff
+
+Task("AppVeyor-Update-Build-Number")
+    .IsDependentOn("Update-Version-Info")
+    .WithCriteria(() => AppVeyor.IsRunningOnAppVeyor)
+    .Does(() =>
+{
+    AppVeyor.UpdateBuildVersion(versionInfo.FullSemVer +"|" +AppVeyor.Environment.Build.Number);
+});
+Task("Appveyor-Upload-Artifacts")
+    .IsDependentOn("Package")
+    .WithCriteria(() => AppVeyor.IsRunningOnAppVeyor)
+    .Does(() =>
+{
+    foreach(var nupkg in GetFiles(artifacts +"/*.nupkg")) {
+        AppVeyor.UploadArtifact(nupkg);
+    }
+});
+Task("Appveyor")
+    .WithCriteria(() => AppVeyor.IsRunningOnAppVeyor)
+    .IsDependentOn("Pack");
+    .IsDependentOn("AppVeyor-Update-Build-Number")
+    .IsDependentOn("AppVeyor-Upload-Artifacts");
+
+
 Task("Default").IsDependentOn("Pack");
 
 RunTarget(target);
