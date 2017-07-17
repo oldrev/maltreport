@@ -40,6 +40,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
             };
 
             var result = template.Render(context);
+
             result.Save(@"c:\tmp\out.odt");
         }
 

@@ -27,9 +27,14 @@ namespace Sandwych.Reporting.OpenDocument
             var mainContentTemplate = _document.ReadTextEntry(_document.MainContentEntryPath);
 
             var templateContext = new TemplateContext();
+
             foreach (var pair in context)
             {
                 templateContext.SetValue(pair.Key, Fluid.Values.FluidValue.Create(pair.Value));
+                if (pair.Value != null)
+                {
+                    templateContext.MemberAccessStrategy.Register(pair.Value.GetType());
+                }
             }
 
             using (var ws = outputDocument.GetEntryOutputStream(outputDocument.MainContentEntryPath))
