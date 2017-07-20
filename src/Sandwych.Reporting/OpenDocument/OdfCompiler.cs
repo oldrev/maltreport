@@ -6,20 +6,17 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 using Sandwych.Reporting.Xml;
+using System.Linq;
 
 namespace Sandwych.Reporting.OpenDocument
 {
     internal class OdfCompiler
     {
-        private const string TextPlaceholderElement = @"text:placeholder";
-        private const string DrawTextBoxElement = @"draw:text-box";
-        private const string TextAnchorElement = @"text:a";
-        private const string TextPlaceholderTypeAttribute = @"text:placeholder-type";
-        private const string TableRowElement = @"table:table-row";
-        private static readonly Regex PlaceHolderValuePattern =
-            new Regex(@"^<\s*(.*)\s*>$", RegexOptions.Compiled);
-        private static readonly Regex HyperLinkValuePattern =
-            new Regex(@"^rtl://(.*)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Lazy<Regex> PlaceHolderValuePattern =
+            new Lazy<Regex>(() => new Regex(@"^<\s*(.*)\s*>$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
+
+        private static readonly Lazy<Regex> HyperLinkValuePattern =
+            new Lazy<Regex>(() => new Regex(@"^dtl://(.*)\s*$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
 
         public static void Compile(OdfDocument template)
         {
@@ -36,11 +33,9 @@ namespace Sandwych.Reporting.OpenDocument
             template.WriteXmlContent(xml);
         }
 
-        #region Compiler Methods
-
         private static void ProcessTableRows(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
-            var rowElements = FindAllRowElements(xml);
+            var rowElements = FindAllRowElements(xml).ToArray();
 
             foreach (XmlElement row in rowElements)
             {
@@ -54,42 +49,37 @@ namespace Sandwych.Reporting.OpenDocument
         {
             var rowDirectiveElements = FindDirectiveNodesInRow(row);
 
-            if (rowDirectiveElements.Count == 1)
+            if (rowDirectiveElements.Count() == 1)
             {
-                row.ParentNode.ReplaceChild(rowDirectiveElements[0], row);
+                row.ParentNode.ReplaceChild(rowDirectiveElements.First(), row);
             }
         }
 
-        private static List<XmlElement> FindAllRowElements(XmlDocument xml)
+        private static IEnumerable<XmlElement> FindAllRowElements(XmlDocument xml)
         {
-            var nodeList = xml.GetElementsByTagName(TableRowElement);
-            var rowNodes = new List<XmlElement>();
+            var nodeList = xml.GetElementsByTagName(OdfDocument.TableRowElement);
 
             foreach (XmlElement rowEle in nodeList)
             {
-                rowNodes.Add(rowEle);
+                yield return rowEle;
             }
-            return rowNodes;
         }
 
-        private static List<DirectiveElement> FindDirectiveNodesInRow(
-            XmlElement row)
+        private static IEnumerable<DirectiveElement> FindDirectiveNodesInRow(XmlElement row)
         {
-            var rowDirectiveNodes = new List<DirectiveElement>(50);
             foreach (XmlElement subnode in row.ChildNodes)
             {
                 var se = subnode as DirectiveElement;
                 if (se != null)
                 {
-                    rowDirectiveNodes.Add(se);
+                    yield return se;
                 }
             }
-            return rowDirectiveNodes;
         }
 
         private static void PreprocessElements(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
-            var placeholders = FindAllRtlElements(xml);
+            var placeholders = FindAllRtlElements(xml).ToArray();
 
             foreach (XmlNode placeholder in placeholders)
             {
@@ -112,26 +102,23 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        private static List<XmlElement> FindAllRtlElements(XmlDocument xml)
+        private static IEnumerable<XmlElement> FindAllRtlElements(XmlDocument xml)
         {
-            var placeholders = new List<XmlElement>();
-
-            var textPlaceholders = xml.GetElementsByTagName(TextPlaceholderElement);
+            var textPlaceholders = xml.GetElementsByTagName(OdfDocument.TextPlaceholderElement);
             foreach (XmlElement tpe in textPlaceholders)
             {
-                placeholders.Add(tpe);
+                yield return tpe;
             }
 
-            var textAnchors = xml.GetElementsByTagName(TextAnchorElement);
+            var textAnchors = xml.GetElementsByTagName(OdfDocument.TextAnchorElement);
             foreach (XmlElement ta in textAnchors)
             {
                 var href = ta.GetAttribute("xlink:href");
-                if (href != null && href.Trim().StartsWith("rtl://", StringComparison.Ordinal))
+                if (href != null && href.Trim().StartsWith("dtl://", StringComparison.Ordinal))
                 {
-                    placeholders.Add(ta);
+                    yield return ta;
                 }
             }
-            return placeholders;
         }
 
         private static string ExtractTemplateExpression(XmlNode placeholder)
@@ -142,12 +129,12 @@ namespace Sandwych.Reporting.OpenDocument
 
             if (placeholder.Name == "text:placeholder")
             {
-                match = PlaceHolderValuePattern.Match(placeholder.InnerText);
+                match = PlaceHolderValuePattern.Value.Match(placeholder.InnerText);
             }
             else
             {
                 var href = placeholder.Attributes["xlink:href"].Value;
-                match = HyperLinkValuePattern.Match(Uri.UnescapeDataString(href));
+                match = HyperLinkValuePattern.Value.Match(Uri.UnescapeDataString(href));
             }
 
             value = match.Groups[1].Value;
@@ -178,7 +165,7 @@ namespace Sandwych.Reporting.OpenDocument
 
             var ie = new ReferenceElement(xml, value);
 
-            if (placeholder.Name == TextPlaceholderElement)
+            if (placeholder.Name == OdfDocument.TextPlaceholderElement)
             {
                 ProcessPlaceHolderElement(placeholder, ie);
             }
@@ -190,7 +177,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         private static void ProcessPlaceHolderElement(XmlNode placeholder, ReferenceElement ie)
         {
-            var placeholderType = placeholder.Attributes[TextPlaceholderTypeAttribute]
+            var placeholderType = placeholder.Attributes[OdfDocument.TextPlaceholderTypeAttribute]
                 .InnerText.Trim().ToLowerInvariant();
             ;
             //Processing The image placeholder
@@ -216,17 +203,14 @@ namespace Sandwych.Reporting.OpenDocument
             Debug.Assert(ie != null);
 
             //向上查找 drawbox
-            var drawboxNode = placeholder.LookupAncestor(DrawTextBoxElement);
-            if (drawboxNode.Name != DrawTextBoxElement)
+            var drawboxNode = placeholder.LookupAncestor(OdfDocument.DrawTextBoxElement);
+            if (drawboxNode.Name != OdfDocument.DrawTextBoxElement)
             {
-                throw new TemplateException("The placeholder of image must be in a 'frame'");
+                throw new TemplateException("The placeholder of an image must be in a 'frame' element");
             }
 
             drawboxNode.ParentNode.ReplaceChild(ie, drawboxNode);
         }
 
-
-
-        #endregion
     }
 }

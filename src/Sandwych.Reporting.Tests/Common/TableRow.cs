@@ -13,5 +13,6 @@ namespace Sandwych.Reporting.Tests.Common
         public DateTime DateTime { get; set; }
         public DateTimeOffset DateTimeOffset { get; set; }
         public TimeSpan TimeSpan { get; set; }
+        public int[] Integers { get; set; }
     }
 }

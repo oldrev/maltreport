@@ -17,7 +17,8 @@ namespace Sandwych.Reporting.Tests.Common
                      Decimal = 9990.00M,
                      Double = 9990.00,
                      Integer = 9990,
-                     TimeSpan = new TimeSpan(12,12,32)
+                     TimeSpan = new TimeSpan(12,12,32),
+                     Integers = new int[] { 11,22,33,44,55},
                  },
 
                  new TableRow {
@@ -27,7 +28,8 @@ namespace Sandwych.Reporting.Tests.Common
                      Decimal = 9991.00M,
                      Double = 9991.00,
                      Integer = 9991,
-                     TimeSpan = new TimeSpan(23,12,32)
+                     TimeSpan = new TimeSpan(23,12,32),
+                     Integers = new int[] { 5,4,3,2,1},
                  },
 
                  new TableRow {
@@ -37,7 +39,8 @@ namespace Sandwych.Reporting.Tests.Common
                      Decimal = 9992.00M,
                      Double = 9992.00,
                      Integer = 9992,
-                     TimeSpan = new TimeSpan(18,12,32)
+                     TimeSpan = new TimeSpan(18,12,32),
+                     Integers = new int[] { 1,2,3,4,5},
                  },
             };
         }
