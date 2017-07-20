@@ -4,7 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Reflection;
 using Fluid;
+using Sandwych.Reporting.Utility;
+using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -26,7 +29,11 @@ namespace Sandwych.Reporting.OpenDocument
 
             var mainContentTemplate = _document.ReadTextEntry(_document.MainContentEntryPath);
 
-            var templateContext = new TemplateContext();
+            var templateContext = new TemplateContext()
+            {
+                MemberAccessStrategy = new UnsafeMemberAccessStrategy(TemplateContext.GlobalMemberAccessStrategy)
+            };
+            templateContext.AmbientValues["template"] = _document;
 
             foreach (var pair in context)
             {

@@ -40,7 +40,7 @@ namespace Sandwych.Reporting.Tests
             Assert.Equal($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
         }
 
-        [Fact(DisplayName ="Fluid with Dynamic Object")]
+        [Fact]
         public void FluidShouldWorksWithDynamicObject()
         {
             dynamic model = new
@@ -57,8 +57,9 @@ namespace Sandwych.Reporting.Tests
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
             Assert.True(FluidTemplate.TryParse(source, out var template));
             var context = new TemplateContext();
-            System.Diagnostics.Debug.WriteLine("{0}", model.Numbers.GetType().ToString() as string);
             context.SetValue("p", model);
+            context.MemberAccessStrategy.Register(model.GetType() as Type);
+            context.MemberAccessStrategy.Register(typeof(Item));
             var result = template.Render(context);
 
             Assert.Equal($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
