@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Reflection;
 using Fluid;
-using Sandwych.Reporting.Utility;
 using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.OpenDocument
