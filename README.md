@@ -1,13 +1,16 @@
-# MaltReport
+﻿# MaltReport
 
 [![NuGet Stats](https://img.shields.io/nuget/v/MaltReport2.svg)](https://www.nuget.org/packages/MaltReport2) 
 [![Build status](https://ci.appveyor.com/api/projects/status/w9rc2jbb6v4o4jgk/branch/master?svg=true)](https://ci.appveyor.com/project/oldrev/maltreport/branch/master)
 
-MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, it is inspired by the excellent [Relatorio Project](http://relatorio.openhex.org/).
+MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, 
+it is inspired by the excellent [Relatorio Project](http://relatorio.openhex.org/).
 
 There is a briefly introduction in Chinese: [MaltReport2 中文使用简介](http://www.cnblogs.com/oldrev/p/maltreport2_intro.html)
 
-MaltReport **DO NOT REQUIRES** MS-Office or LibreOffice to render report, on the contrary, MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fast & reliable. 
+MaltReport DO NOT REQUIRES MS-Office or LibreOffice to generate document. 
+Instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fast & reliable.
+
 
 The template of your report is just a normal document created with LibreOffice or MS-Word/MS-Excel (ODT/ODS and XLS/DOC are fully supported), 
 we can use LibreOffice and MS-Word/Excel as WYSIWYG report development tools.
@@ -90,7 +93,7 @@ using (var resultFile3 = File.Open(@"c:\tmp\result.doc", FileMode.Create, FileAc
 
 MaltReport is licensed in the MIT license.
 
-Author: Wei "oldrev" Li <oldrev<at>gmail.com>
+Author: Wei "oldrev" Li <oldrev@gmail.com>
 
 * Copyright (C) 2009 Wei "oldrev" Li
 * Copyright (C) 2010-2016 Sandwych Consulting LLC.
