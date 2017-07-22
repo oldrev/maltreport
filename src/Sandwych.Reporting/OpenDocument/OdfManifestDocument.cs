@@ -91,8 +91,8 @@ namespace Sandwych.Reporting.OpenDocument
 
             var fileEntryElement = this.CreateElement(
              "manifest", "file-entry", OdfNamespaceManager.ManifestNamespace);
-            fileEntryElement.SetAttribute("media-type", OdfNamespaceManager.ManifestNamespace, mediaType);
             fileEntryElement.SetAttribute("full-path", OdfNamespaceManager.ManifestNamespace, fullPath);
+            fileEntryElement.SetAttribute("media-type", OdfNamespaceManager.ManifestNamespace, mediaType);
 
             manifestElement.AppendChild(fileEntryElement);
         }

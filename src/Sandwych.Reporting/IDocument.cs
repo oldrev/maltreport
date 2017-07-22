@@ -46,10 +46,8 @@ namespace Sandwych.Reporting
             }
         }
 
-        public static string ToBase64String(this IDocument self)
-        {
-            return Convert.ToBase64String(self.AsBuffer());
-        }
+        public static string ToBase64String(this IDocument self) =>
+            Convert.ToBase64String(self.AsBuffer());
 
 
     }

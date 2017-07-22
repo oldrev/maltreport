@@ -14,7 +14,7 @@ namespace Sandwych.Reporting
         Stream GetEntryInputStream(string entryPath);
         Stream GetEntryOutputStream(string entryPath);
         bool EntryExists(string entryPath);
-        void CopyTo(IZippedDocument destDoc);
+        void SaveAs(IZippedDocument destDoc);
     }
 
 

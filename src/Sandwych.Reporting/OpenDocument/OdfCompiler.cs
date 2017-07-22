@@ -206,7 +206,7 @@ namespace Sandwych.Reporting.OpenDocument
             var drawboxNode = placeholder.LookupAncestor(OdfDocument.DrawTextBoxElement);
             if (drawboxNode.Name != OdfDocument.DrawTextBoxElement)
             {
-                throw new TemplateException("The placeholder of an image must be in a 'frame' element");
+                throw new TemplateException("The placeholder of an image must be in a 'draw-box' element");
             }
 
             drawboxNode.ParentNode.ReplaceChild(ie, drawboxNode);

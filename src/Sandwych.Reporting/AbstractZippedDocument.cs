@@ -158,7 +158,7 @@ namespace Sandwych.Reporting
                 throw new ArgumentNullException("dest");
             }
 
-            var bufSize = 2048;
+            var bufSize = 1024 * 8;
             var buf = new byte[bufSize];
             int nRead = 0;
             while ((nRead = src.Read(buf, 0, bufSize)) > 0)
@@ -167,13 +167,14 @@ namespace Sandwych.Reporting
             }
         }
 
-        public virtual void CopyTo(IZippedDocument destDoc)
+        public virtual void SaveAs(IZippedDocument destDoc)
         {
             if (destDoc == null)
             {
                 throw new ArgumentNullException("destDoc");
             }
 
+            //A Copy on write approach
             foreach (var item in this.EntryPaths)
             {
                 using (var inStream = this.GetEntryInputStream(item))

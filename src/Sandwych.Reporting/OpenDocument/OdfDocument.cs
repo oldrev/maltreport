@@ -29,6 +29,7 @@ namespace Sandwych.Reporting.OpenDocument
         public const string TextPlaceholderTypeAttribute = @"text:placeholder-type";
         public const string TableRowElement = @"table:table-row";
 
+        public readonly Lazy<List<OdfBlobEntry>> _blobs = new Lazy<List<OdfBlobEntry>>(() => new List<OdfBlobEntry>(), true);
 
         public string MainContentEntryPath => ContentEntryPath;
 
@@ -59,17 +60,25 @@ namespace Sandwych.Reporting.OpenDocument
         public override void Save(Stream outStream) =>
             this.SaveAsync(outStream).GetAwaiter().GetResult();
 
-        public string AddImage(Image img)
+        public OdfBlobEntry AddOrGetImage(Blob imageBlob)
         {
-            if (img == null)
+            if (imageBlob == null)
             {
-                throw new ArgumentNullException(nameof(img));
+                throw new ArgumentNullException(nameof(imageBlob));
             }
 
-            var fullPath = "Pictures/" + img.DocumentFileName;
+            var fullPath = "Pictures/" + imageBlob.FileName;
+
+            var existedBlob = _blobs.Value.FirstOrDefault(b => b.Blob.Id == imageBlob.Id);
+
+            if (existedBlob != null)
+            {
+                return existedBlob;
+            }
+
             using (var outStream = this.GetEntryOutputStream(fullPath))
             {
-                outStream.Write(img.GetData(), 0, img.DataSize);
+                outStream.Write(imageBlob.GetBuffer(), 0, imageBlob.Length);
             }
 
             var manifestDoc = new OdfManifestDocument();
@@ -78,21 +87,25 @@ namespace Sandwych.Reporting.OpenDocument
                 manifestDoc.Load(manifestInStream);
             }
 
-            manifestDoc.AppendImageFileEntry(img.ExtensionName, fullPath);
-            manifestDoc.CreatePicturesEntryElement();
+            //manifestDoc.CreatePicturesEntryElement();
+            manifestDoc.AppendImageFileEntry(imageBlob.ExtensionName, fullPath);
 
             using (var manifestOutStream = this.GetEntryOutputStream(OdfDocument.ManifestEntryPath))
             {
                 manifestDoc.Save(manifestOutStream);
             }
 
-            return fullPath;
+            var blobEntry = new OdfBlobEntry(fullPath, imageBlob);
+            this._blobs.Value.Add(blobEntry);
+            return blobEntry;
         }
+
+        public IEnumerable<OdfBlobEntry> BlobEntries => _blobs.Value;
 
         public OdfDocument Clone()
         {
             var destDoc = new OdfDocument();
-            this.CopyTo(destDoc);
+            this.SaveAs(destDoc);
             return destDoc;
         }
 

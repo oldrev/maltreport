@@ -24,24 +24,14 @@ namespace Sandwych.Reporting.OpenDocument
         public IDocument Render(IReadOnlyDictionary<string, object> context)
         {
             var outputDocument = new OdfDocument();
-            _document.CopyTo(outputDocument);
+            _document.SaveAs(outputDocument);
 
             var mainContentTemplate = _document.ReadTextEntry(_document.MainContentEntryPath);
 
-            var templateContext = new TemplateContext()
-            {
-                MemberAccessStrategy = new UnsafeMemberAccessStrategy(TemplateContext.GlobalMemberAccessStrategy)
-            };
-            templateContext.AmbientValues["template"] = _document;
+            var templateContext = new FluidTemplateContext(outputDocument, context);
 
-            foreach (var pair in context)
-            {
-                templateContext.SetValue(pair.Key, Fluid.Values.FluidValue.Create(pair.Value));
-                if (pair.Value != null)
-                {
-                    templateContext.MemberAccessStrategy.Register(pair.Value.GetType());
-                }
-            }
+            var imageFilter = new OdfImageFilter(outputDocument);
+            templateContext.Filters.AddFilter("image", imageFilter.Execute);
 
             using (var ws = outputDocument.GetEntryOutputStream(outputDocument.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
