@@ -1,21 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Xml;
 
 namespace Sandwych.Reporting
 {
+    public interface IZippedDocument : IDocument
+    {
+        IEnumerable<string> EntryPaths { get; }
+        Stream GetEntryInputStream(string entryPath);
+        Stream GetEntryOutputStream(string entryPath);
+        bool EntryExists(string entryPath);
+        void CopyTo(IZippedDocument destDoc);
+    }
+
+
     public static class ZippedDocumentExtensions
     {
 
-        public static TextReader GetEntryTextReader(this AbstractZippedDocument self, string entryPath) =>
+        public static TextReader GetEntryTextReader(this IZippedDocument self, string entryPath) =>
             new StreamReader(self.GetEntryInputStream(entryPath));
 
-        public static TextWriter GetEntryTextWriter(this AbstractZippedDocument self, string entryPath) =>
+        public static TextWriter GetEntryTextWriter(this IZippedDocument self, string entryPath) =>
             new StreamWriter(self.GetEntryOutputStream(entryPath));
 
-        public static void WriteXmlEntry(this AbstractZippedDocument self, string entryPath, XmlDocument xml)
+        public static void WriteXmlEntry(this IZippedDocument self, string entryPath, XmlDocument xml)
         {
             using (var cos = self.GetEntryOutputStream(entryPath))
             using (var writer = XmlWriter.Create(cos, new XmlWriterSettings { Encoding = Encoding.UTF8 }))
@@ -24,7 +36,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public static XmlDocument ReadXmlEntry(this AbstractZippedDocument self, string entryPath)
+        public static XmlDocument ReadXmlEntry(this IZippedDocument self, string entryPath)
         {
             using (var contentStream = self.GetEntryInputStream(entryPath))
             {
@@ -34,7 +46,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public static string ReadTextEntry(this AbstractZippedDocument self, string entryPath)
+        public static string ReadTextEntry(this IZippedDocument self, string entryPath)
         {
             using (var tr = self.GetEntryTextReader(entryPath))
             {
@@ -42,7 +54,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public static void WriteTextEntry(this AbstractZippedDocument self, string entryPath, string content)
+        public static void WriteTextEntry(this IZippedDocument self, string entryPath, string content)
         {
             using (var tw = self.GetEntryTextWriter(entryPath))
             {
@@ -50,7 +62,5 @@ namespace Sandwych.Reporting
             }
 
         }
-
-
     }
 }

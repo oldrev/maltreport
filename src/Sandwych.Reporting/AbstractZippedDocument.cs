@@ -1,5 +1,4 @@
-﻿//2010-09-02
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
@@ -8,14 +7,13 @@ using System.Xml;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Fluid;
-using System.Collections.Concurrent;
 using System.IO.Compression;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractZippedDocument : IDocument
+    public abstract class AbstractZippedDocument : IZippedDocument
     {
-        private readonly ConcurrentDictionary<string, byte[]> _documentEntries = new ConcurrentDictionary<string, byte[]>();
+        private readonly IDictionary<string, byte[]> _documentEntries = new Dictionary<string, byte[]>();
 
         public IDictionary<string, byte[]> Entries => _documentEntries;
 
@@ -56,7 +54,7 @@ namespace Sandwych.Reporting
             {
                 foreach (var item in _documentEntries)
                 {
-                    await this.AppendZipEntryAsync(zip, item.Key);
+                    await this.AddZipEntryAsync(zip, item.Key);
                 }
             }
         }
@@ -65,7 +63,7 @@ namespace Sandwych.Reporting
             this.SaveAsync(outStream).GetAwaiter().GetResult();
 
 
-        public async Task AppendZipEntryAsync(ZipArchive archive, string name)
+        protected async Task AddZipEntryAsync(ZipArchive archive, string name)
         {
             Debug.Assert(archive != null);
             Debug.Assert(!string.IsNullOrEmpty(name));
@@ -73,20 +71,23 @@ namespace Sandwych.Reporting
 
             var data = this._documentEntries[name];
 
-            var extensionName = Path.GetExtension(name).ToUpperInvariant();
+            var extensionName = Path.GetExtension(name).ToLowerInvariant();
             var cl = CompressionLevel.Fastest;
             switch (extensionName)
             {
-                case "JPEG":
-                case "JPG":
-                case "PNG":
-                case "MP3":
-                case "MP4":
+                case "zip":
+                case "jpeg":
+                case "jpg":
+                case "png":
+                case "gif":
+                case "mp3":
+                case "avi":
+                case "mp4":
                     cl = CompressionLevel.NoCompression;
                     break;
 
                 default:
-                    cl = CompressionLevel.Fastest;
+                    cl = CompressionLevel.Optimal;
                     break;
             }
             var zae = archive.CreateEntry(name, cl);
@@ -96,12 +97,12 @@ namespace Sandwych.Reporting
             }
         }
 
-        public void AppendZipEntry(ZipArchive archive, string name)
+        protected void AppendZipEntry(ZipArchive archive, string name)
         {
-            this.AppendZipEntryAsync(archive, name).GetAwaiter().GetResult();
+            this.AddZipEntryAsync(archive, name).GetAwaiter().GetResult();
         }
 
-        public ICollection<string> EntryPaths
+        public IEnumerable<string> EntryPaths
         {
             get { return this._documentEntries.Keys; }
         }
@@ -136,18 +137,13 @@ namespace Sandwych.Reporting
             return this._documentEntries.ContainsKey(entryPath);
         }
 
-        public virtual byte[] GetBuffer()
+        public virtual byte[] AsBuffer()
         {
             using (var ms = new MemoryStream())
             {
-                //this.Save(ms);
+                this.Save(ms);
                 return ms.ToArray();
             }
-        }
-
-        public string ToBase64String()
-        {
-            return Convert.ToBase64String(this.GetBuffer());
         }
 
         protected static void CopyStream(Stream src, Stream dest)
@@ -171,7 +167,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public void CopyTo(AbstractZippedDocument destDoc)
+        public virtual void CopyTo(IZippedDocument destDoc)
         {
             if (destDoc == null)
             {
@@ -187,6 +183,6 @@ namespace Sandwych.Reporting
                 }
             }
         }
-
     }
+
 }

@@ -24,13 +24,13 @@ namespace Sandwych.Reporting.OpenDocument
             var nsmanager = new OdfNamespaceManager(xml.NameTable);
             nsmanager.LoadOpenDocumentNamespaces();
 
-            //第1遍，先处理简单的Tag 替换
+            // First pass, process all simple tags
             PreprocessElements(xml, nsmanager);
 
-            //第2遍，处理表格循环
+            // Second pass, process all looping table things
             ProcessTableRows(xml, nsmanager);
 
-            template.WriteXmlContent(xml);
+            template.WriteMainContentXml(xml);
         }
 
         private static void ProcessTableRows(XmlDocument xml, XmlNamespaceManager nsmanager)

@@ -46,12 +46,12 @@ namespace Sandwych.Reporting.OpenDocument
 
             using (var zip = new ZipArchive(outStream, ZipArchiveMode.Create))
             {
-                await this.AppendZipEntryAsync(zip, MimeTypeEntryPath);
+                await this.AddZipEntryAsync(zip, MimeTypeEntryPath);
                 this.Entries.Remove(MimeTypeEntryPath);
 
                 foreach (var item in this.Entries)
                 {
-                    await this.AppendZipEntryAsync(zip, item.Key);
+                    await this.AddZipEntryAsync(zip, item.Key);
                 }
             }
         }
@@ -89,8 +89,6 @@ namespace Sandwych.Reporting.OpenDocument
             return fullPath;
         }
 
-
-
         public OdfDocument Clone()
         {
             var destDoc = new OdfDocument();
@@ -98,22 +96,11 @@ namespace Sandwych.Reporting.OpenDocument
             return destDoc;
         }
 
-
         public void WriteMainContentXml(XmlDocument xml) =>
             this.WriteXmlEntry(this.MainContentEntryPath, xml);
 
         public XmlDocument ReadMainContentXml() =>
             this.ReadXmlEntry(this.MainContentEntryPath);
-
-        public void WriteXmlContent(XmlDocument xml)
-        {
-            //把编译后的 XmlDocument 写入
-            using (var cos = this.GetEntryOutputStream(this.MainContentEntryPath))
-            using (var writer = XmlWriter.Create(cos))
-            {
-                xml.WriteTo(writer);
-            }
-        }
 
     }
 }
