@@ -75,14 +75,14 @@ namespace Sandwych.Reporting
             var cl = CompressionLevel.Fastest;
             switch (extensionName)
             {
-                case "zip":
-                case "jpeg":
-                case "jpg":
-                case "png":
-                case "gif":
-                case "mp3":
-                case "avi":
-                case "mp4":
+                case ".zip":
+                case ".jpeg":
+                case ".jpg":
+                case ".png":
+                case ".gif":
+                case ".mp3":
+                case ".avi":
+                case ".mp4":
                     cl = CompressionLevel.NoCompression;
                     break;
 
