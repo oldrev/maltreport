@@ -5,12 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\PngImage.png" />
     <None Remove="OpenDocument\Templates\Template1.odt" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\PngImage.png" />
+    <EmbeddedResource Include="Assets\JpegImage.jpeg" />
     <EmbeddedResource Include="OpenDocument\Templates\Template1.odt" />
   </ItemGroup>
 

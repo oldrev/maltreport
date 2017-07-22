@@ -11,8 +11,8 @@ namespace Sandwych.Reporting
     public interface IZippedDocument : IDocument
     {
         IEnumerable<string> EntryPaths { get; }
-        Stream GetEntryInputStream(string entryPath);
-        Stream GetEntryOutputStream(string entryPath);
+        byte[] GetEntryBuffer(string entryPath);
+        void SetEntryBuffer(string entryPath, byte[] buffer);
         bool EntryExists(string entryPath);
         void SaveAs(IZippedDocument destDoc);
     }
@@ -21,15 +21,26 @@ namespace Sandwych.Reporting
     public static class ZippedDocumentExtensions
     {
 
+        public static Stream OpenEntryToRead(this IZippedDocument self, string entryPath)
+        {
+            return new MemoryStream(self.GetEntryBuffer(entryPath));
+        }
+
+        public static Stream OpenOrCreateEntryToWrite(this IZippedDocument self, string entryPath)
+        {
+            var oms = new OutputMemoryStream(entryPath, self);
+            return oms;
+        }
+
         public static TextReader GetEntryTextReader(this IZippedDocument self, string entryPath) =>
-            new StreamReader(self.GetEntryInputStream(entryPath));
+            new StreamReader(self.OpenEntryToRead(entryPath));
 
         public static TextWriter GetEntryTextWriter(this IZippedDocument self, string entryPath) =>
-            new StreamWriter(self.GetEntryOutputStream(entryPath));
+            new StreamWriter(self.OpenOrCreateEntryToWrite(entryPath));
 
         public static void WriteXmlEntry(this IZippedDocument self, string entryPath, XmlDocument xml)
         {
-            using (var cos = self.GetEntryOutputStream(entryPath))
+            using (var cos = self.OpenOrCreateEntryToWrite(entryPath))
             using (var writer = XmlWriter.Create(cos, new XmlWriterSettings { Encoding = Encoding.UTF8 }))
             {
                 xml.WriteTo(writer);
@@ -38,7 +49,7 @@ namespace Sandwych.Reporting
 
         public static XmlDocument ReadXmlEntry(this IZippedDocument self, string entryPath)
         {
-            using (var contentStream = self.GetEntryInputStream(entryPath))
+            using (var contentStream = self.OpenEntryToRead(entryPath))
             {
                 var xml = new XmlDocument();
                 xml.Load(contentStream);

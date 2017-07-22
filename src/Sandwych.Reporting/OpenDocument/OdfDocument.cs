@@ -31,15 +31,45 @@ namespace Sandwych.Reporting.OpenDocument
         public const string TableRowElement = @"table:table-row";
 
         public readonly Lazy<List<OdfBlobEntry>> _blobs = new Lazy<List<OdfBlobEntry>>(() => new List<OdfBlobEntry>(), true);
-
+        private readonly Lazy<OdfManifestXmlDocument> _manifestDocument;
         public string MainContentEntryPath => ContentEntryPath;
+
+        public OdfManifestXmlDocument ManifestXmlDocument => _manifestDocument.Value;
 
         public OdfDocument()
         {
+            _manifestDocument = new Lazy<OdfManifestXmlDocument>(this.LoadManifestDocument, true);
+        }
+
+        public void Flush()
+        {
+            //Before save to other doc, we must save manifest & main content
+            if (_manifestDocument.IsValueCreated)
+            {
+                using (var s = this.OpenOrCreateEntryToWrite(ManifestEntryPath))
+                {
+                    _manifestDocument.Value.Save(s);
+                }
+            }
+        }
+
+        private OdfManifestXmlDocument LoadManifestDocument()
+        {
+            using (var s = this.OpenEntryToRead(ManifestEntryPath))
+            {
+                return new OdfManifestXmlDocument(s);
+            }
+        }
+
+        public override async Task LoadAsync(Stream inStream)
+        {
+            await base.LoadAsync(inStream);
         }
 
         public override async Task SaveAsync(Stream outStream)
         {
+            this.Flush();
+
             //ODF 格式约定 mimetype 必须为 ZIP 包里的第一个文件
             if (!this.Entries.ContainsKey(MimeTypeEntryPath))
             {
@@ -77,24 +107,9 @@ namespace Sandwych.Reporting.OpenDocument
                 return existedBlob;
             }
 
-            using (var outStream = this.GetEntryOutputStream(fullPath))
-            {
-                outStream.Write(imageBlob.GetBuffer(), 0, imageBlob.Length);
-            }
+            this.SetEntryBuffer(fullPath, imageBlob.GetBuffer());
 
-            var manifestDoc = new OdfManifestDocument();
-            using (var manifestInStream = this.GetEntryInputStream(OdfDocument.ManifestEntryPath))
-            {
-                manifestDoc.Load(manifestInStream);
-            }
-
-            //manifestDoc.CreatePicturesEntryElement();
-            manifestDoc.AppendImageFileEntry(imageBlob.ExtensionName, fullPath);
-
-            using (var manifestOutStream = this.GetEntryOutputStream(OdfDocument.ManifestEntryPath))
-            {
-                manifestDoc.Save(manifestOutStream);
-            }
+            _manifestDocument.Value.AppendImageFileEntry(imageBlob.ExtensionName, fullPath);
 
             var blobEntry = new OdfBlobEntry(fullPath, imageBlob);
             this._blobs.Value.Add(blobEntry);
@@ -103,18 +118,25 @@ namespace Sandwych.Reporting.OpenDocument
 
         public IEnumerable<OdfBlobEntry> BlobEntries => _blobs.Value;
 
-        public OdfDocument Clone()
+        public override void SaveAs(IZippedDocument destDoc)
         {
-            var destDoc = new OdfDocument();
-            this.SaveAs(destDoc);
-            return destDoc;
+            this.Flush();
+
+            base.SaveAs(destDoc);
         }
 
-        public void WriteMainContentXml(XmlDocument xml) =>
+        public void WriteMainContentXml(OdfContentXmlDocument xml) =>
             this.WriteXmlEntry(this.MainContentEntryPath, xml);
 
-        public XmlDocument ReadMainContentXml() =>
-            this.ReadXmlEntry(this.MainContentEntryPath);
+        public OdfContentXmlDocument ReadMainContentXml()
+        {
+            using (var s = this.OpenEntryToRead(MainContentEntryPath))
+            {
+                var doc = new OdfContentXmlDocument(s);
+                return doc;
+            }
+        }
 
-    }
-}
+    } //class
+
+} //namespace

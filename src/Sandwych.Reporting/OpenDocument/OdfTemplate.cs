@@ -7,6 +7,7 @@ using System.Text.Encodings.Web;
 using System.Reflection;
 using Fluid;
 using Sandwych.Reporting.Textilize;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -15,16 +16,30 @@ namespace Sandwych.Reporting.OpenDocument
         private readonly OdfDocument _document;
         private IFluidTemplate _fluidTemplate = null;
 
+        public OdfTemplate(Stream inStream)
+        {
+            _document = new OdfDocument();
+            _document.Load(inStream);
+            this.CompileAndParse();
+        }
+
+        public OdfTemplate(string filePath)
+        {
+            _document = new OdfDocument();
+            _document.Load(filePath);
+            this.CompileAndParse();
+        }
+
         public OdfTemplate(OdfDocument document)
         {
             _document = document;
             this.CompileAndParse();
         }
 
-        public IDocument Render(IReadOnlyDictionary<string, object> context)
+        public async Task<IDocument> RenderAsync(IReadOnlyDictionary<string, object> context)
         {
             var outputDocument = new OdfDocument();
-            _document.SaveAs(outputDocument);
+            this._document.SaveAs(outputDocument);
 
             var mainContentTemplate = _document.ReadTextEntry(_document.MainContentEntryPath);
 
@@ -33,18 +48,24 @@ namespace Sandwych.Reporting.OpenDocument
             var imageFilter = new OdfImageFilter(outputDocument);
             templateContext.Filters.AddFilter("image", imageFilter.Execute);
 
-            using (var ws = outputDocument.GetEntryOutputStream(outputDocument.MainContentEntryPath))
+            using (var ws = outputDocument.OpenOrCreateEntryToWrite(outputDocument.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
-                _fluidTemplate.Render(writer, HtmlEncoder.Default, templateContext);
+                await _fluidTemplate.RenderAsync(writer, HtmlEncoder.Default, templateContext);
             }
 
+            outputDocument.Flush();
             return outputDocument;
         }
+
+        public IDocument Render(IReadOnlyDictionary<string, object> context) =>
+            this.RenderAsync(context).GetAwaiter().GetResult();
 
         private void CompileAndParse()
         {
             OdfCompiler.Compile(_document);
+            _document.Flush();
+
             var mainContentText = _document.GetEntryTextReader(_document.MainContentEntryPath).ReadToEnd();
             if (!FluidTemplate.TryParse(mainContentText, out this._fluidTemplate, out var errors))
             {

@@ -6,13 +6,13 @@ namespace Sandwych.Reporting.Tests.Common
 {
     public class SimpleObject
     {
-        private const string PngImagePath = "Sandwych.Reporting.Tests.Assets.PngImage.png";
+        private const string PngImagePath = "Sandwych.Reporting.Tests.Assets.JpegImage.jpeg";
 
         public SimpleObject()
         {
             using (var resStream = DocumentTestHelper.GetResource(PngImagePath))
             {
-                this.PngImage = Blob.FromStream("png", resStream);
+                this.JpegImage = Blob.FromStream("jpeg", resStream);
             }
         }
 
@@ -25,7 +25,7 @@ namespace Sandwych.Reporting.Tests.Common
 
         public decimal DecimalValue => 3.14M;
 
-        public Blob PngImage { get; private set; }
+        public Blob JpegImage { get; private set; }
     }
 
 }

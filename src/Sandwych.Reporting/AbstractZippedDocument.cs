@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Fluid;
 using System.IO.Compression;
+using Sandwych.Reporting.IO;
 
 namespace Sandwych.Reporting
 {
@@ -17,17 +18,20 @@ namespace Sandwych.Reporting
 
         public IDictionary<string, byte[]> Entries => _documentEntries;
 
-        public void Load(Stream inStream) =>
+        public virtual void Load(Stream inStream) =>
             this.LoadAsync(inStream).GetAwaiter().GetResult();
 
-        public async Task LoadAsync(Stream inStream)
+        public virtual async Task LoadAsync(Stream inStream)
         {
             if (inStream == null)
             {
                 throw new ArgumentNullException(nameof(inStream));
             }
 
-            _documentEntries.Clear();
+            if (_documentEntries.Count > 0)
+            {
+                _documentEntries.Clear();
+            }
 
             // Load zipped content into the memory
             using (var archive = new ZipArchive(inStream, ZipArchiveMode.Read))
@@ -36,9 +40,8 @@ namespace Sandwych.Reporting
                 {
                     using (var zs = ze.Open())
                     {
-                        var buf = new byte[ze.Length];
-                        var nread = await zs.ReadAsync(buf, 0, (int)ze.Length);
-                        if (nread != ze.Length)
+                        var buf = await zs.ReadAllBytesAsync();
+                        if (buf.Length != ze.Length)
                         {
                             throw new IOException("Failed to read zip entry: " + ze.FullName);
                         }
@@ -61,7 +64,6 @@ namespace Sandwych.Reporting
 
         public virtual void Save(Stream outStream) =>
             this.SaveAsync(outStream).GetAwaiter().GetResult();
-
 
         protected async Task AddZipEntryAsync(ZipArchive archive, string name)
         {
@@ -97,36 +99,14 @@ namespace Sandwych.Reporting
             }
         }
 
-        protected void AppendZipEntry(ZipArchive archive, string name)
-        {
-            this.AddZipEntryAsync(archive, name).GetAwaiter().GetResult();
-        }
-
         public IEnumerable<string> EntryPaths
         {
             get { return this._documentEntries.Keys; }
         }
 
-        public Stream GetEntryInputStream(string entryPath)
-        {
-            if (string.IsNullOrEmpty(entryPath))
-            {
-                throw new ArgumentNullException(nameof(entryPath));
-            }
+        public byte[] GetEntryBuffer(string entryPath) => _documentEntries[entryPath];
 
-            var data = this._documentEntries[entryPath];
-            return new MemoryStream(data);
-        }
-
-        public Stream GetEntryOutputStream(string entryPath)
-        {
-            if (string.IsNullOrEmpty(entryPath))
-            {
-                throw new ArgumentNullException(nameof(entryPath));
-            }
-            var oms = new OutputMemoryStream(entryPath, this._documentEntries);
-            return oms;
-        }
+        public void SetEntryBuffer(string entryPath, byte[] buffer) => _documentEntries[entryPath] = buffer;
 
         public bool EntryExists(string entryPath)
         {
@@ -177,8 +157,8 @@ namespace Sandwych.Reporting
             //A Copy on write approach
             foreach (var item in this.EntryPaths)
             {
-                using (var inStream = this.GetEntryInputStream(item))
-                using (var outStream = destDoc.GetEntryOutputStream(item))
+                using (var inStream = this.OpenEntryToRead(item))
+                using (var outStream = destDoc.OpenOrCreateEntryToWrite(item))
                 {
                     CopyStream(inStream, outStream);
                 }

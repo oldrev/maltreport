@@ -7,42 +7,16 @@ using System.Globalization;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    internal class OdfManifestDocument : XmlDocument
+    public class OdfManifestXmlDocument : OdfXmlDocument
     {
         public const string PicturesFullPath = @"Pictures/";
-        private OdfNamespaceManager nsmanager;
+
         private XmlElement manifestElement;
 
-        public override void Load(Stream inStream)
+        public OdfManifestXmlDocument(Stream stream) : base(stream)
         {
-            base.Load(inStream);
-            this.Init();
-        }
 
-        public override void Load(TextReader txtReader)
-        {
-            base.Load(txtReader);
-            this.Init();
-        }
-
-        public override void Load(XmlReader reader)
-        {
-            base.Load(reader);
-            this.Init();
-        }
-
-        public override void LoadXml(string xml)
-        {
-            base.LoadXml(xml);
-            this.Init();
-        }
-
-        private void Init()
-        {
-            this.nsmanager = new OdfNamespaceManager(this.NameTable);
-            this.nsmanager.LoadOpenDocumentNamespaces();
-
-            this.manifestElement = (XmlElement)this.SelectSingleNode(@"/manifest:manifest", nsmanager);
+            this.manifestElement = (XmlElement)this.SelectSingleNode(@"/manifest:manifest", this.NamespaceManager);
 
             if (this.manifestElement == null)
             {
@@ -60,7 +34,7 @@ namespace Sandwych.Reporting.OpenDocument
             var xpath = string.Format(
                 CultureInfo.InvariantCulture,
                 @"/manifest:manifest/manifest:file-entry[@manifest:full-path=""{0}""]", PicturesFullPath);
-            var picturesEntryNode = this.SelectSingleNode(xpath, nsmanager);
+            var picturesEntryNode = this.SelectSingleNode(xpath, this.NamespaceManager);
 
             if (picturesEntryNode == null)
             {

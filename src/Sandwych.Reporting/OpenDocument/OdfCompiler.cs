@@ -26,19 +26,17 @@ namespace Sandwych.Reporting.OpenDocument
         public static void Compile(OdfDocument template)
         {
             var xml = template.ReadMainContentXml();
-            var nsmanager = new OdfNamespaceManager(xml.NameTable);
-            nsmanager.LoadOpenDocumentNamespaces();
 
             // First pass, process all simple tags
-            PreprocessElements(xml, nsmanager);
+            PreprocessElements(xml);
 
             // Second pass, process all looping table things
-            ProcessTableRows(xml, nsmanager);
+            ProcessTableRows(xml);
 
             template.WriteMainContentXml(xml);
         }
 
-        private static void ProcessTableRows(XmlDocument xml, XmlNamespaceManager nsmanager)
+        private static void ProcessTableRows(OdfContentXmlDocument xml)
         {
             var rowElements = FindAllRowElements(xml).ToArray();
 
@@ -60,7 +58,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        private static IEnumerable<XmlElement> FindAllRowElements(XmlDocument xml)
+        private static IEnumerable<XmlElement> FindAllRowElements(OdfContentXmlDocument xml)
         {
             var nodeList = xml.GetElementsByTagName(OdfDocument.TableRowElement);
 
@@ -82,7 +80,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        private static void PreprocessElements(XmlDocument xml, XmlNamespaceManager nsmanager)
+        private static void PreprocessElements(OdfContentXmlDocument xml)
         {
             var placeholders = FindAllPlaceholderElements(xml).ToArray();
 
@@ -107,7 +105,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
 
             //处理 draw:frame 包含 draw:image 的情况
-            var drawFrameElements = xml.SelectNodes("//" + OdfDocument.DrawFrameElement, nsmanager);
+            var drawFrameElements = xml.SelectNodes("//" + OdfDocument.DrawFrameElement, xml.NamespaceManager);
             var dtlDrawFrames = new List<XmlNode>();
             foreach (XmlNode node in drawFrameElements)
             {
@@ -120,12 +118,12 @@ namespace Sandwych.Reporting.OpenDocument
 
             foreach (var node in dtlDrawFrames)
             {
-                ProcessDrawFrameElement(node, nsmanager);
+                ProcessDrawFrameElement(node, xml.NamespaceManager);
             }
 
         }
 
-        private static IEnumerable<XmlElement> FindAllPlaceholderElements(XmlDocument xml)
+        private static IEnumerable<XmlElement> FindAllPlaceholderElements(OdfContentXmlDocument xml)
         {
             var textPlaceholders = xml.GetElementsByTagName(OdfDocument.TextPlaceholderElement);
             foreach (XmlElement tpe in textPlaceholders)
@@ -180,7 +178,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        private static void ProcessIdentifierTag(XmlDocument xml, XmlNode placeholder, string value)
+        private static void ProcessIdentifierTag(OdfContentXmlDocument xml, XmlNode placeholder, string value)
         {
             Debug.Assert(xml != null);
             Debug.Assert(placeholder != null);

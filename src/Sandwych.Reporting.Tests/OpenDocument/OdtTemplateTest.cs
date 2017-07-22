@@ -25,12 +25,11 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Fact]
         public void CanRenderOdtTemplate()
         {
-            OdfDocument odt = new OdfDocument();
+            OdfTemplate template;
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
             {
-                odt.Load(stream);
+                template = new OdfTemplate(stream);
             }
-            var template = new OdfTemplate(odt);
 
             var dataSet = new TestingDataSet();
             var context = new Dictionary<string, object>()

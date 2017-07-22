@@ -1,5 +1,4 @@
-﻿//Creation Time: 2010-08-20
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -12,21 +11,18 @@ namespace Sandwych.Reporting
     /// </summary>
     internal sealed class OutputMemoryStream : MemoryStream
     {
-        private readonly string name;
-        private readonly IDictionary<string, byte[]> entries;
+        private readonly string _entryPath;
+        private readonly IZippedDocument _zipDocument;
 
-        public OutputMemoryStream(string name, IDictionary<string, byte[]> entries)
+        public OutputMemoryStream(string name, IZippedDocument zipDocument)
         {
-            Debug.Assert(entries != null);
-            Debug.Assert(!string.IsNullOrEmpty(name));
-
-            this.name = name;
-            this.entries = entries;
+            this._entryPath = name;
+            _zipDocument = zipDocument;
         }
 
         protected override void Dispose(bool disposing)
         {
-            this.entries[this.name] = this.ToArray();
+            _zipDocument.SetEntryBuffer(this._entryPath, this.ToArray());
 
             base.Dispose(disposing);
         }
