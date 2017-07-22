@@ -25,6 +25,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         public const string TextPlaceholderElement = @"text:placeholder";
         public const string DrawTextBoxElement = @"draw:text-box";
+        public const string DrawFrameElement = @"draw:frame";
         public const string TextAnchorElement = @"text:a";
         public const string TextPlaceholderTypeAttribute = @"text:placeholder-type";
         public const string TableRowElement = @"table:table-row";

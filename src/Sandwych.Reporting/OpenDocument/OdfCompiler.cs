@@ -12,11 +12,16 @@ namespace Sandwych.Reporting.OpenDocument
 {
     internal class OdfCompiler
     {
+        private const string DtlProtocolPrefix = "dtl://";
+
         private static readonly Lazy<Regex> PlaceHolderValuePattern =
             new Lazy<Regex>(() => new Regex(@"^<\s*(.*)\s*>$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
 
         private static readonly Lazy<Regex> HyperLinkValuePattern =
             new Lazy<Regex>(() => new Regex(@"^dtl://(.*)\s*$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
+
+        private static readonly Lazy<Regex> ImageBoxPattern =
+            new Lazy<Regex>(() => new Regex(@".*\{\{.*\s*\|\s*image\s*\}\}.*", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
 
         public static void Compile(OdfDocument template)
         {
@@ -79,7 +84,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         private static void PreprocessElements(XmlDocument xml, XmlNamespaceManager nsmanager)
         {
-            var placeholders = FindAllRtlElements(xml).ToArray();
+            var placeholders = FindAllPlaceholderElements(xml).ToArray();
 
             foreach (XmlNode placeholder in placeholders)
             {
@@ -100,9 +105,27 @@ namespace Sandwych.Reporting.OpenDocument
                     throw new SyntaxErrorException();
                 }
             }
+
+            //处理 draw:frame 包含 draw:image 的情况
+            var drawFrameElements = xml.SelectNodes("//" + OdfDocument.DrawFrameElement, nsmanager);
+            var dtlDrawFrames = new List<XmlNode>();
+            foreach (XmlNode node in drawFrameElements)
+            {
+                var nameAttr = node.Attributes["draw:name"];
+                if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value) && nameAttr.Value.Trim().StartsWith(DtlProtocolPrefix))
+                {
+                    dtlDrawFrames.Add(node);
+                }
+            }
+
+            foreach (var node in dtlDrawFrames)
+            {
+                ProcessDrawFrameElement(node, nsmanager);
+            }
+
         }
 
-        private static IEnumerable<XmlElement> FindAllRtlElements(XmlDocument xml)
+        private static IEnumerable<XmlElement> FindAllPlaceholderElements(XmlDocument xml)
         {
             var textPlaceholders = xml.GetElementsByTagName(OdfDocument.TextPlaceholderElement);
             foreach (XmlElement tpe in textPlaceholders)
@@ -114,7 +137,7 @@ namespace Sandwych.Reporting.OpenDocument
             foreach (XmlElement ta in textAnchors)
             {
                 var href = ta.GetAttribute("xlink:href");
-                if (href != null && href.Trim().StartsWith("dtl://", StringComparison.Ordinal))
+                if (href != null && href.Trim().StartsWith(DtlProtocolPrefix))
                 {
                     yield return ta;
                 }
@@ -180,14 +203,8 @@ namespace Sandwych.Reporting.OpenDocument
             var placeholderType = placeholder.Attributes[OdfDocument.TextPlaceholderTypeAttribute]
                 .InnerText.Trim().ToLowerInvariant();
             ;
-            //Processing The image placeholder
-
             switch (placeholderType)
             {
-                case "image":
-                    ProcessImageTag(placeholder, ie);
-                    break;
-
                 case "text":
                     placeholder.ParentNode.ReplaceChild(ie, placeholder);
                     break;
@@ -197,19 +214,19 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        private static void ProcessImageTag(XmlNode placeholder, ReferenceElement ie)
+        private static void ProcessDrawFrameElement(XmlNode drawFrameNode, XmlNamespaceManager nsmanager)
         {
-            Debug.Assert(placeholder != null);
-            Debug.Assert(ie != null);
-
-            //向上查找 drawbox
-            var drawboxNode = placeholder.LookupAncestor(OdfDocument.DrawTextBoxElement);
-            if (drawboxNode.Name != OdfDocument.DrawTextBoxElement)
+            if (drawFrameNode.Name != OdfDocument.DrawFrameElement)
             {
-                throw new TemplateException("The placeholder of an image must be in a 'draw-box' element");
+                throw new InvalidOperationException();
             }
 
-            drawboxNode.ParentNode.ReplaceChild(ie, drawboxNode);
+            var nameAttr = drawFrameNode.Attributes["draw:name"];
+            var drawImageNode = drawFrameNode.SelectSingleNode("//draw:image", nsmanager);
+            drawFrameNode.RemoveChild(drawImageNode);
+            var userExpr = nameAttr.Value.Trim().Substring(DtlProtocolPrefix.Length);
+            var fluidExpr = "{{ " + userExpr + " | image }}";
+            drawFrameNode.InnerText = fluidExpr;
         }
 
     }

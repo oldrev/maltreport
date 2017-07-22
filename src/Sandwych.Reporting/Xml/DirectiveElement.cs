@@ -23,10 +23,6 @@ namespace Sandwych.Reporting.Xml
             Debug.Assert(doc != null);
             Debug.Assert(directive != null);
 
-            //WORKAROUND:
-            //由于 NVelocity 1.1 不支持 #{end} 形式的 Directive，因此遇到类似 #endWHATEVER_STRING
-            //的 Directive 会造成解析错误，这里我们在后边加上一个 VTL 注释隔开 #end#**#WHATEVER_STRING 
-
             this._directive = directive;
         }
 
