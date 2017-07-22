@@ -6,11 +6,13 @@
 
   <ItemGroup>
     <None Remove="OpenDocument\Templates\Template1.odt" />
+    <None Remove="OpenDocument\Templates\Template2.ods" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\JpegImage.jpeg" />
     <EmbeddedResource Include="OpenDocument\Templates\Template1.odt" />
+    <EmbeddedResource Include="OpenDocument\Templates\Template2.ods" />
   </ItemGroup>
 
   <ItemGroup>
