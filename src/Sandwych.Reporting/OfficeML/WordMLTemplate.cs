@@ -9,7 +9,7 @@ using Sandwych.Reporting.Xml;
 
 namespace Sandwych.Reporting.OfficeML
 {
-    public class WordMLTemplate : AbstractXmlTemplate<IDocument>
+    public class WordMLTemplate : AbstractXmlTemplate<WordMLDocument>
     {
         private const string DestAttribute = "w:dest";
         private const string HlinkElement = "w:hlink";
@@ -119,12 +119,12 @@ namespace Sandwych.Reporting.OfficeML
             placeholderElement.ParentNode.ReplaceChild(rEle, placeholderElement);
         }
 
-        public override Task<IDocument> RenderAsync(TemplateContext context)
+        public override Task<WordMLDocument> RenderAsync(TemplateContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override IDocument Render(TemplateContext context)
+        public override WordMLDocument Render(TemplateContext context)
         {
             throw new NotImplementedException();
         }

@@ -9,9 +9,10 @@ namespace Sandwych.Reporting.OpenDocument
         public OdfNamespaceManager(XmlNameTable xnt)
             : base(xnt)
         {
+            this.LoadNamespaces();
         }
 
-        public void LoadOpenDocumentNamespaces()
+        private void LoadNamespaces()
         {
             this.AddNamespace("manifest", ManifestNamespace);
             this.AddNamespace("text", @"urn:oasis:names:tc:opendocument:xmlns:text:1.0");

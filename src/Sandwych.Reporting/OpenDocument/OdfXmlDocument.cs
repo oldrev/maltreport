@@ -11,7 +11,6 @@ namespace Sandwych.Reporting.OpenDocument
         {
             this.Load(stream);
             _nsmanager = new OdfNamespaceManager(this.NameTable);
-            _nsmanager.LoadOpenDocumentNamespaces();
         }
 
         public OdfNamespaceManager NamespaceManager => _nsmanager;

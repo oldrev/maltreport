@@ -15,9 +15,10 @@ namespace Sandwych.Reporting.OfficeML
         public WordMLNamespaceManager(XmlNameTable xnt)
             : base(xnt)
         {
+            this.LoadNamespaces();
         }
 
-        public void LoadOpenDocumentNamespaces()
+        private void LoadNamespaces()
         {
             this.AddNamespace("w", WNamespace);
             this.AddNamespace("o", ONamespace);

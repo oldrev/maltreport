@@ -13,8 +13,6 @@ namespace Sandwych.Reporting
     public abstract class AbstractXmlTemplate<TDocument> : ITemplate<TDocument>
         where TDocument : IDocument
     {
-        private byte[] data;
-
         public abstract Task<TDocument> RenderAsync(TemplateContext context);
 
         public abstract TDocument Render(TemplateContext context);
