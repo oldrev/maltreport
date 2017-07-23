@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    public class OdfDocument : AbstractZippedDocument
+    public class OdfDocument : AbstractZipDocument
     {
         public const string MimeTypeEntryPath = "mimetype";
         public const string SettingsEntryPath = "settings.xml";
@@ -109,7 +109,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         public IEnumerable<OdfBlobEntry> BlobEntries => _blobs.Value;
 
-        public override void SaveAs(IZippedDocument destDoc)
+        public override void SaveAs(IZipDocument destDoc)
         {
             this.Flush();
 

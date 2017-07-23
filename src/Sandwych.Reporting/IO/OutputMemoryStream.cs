@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Sandwych.Reporting
+namespace Sandwych.Reporting.IO
 {
     /// <summary>
     ///  Memory stream of write-only
@@ -9,9 +9,9 @@ namespace Sandwych.Reporting
     internal sealed class OutputMemoryStream : MemoryStream
     {
         private readonly string _entryPath;
-        private readonly IZippedDocument _zipDocument;
+        private readonly IZipDocument _zipDocument;
 
-        public OutputMemoryStream(string name, IZippedDocument zipDocument)
+        public OutputMemoryStream(string name, IZipDocument zipDocument)
         {
             this._entryPath = name;
             _zipDocument = zipDocument;

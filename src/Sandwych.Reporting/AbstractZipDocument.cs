@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractZippedDocument : IZippedDocument
+    public abstract class AbstractZipDocument : IZipDocument
     {
         private readonly IDictionary<string, byte[]> _documentEntries = new Dictionary<string, byte[]>();
 
@@ -143,7 +143,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public virtual void SaveAs(IZippedDocument destDoc)
+        public virtual void SaveAs(IZipDocument destDoc)
         {
             if (destDoc == null)
             {

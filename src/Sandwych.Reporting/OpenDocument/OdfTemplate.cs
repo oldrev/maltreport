@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    public abstract class OdfTemplate : IDocumentTemplate
+    public abstract class OdfTemplate : ITemplate<OdfDocument>
     {
         private readonly OdfDocument _document;
         private IFluidTemplate _fluidTemplate = null;
@@ -33,7 +33,7 @@ namespace Sandwych.Reporting.OpenDocument
             this.CompileAndParse();
         }
 
-        public async Task<IDocument> RenderAsync(TemplateContext context)
+        public async Task<OdfDocument> RenderAsync(TemplateContext context)
         {
             var outputDocument = new OdfDocument();
             this._document.SaveAs(outputDocument);
@@ -58,7 +58,7 @@ namespace Sandwych.Reporting.OpenDocument
             templateContext.Filters.AddFilter(imageFilter.Name, imageFilter.Execute);
         }
 
-        public IDocument Render(TemplateContext context) =>
+        public OdfDocument Render(TemplateContext context) =>
             this.RenderAsync(context).GetAwaiter().GetResult();
 
         private void CompileAndParse()

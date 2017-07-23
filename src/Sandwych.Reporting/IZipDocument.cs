@@ -2,10 +2,11 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using Sandwych.Reporting.IO;
 
 namespace Sandwych.Reporting
 {
-    public interface IZippedDocument : IDocument
+    public interface IZipDocument : IDocument
     {
         IEnumerable<string> EntryPaths { get; }
 
@@ -15,29 +16,29 @@ namespace Sandwych.Reporting
 
         bool EntryExists(string entryPath);
 
-        void SaveAs(IZippedDocument destDoc);
+        void SaveAs(IZipDocument destDoc);
     }
 
     public static class ZippedDocumentExtensions
     {
-        public static Stream OpenEntryToRead(this IZippedDocument self, string entryPath)
+        public static Stream OpenEntryToRead(this IZipDocument self, string entryPath)
         {
             return new MemoryStream(self.GetEntryBuffer(entryPath));
         }
 
-        public static Stream OpenOrCreateEntryToWrite(this IZippedDocument self, string entryPath)
+        public static Stream OpenOrCreateEntryToWrite(this IZipDocument self, string entryPath)
         {
             var oms = new OutputMemoryStream(entryPath, self);
             return oms;
         }
 
-        public static TextReader GetEntryTextReader(this IZippedDocument self, string entryPath) =>
+        public static TextReader GetEntryTextReader(this IZipDocument self, string entryPath) =>
             new StreamReader(self.OpenEntryToRead(entryPath));
 
-        public static TextWriter GetEntryTextWriter(this IZippedDocument self, string entryPath) =>
+        public static TextWriter GetEntryTextWriter(this IZipDocument self, string entryPath) =>
             new StreamWriter(self.OpenOrCreateEntryToWrite(entryPath));
 
-        public static void WriteXmlEntry(this IZippedDocument self, string entryPath, XmlDocument xml)
+        public static void WriteXmlEntry(this IZipDocument self, string entryPath, XmlDocument xml)
         {
             using (var cos = self.OpenOrCreateEntryToWrite(entryPath))
             using (var writer = XmlWriter.Create(cos, new XmlWriterSettings { Encoding = Encoding.UTF8 }))
@@ -46,7 +47,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public static XmlDocument ReadXmlEntry(this IZippedDocument self, string entryPath)
+        public static XmlDocument ReadXmlEntry(this IZipDocument self, string entryPath)
         {
             using (var contentStream = self.OpenEntryToRead(entryPath))
             {
@@ -56,7 +57,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public static string ReadTextEntry(this IZippedDocument self, string entryPath)
+        public static string ReadTextEntry(this IZipDocument self, string entryPath)
         {
             using (var tr = self.GetEntryTextReader(entryPath))
             {
@@ -64,7 +65,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public static void WriteTextEntry(this IZippedDocument self, string entryPath, string content)
+        public static void WriteTextEntry(this IZipDocument self, string entryPath, string content)
         {
             using (var tw = self.GetEntryTextWriter(entryPath))
             {
