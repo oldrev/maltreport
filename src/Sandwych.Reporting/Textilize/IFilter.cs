@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Fluid;
+﻿using Fluid;
 using Fluid.Values;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
@@ -21,5 +18,4 @@ namespace Sandwych.Reporting
     {
         Task<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context);
     }
-
 }

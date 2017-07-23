@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.IO
 {
     public static class StreamExtensions
     {
-
         public static async Task<byte[]> ReadAllBytesAsync(this Stream self)
         {
             using (var outStream = new MemoryStream())

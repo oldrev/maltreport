@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using System.Xml;
 
 namespace Sandwych.Reporting.OpenDocument
@@ -18,6 +15,5 @@ namespace Sandwych.Reporting.OpenDocument
         }
 
         public OdfNamespaceManager NamespaceManager => _nsmanager;
-
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Text;
 using System.Xml;
 
@@ -11,16 +8,18 @@ namespace Sandwych.Reporting
     public interface IZippedDocument : IDocument
     {
         IEnumerable<string> EntryPaths { get; }
+
         byte[] GetEntryBuffer(string entryPath);
+
         void SetEntryBuffer(string entryPath, byte[] buffer);
+
         bool EntryExists(string entryPath);
+
         void SaveAs(IZippedDocument destDoc);
     }
 
-
     public static class ZippedDocumentExtensions
     {
-
         public static Stream OpenEntryToRead(this IZippedDocument self, string entryPath)
         {
             return new MemoryStream(self.GetEntryBuffer(entryPath));
@@ -71,7 +70,6 @@ namespace Sandwych.Reporting
             {
                 tw.Write(content);
             }
-
         }
     }
 }

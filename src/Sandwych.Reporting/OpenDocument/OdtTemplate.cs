@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -14,6 +11,5 @@ namespace Sandwych.Reporting.OpenDocument
         public OdtTemplate(OdfDocument templateDocument) : base(templateDocument)
         {
         }
-
     }
 }

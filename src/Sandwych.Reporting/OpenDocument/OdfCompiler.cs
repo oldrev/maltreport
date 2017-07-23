@@ -1,17 +1,14 @@
-﻿using System;
+﻿using Sandwych.Reporting.Xml;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
-
-using Sandwych.Reporting.Xml;
 using System.Linq;
-using Sandwych.Reporting.OpenDocument.Filters;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    internal class OdfCompiler
+    internal static class OdfCompiler
     {
         private const string DtlProtocolPrefix = "dtl://";
 
@@ -24,7 +21,7 @@ namespace Sandwych.Reporting.OpenDocument
         private static readonly Lazy<Regex> ImageBoxPattern =
             new Lazy<Regex>(() => new Regex(@".*\{\{.*\s*\|\s*image\s*\}\}.*", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
 
-        public static void Compile(OdfDocument template)
+        public static void Compile(this OdfDocument template)
         {
             var xml = template.ReadMainContentXml();
 
@@ -92,7 +89,6 @@ namespace Sandwych.Reporting.OpenDocument
                 if (value.StartsWith("{{") && value.EndsWith("}}"))
                 {
                     ProcessIdentifierTag(xml, placeholder, value);
-
                 }
                 else if (value.StartsWith("{%") && value.EndsWith("%}"))
                 {
@@ -121,7 +117,6 @@ namespace Sandwych.Reporting.OpenDocument
             {
                 ProcessDrawFrameElement(node, xml.NamespaceManager);
             }
-
         }
 
         private static IEnumerable<XmlElement> FindAllPlaceholderElements(OdfContentXmlDocument xml)
@@ -167,7 +162,6 @@ namespace Sandwych.Reporting.OpenDocument
 
         private static void CheckTemplateExpression(XmlNode placeholder, string value, Match match)
         {
-
             if (match.Groups.Count != 2)
             {
                 throw new SyntaxErrorException("Syntax Error: " + placeholder.InnerText);
@@ -227,6 +221,5 @@ namespace Sandwych.Reporting.OpenDocument
             var fluidExpr = "{{ " + userExpr + " }}";
             drawFrameNode.InnerText = fluidExpr;
         }
-
     }
 }

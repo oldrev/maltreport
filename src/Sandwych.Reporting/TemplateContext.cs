@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Sandwych.Reporting.Textilize;
 using System.Collections.Generic;
-using System.Text;
-using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting
 {
@@ -23,6 +21,5 @@ namespace Sandwych.Reporting
                 }
             }
         }
-
     }
 }

@@ -1,10 +1,6 @@
 ﻿//Creation Time: 2010-08-20
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Xml;
 
 namespace Sandwych.Reporting.Xml
 {

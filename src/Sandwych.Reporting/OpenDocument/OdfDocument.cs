@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Diagnostics;
-using System.Xml;
-using System.Text.RegularExpressions;
 using System.IO.Compression;
-
-
-using Sandwych.Reporting.Xml;
+using System.Linq;
 using System.Threading.Tasks;
-using Fluid;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -136,7 +127,5 @@ namespace Sandwych.Reporting.OpenDocument
                 return doc;
             }
         }
-
     } //class
-
 } //namespace

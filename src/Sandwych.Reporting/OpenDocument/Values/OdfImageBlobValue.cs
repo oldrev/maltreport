@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using Fluid.Values;
+using System;
 using System.IO;
-using System.Text;
 using System.Text.Encodings.Web;
-using System.Xml;
-using Fluid;
-using Fluid.Values;
 
 namespace Sandwych.Reporting.OpenDocument.Values
 {
@@ -71,6 +66,5 @@ namespace Sandwych.Reporting.OpenDocument.Values
         {
             tw.Write($"<draw:image xlink:href=\"{imagePath}\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\" />");
         }
-
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.IO;
 using System.Globalization;
+using System.IO;
+using System.Xml;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -15,7 +13,6 @@ namespace Sandwych.Reporting.OpenDocument
 
         public OdfManifestXmlDocument(Stream stream) : base(stream)
         {
-
             this.manifestElement = (XmlElement)this.SelectSingleNode(@"/manifest:manifest", this.NamespaceManager);
 
             if (this.manifestElement == null)
@@ -29,7 +26,6 @@ namespace Sandwych.Reporting.OpenDocument
         /// </summary>
         public void CreatePicturesEntryElement()
         {
-
             //看看是否有 "Pictures/" 这一项
             var xpath = string.Format(
                 CultureInfo.InvariantCulture,

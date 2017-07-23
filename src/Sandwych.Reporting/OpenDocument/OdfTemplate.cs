@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Fluid;
+using Sandwych.Reporting.OpenDocument.Filters;
+using Sandwych.Reporting.Textilize;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Encodings.Web;
-using System.Reflection;
-using Fluid;
-using Sandwych.Reporting.Textilize;
 using System.Threading.Tasks;
-using Sandwych.Reporting.OpenDocument.Filters;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -67,7 +63,8 @@ namespace Sandwych.Reporting.OpenDocument
 
         private void CompileAndParse()
         {
-            OdfCompiler.Compile(_document);
+            this._document.Compile();
+
             _document.Flush();
 
             var mainContentText = _document.GetEntryTextReader(_document.MainContentEntryPath).ReadToEnd();
@@ -76,6 +73,5 @@ namespace Sandwych.Reporting.OpenDocument
                 throw new SyntaxErrorException(errors.Aggregate((x, y) => x + "\n" + y));
             }
         }
-
     }
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -20,7 +17,6 @@ namespace Sandwych.Reporting
         byte[] AsBuffer();
     }
 
-
     public static class DocumentExtensions
     {
         public static void Load(this IDocument self, string path) =>
@@ -37,7 +33,6 @@ namespace Sandwych.Reporting
         public static void Save(this IDocument self, string path) =>
             self.SaveAsync(path).GetAwaiter().GetResult();
 
-
         public static async Task SaveAsync(this IDocument self, string path)
         {
             using (var stream = File.Create(path))
@@ -48,8 +43,5 @@ namespace Sandwych.Reporting
 
         public static string ToBase64String(this IDocument self) =>
             Convert.ToBase64String(self.AsBuffer());
-
-
     }
-
 }

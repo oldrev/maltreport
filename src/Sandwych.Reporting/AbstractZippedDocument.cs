@@ -1,14 +1,10 @@
-﻿using System;
+﻿using Sandwych.Reporting.IO;
+using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Text;
-using System.IO;
-using System.Xml;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using Fluid;
+using System.IO;
 using System.IO.Compression;
-using Sandwych.Reporting.IO;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
@@ -165,5 +161,4 @@ namespace Sandwych.Reporting
             }
         }
     }
-
 }

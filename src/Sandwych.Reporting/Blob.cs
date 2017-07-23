@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-using System.Globalization;
-using System.Security.Authentication;
 using System.Security.Cryptography;
-using System.Linq;
 
 namespace Sandwych.Reporting
 {
@@ -86,7 +79,5 @@ namespace Sandwych.Reporting
         }
 
         public override int GetHashCode() => _blobHash.GetHashCode();
-
-
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.IO;
-using System.Globalization;
+﻿using System.IO;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -11,7 +6,6 @@ namespace Sandwych.Reporting.OpenDocument
     {
         public OdfContentXmlDocument(Stream stream) : base(stream)
         {
-
         }
     }
 }

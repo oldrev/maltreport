@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
+﻿using System.Xml;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -24,6 +21,5 @@ namespace Sandwych.Reporting.OpenDocument
             this.AddNamespace("office", @"urn:oasis:names:tc:opendocument:xmlns:office:1.0");
             this.AddNamespace("calcext", @"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0");
         }
-
     }
 }

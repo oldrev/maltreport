@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Sandwych.Reporting.Textilize;
 using System.IO;
-using System.Text;
-using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -22,6 +19,5 @@ namespace Sandwych.Reporting.OpenDocument
 
             //TODO Add internal filters for cells generation
         }
-
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Fluid;
 using Fluid.Values;
-using Fluid;
 using Sandwych.Reporting.OpenDocument.Values;
+using System;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
@@ -35,6 +35,5 @@ namespace Sandwych.Reporting.OpenDocument.Filters
 
             return new OdfImageBlobValue(this._outputDocument, blob);
         }
-
     }
 }

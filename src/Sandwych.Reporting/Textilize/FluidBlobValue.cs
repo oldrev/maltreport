@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Xml;
-using Fluid;
-using Fluid.Values;
+﻿using Fluid.Values;
 using Sandwych.Reporting.OpenDocument.Values;
+using System;
+using System.IO;
+using System.Text.Encodings.Web;
 
 namespace Sandwych.Reporting.OpenDocument
 {
