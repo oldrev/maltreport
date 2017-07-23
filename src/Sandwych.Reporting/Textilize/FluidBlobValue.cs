@@ -7,6 +7,7 @@ using System.Text.Encodings.Web;
 using System.Xml;
 using Fluid;
 using Fluid.Values;
+using Sandwych.Reporting.OpenDocument.Values;
 
 namespace Sandwych.Reporting.OpenDocument
 {

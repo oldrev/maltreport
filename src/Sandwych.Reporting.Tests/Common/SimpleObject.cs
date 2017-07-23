@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Sandwych.Reporting.Tests.Common
@@ -12,7 +13,9 @@ namespace Sandwych.Reporting.Tests.Common
         {
             using (var resStream = DocumentTestHelper.GetResource(PngImagePath))
             {
-                this.JpegImage = Blob.FromStream("jpeg", resStream);
+                var buf = new byte[resStream.Length];
+                resStream.Read(buf, 0, buf.Length);
+                this.JpegImage = buf;
             }
         }
 
@@ -25,7 +28,7 @@ namespace Sandwych.Reporting.Tests.Common
 
         public decimal DecimalValue => 3.14M;
 
-        public Blob JpegImage { get; private set; }
+        public byte[] JpegImage { get; private set; }
     }
 
 }

@@ -7,6 +7,7 @@ using System.Diagnostics;
 
 using Sandwych.Reporting.Xml;
 using System.Linq;
+using Sandwych.Reporting.OpenDocument.Filters;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -223,7 +224,7 @@ namespace Sandwych.Reporting.OpenDocument
             var drawImageNode = drawFrameNode.SelectSingleNode("//draw:image", nsmanager);
             drawFrameNode.RemoveChild(drawImageNode);
             var userExpr = nameAttr.Value.Trim().Substring(DtlProtocolPrefix.Length);
-            var fluidExpr = "{{ " + userExpr + " | image }}";
+            var fluidExpr = "{{ " + userExpr + " }}";
             drawFrameNode.InnerText = fluidExpr;
         }
 

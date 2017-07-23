@@ -13,7 +13,7 @@ namespace Sandwych.Reporting
     /// <summary>
     /// Blob in zipped document
     /// </summary>
-    public class Blob : IEquatable<Blob>
+    public abstract class Blob : IEquatable<Blob>
     {
         private readonly string _extName;
         private readonly byte[] blob;
@@ -87,18 +87,6 @@ namespace Sandwych.Reporting
 
         public override int GetHashCode() => _blobHash.GetHashCode();
 
-        public static Blob FromStream(string extensionName, Stream stream)
-        {
-            var buf = new byte[stream.Length];
-            stream.Read(buf, 0, buf.Length);
-            return new Blob(extensionName, buf);
-        }
-
-        public static Blob FromFile(string blobFilePath)
-        {
-            var extensionName = Path.GetExtension(blobFilePath).Substring(1).ToLowerInvariant();
-            return new Blob(blobFilePath, File.ReadAllBytes(blobFilePath));
-        }
 
     }
 }

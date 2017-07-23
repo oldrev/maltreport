@@ -31,7 +31,7 @@ namespace Sandwych.Reporting.Tests
 
             Assert.True(FluidTemplate.TryParse(source, out var template));
 
-            var context = new TemplateContext();
+            var context = new Fluid.TemplateContext();
             context.MemberAccessStrategy.Register(model.GetType()); // Allows any public property of the model to be used
             context.MemberAccessStrategy.Register(typeof(Item));
             context.SetValue("p", model);
@@ -56,7 +56,7 @@ namespace Sandwych.Reporting.Tests
 
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
             Assert.True(FluidTemplate.TryParse(source, out var template));
-            var context = new TemplateContext();
+            var context = new Fluid.TemplateContext();
             context.SetValue("p", model);
             context.MemberAccessStrategy.Register(model.GetType() as Type);
             context.MemberAccessStrategy.Register(typeof(Item));

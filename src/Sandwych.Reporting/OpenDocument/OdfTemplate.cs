@@ -8,10 +8,11 @@ using System.Reflection;
 using Fluid;
 using Sandwych.Reporting.Textilize;
 using System.Threading.Tasks;
+using Sandwych.Reporting.OpenDocument.Filters;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    public class OdfTemplate : ITemplate
+    public abstract class OdfTemplate : IDocumentTemplate
     {
         private readonly OdfDocument _document;
         private IFluidTemplate _fluidTemplate = null;
@@ -36,29 +37,32 @@ namespace Sandwych.Reporting.OpenDocument
             this.CompileAndParse();
         }
 
-        public async Task<IDocument> RenderAsync(IReadOnlyDictionary<string, object> context)
+        public async Task<IDocument> RenderAsync(TemplateContext context)
         {
             var outputDocument = new OdfDocument();
             this._document.SaveAs(outputDocument);
 
             var mainContentTemplate = _document.ReadTextEntry(_document.MainContentEntryPath);
 
-            var templateContext = new FluidTemplateContext(outputDocument, context);
-
-            var imageFilter = new OdfImageFilter(outputDocument);
-            templateContext.Filters.AddFilter("image", imageFilter.Execute);
+            this.SetInternalFilters(outputDocument, context.FluidContext);
 
             using (var ws = outputDocument.OpenOrCreateEntryToWrite(outputDocument.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
-                await _fluidTemplate.RenderAsync(writer, HtmlEncoder.Default, templateContext);
+                await _fluidTemplate.RenderAsync(writer, HtmlEncoder.Default, context.FluidContext);
             }
 
             outputDocument.Flush();
             return outputDocument;
         }
 
-        public IDocument Render(IReadOnlyDictionary<string, object> context) =>
+        protected virtual void SetInternalFilters(OdfDocument outputDocument, FluidTemplateContext templateContext)
+        {
+            var imageFilter = new OdfImageFilter(outputDocument);
+            templateContext.Filters.AddFilter(imageFilter.Name, imageFilter.Execute);
+        }
+
+        public IDocument Render(TemplateContext context) =>
             this.RenderAsync(context).GetAwaiter().GetResult();
 
         private void CompileAndParse()

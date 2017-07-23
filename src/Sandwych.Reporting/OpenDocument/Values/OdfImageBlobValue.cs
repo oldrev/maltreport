@@ -8,16 +8,16 @@ using System.Xml;
 using Fluid;
 using Fluid.Values;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.OpenDocument.Values
 {
     public class OdfImageBlobValue : FluidValue
     {
-        private readonly Blob _value;
+        private readonly ImageBlob _value;
         private readonly OdfDocument _outputDocument;
 
-        public Blob Blob => _value;
+        public ImageBlob Blob => _value;
 
-        public OdfImageBlobValue(OdfDocument outputDocument, Blob blob)
+        public OdfImageBlobValue(OdfDocument outputDocument, ImageBlob blob)
         {
             _outputDocument = outputDocument;
             _value = blob;

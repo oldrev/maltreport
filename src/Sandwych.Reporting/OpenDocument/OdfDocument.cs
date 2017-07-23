@@ -43,7 +43,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         public void Flush()
         {
-            //Before save to other doc, we must save manifest & main content
+            //Before save to other doc, we must save manifest
             if (_manifestDocument.IsValueCreated)
             {
                 using (var s = this.OpenOrCreateEntryToWrite(ManifestEntryPath))
