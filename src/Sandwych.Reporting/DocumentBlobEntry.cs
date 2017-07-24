@@ -1,8 +1,8 @@
-﻿namespace Sandwych.Reporting.OpenDocument
+﻿namespace Sandwych.Reporting
 {
-    public class OdfBlobEntry
+    public class DocumentBlobEntry
     {
-        public OdfBlobEntry(string entryPath, Blob blob)
+        public DocumentBlobEntry(string entryPath, Blob blob)
         {
             this.EntryPath = entryPath;
             this.Blob = blob;

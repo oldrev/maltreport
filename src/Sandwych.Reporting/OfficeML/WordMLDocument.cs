@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Sandwych.Reporting.OfficeML
 {
-    public class WordMLDocument : AbstractXmlDocument
+    public class WordMLDocument : AbstractXmlDocument<WordMLDocument>
     {
         public const string DestAttribute = "w:dest";
         public const string HlinkElement = "w:hlink";

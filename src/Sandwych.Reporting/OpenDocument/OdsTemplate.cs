@@ -5,12 +5,9 @@ namespace Sandwych.Reporting.OpenDocument
 {
     public class OdsTemplate : OdfTemplate
     {
-        public OdsTemplate(Stream inStream) : base(inStream)
-        {
-        }
-
         public OdsTemplate(OdfDocument templateDocument) : base(templateDocument)
         {
+
         }
 
         protected override void SetInternalFilters(OdfDocument outputDocument, FluidTemplateContext templateContext)

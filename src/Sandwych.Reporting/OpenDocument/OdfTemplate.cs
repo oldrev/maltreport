@@ -8,37 +8,21 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    public abstract class OdfTemplate : ITemplate<OdfDocument>
+    public abstract class OdfTemplate : AbstractTemplate<OdfDocument>
     {
-        private readonly OdfDocument _document;
         private IFluidTemplate _fluidTemplate = null;
 
-        public OdfTemplate(Stream inStream)
+        public OdfTemplate(OdfDocument templateDocument) : base(templateDocument)
         {
-            _document = new OdfDocument();
-            _document.Load(inStream);
-            this.CompileAndParse();
+
         }
 
-        public OdfTemplate(string filePath)
-        {
-            _document = new OdfDocument();
-            _document.Load(filePath);
-            this.CompileAndParse();
-        }
-
-        public OdfTemplate(OdfDocument document)
-        {
-            _document = document;
-            this.CompileAndParse();
-        }
-
-        public async Task<OdfDocument> RenderAsync(TemplateContext context)
+        public override async Task<OdfDocument> RenderAsync(TemplateContext context)
         {
             var outputDocument = new OdfDocument();
-            this._document.SaveAs(outputDocument);
+            this.TemplateDocument.SaveAs(outputDocument);
 
-            var mainContentTemplate = _document.ReadTextEntry(_document.MainContentEntryPath);
+            var mainContentTemplate = this.TemplateDocument.ReadTextEntry(this.TemplateDocument.MainContentEntryPath);
 
             this.SetInternalFilters(outputDocument, context.FluidContext);
 
@@ -58,16 +42,16 @@ namespace Sandwych.Reporting.OpenDocument
             templateContext.Filters.AddFilter(imageFilter.Name, imageFilter.Execute);
         }
 
-        public OdfDocument Render(TemplateContext context) =>
+        public override OdfDocument Render(TemplateContext context) =>
             this.RenderAsync(context).GetAwaiter().GetResult();
 
-        private void CompileAndParse()
+        protected override void CompileAndParse()
         {
-            this._document.Compile();
+            this.TemplateDocument.Compile();
 
-            _document.Flush();
+            this.TemplateDocument.Flush();
 
-            var mainContentText = _document.GetEntryTextReader(_document.MainContentEntryPath).ReadToEnd();
+            var mainContentText = this.TemplateDocument.GetEntryTextReader(this.TemplateDocument.MainContentEntryPath).ReadToEnd();
             if (!FluidTemplate.TryParse(mainContentText, out this._fluidTemplate, out var errors))
             {
                 throw new SyntaxErrorException(errors.Aggregate((x, y) => x + "\n" + y));

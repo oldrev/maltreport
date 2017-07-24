@@ -7,7 +7,8 @@ using System.Xml;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractXmlDocument : IDocument
+    public abstract class AbstractXmlDocument<TDocument> : AbstractDocument<TDocument>
+        where TDocument : AbstractXmlDocument<TDocument>, new()
     {
         private XmlNamespaceManager _nsManager = null;
         private readonly XmlDocument _xmlDocument;
@@ -22,7 +23,7 @@ namespace Sandwych.Reporting
 
         public abstract XmlNamespaceManager CreateXmlNamespaceManager(XmlDocument xmlDoc);
 
-        public byte[] AsBuffer()
+        public override byte[] AsBuffer()
         {
             using (var ms = new MemoryStream())
             {
@@ -31,25 +32,33 @@ namespace Sandwych.Reporting
             }
         }
 
-        public virtual void Load(Stream inStream)
+        protected override void OnLoad(Stream inStream)
         {
             _xmlDocument.Load(inStream);
             _nsManager = this.CreateXmlNamespaceManager(_xmlDocument);
         }
 
-        public virtual Task LoadAsync(Stream inStream)
+        protected override Task OnLoadAsync(Stream inStream)
         {
-            return Task.Factory.StartNew(() => this.Load(inStream));
+            return Task.Factory.StartNew(() => this.OnLoad(inStream));
         }
 
-        public virtual void Save(Stream outStream)
+        public override void Save(Stream outStream)
         {
             _xmlDocument.Save(outStream);
         }
 
-        public virtual Task SaveAsync(Stream outStream)
+        public override Task SaveAsync(Stream outStream)
         {
             return Task.Factory.StartNew(() => this.Save(outStream));
+        }
+
+        public static TDocument LoadXml(string xml)
+        {
+            var doc = new TDocument();
+            doc._xmlDocument.LoadXml(xml);
+            doc._nsManager = doc.CreateXmlNamespaceManager(doc._xmlDocument);
+            return doc;
         }
     }
 }

@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractZipDocument : IZipDocument
+    public abstract class AbstractZipDocument<TDocument> : AbstractDocument<TDocument>, IZipDocument
+        where TDocument : AbstractZipDocument<TDocument>, new()
     {
         private readonly IDictionary<string, byte[]> _documentEntries = new Dictionary<string, byte[]>();
 
         public IDictionary<string, byte[]> Entries => _documentEntries;
 
-        public virtual void Load(Stream inStream) =>
-            this.LoadAsync(inStream).GetAwaiter().GetResult();
+        protected override void OnLoad(Stream inStream) =>
+            this.OnLoadAsync(inStream).GetAwaiter().GetResult();
 
-        public virtual async Task LoadAsync(Stream inStream)
+        protected override async Task OnLoadAsync(Stream inStream)
         {
             if (inStream == null)
             {
@@ -47,7 +48,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public virtual async Task SaveAsync(Stream outStream)
+        public override async Task SaveAsync(Stream outStream)
         {
             using (var zip = new ZipArchive(outStream, ZipArchiveMode.Create))
             {
@@ -58,7 +59,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public virtual void Save(Stream outStream) =>
+        public override void Save(Stream outStream) =>
             this.SaveAsync(outStream).GetAwaiter().GetResult();
 
         protected async Task AddZipEntryAsync(ZipArchive archive, string name)
@@ -113,7 +114,7 @@ namespace Sandwych.Reporting
             return this._documentEntries.ContainsKey(entryPath);
         }
 
-        public virtual byte[] AsBuffer()
+        public override byte[] AsBuffer()
         {
             using (var ms = new MemoryStream())
             {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument
 {
-    public class OdfDocument : AbstractZipDocument
+    public class OdfDocument : AbstractZipDocument<OdfDocument>
     {
         public const string MimeTypeEntryPath = "mimetype";
         public const string SettingsEntryPath = "settings.xml";
@@ -21,7 +21,7 @@ namespace Sandwych.Reporting.OpenDocument
         public const string TextPlaceholderTypeAttribute = @"text:placeholder-type";
         public const string TableRowElement = @"table:table-row";
 
-        public readonly Lazy<List<OdfBlobEntry>> _blobs = new Lazy<List<OdfBlobEntry>>(() => new List<OdfBlobEntry>(), true);
+        public readonly Lazy<List<DocumentBlobEntry>> _blobs = new Lazy<List<DocumentBlobEntry>>(() => new List<DocumentBlobEntry>(), true);
         private readonly Lazy<OdfManifestXmlDocument> _manifestDocument;
         public string MainContentEntryPath => ContentEntryPath;
 
@@ -52,9 +52,9 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        public override async Task LoadAsync(Stream inStream)
+        protected override async Task OnLoadAsync(Stream inStream)
         {
-            await base.LoadAsync(inStream);
+            await base.OnLoadAsync(inStream);
         }
 
         public override async Task SaveAsync(Stream outStream)
@@ -82,7 +82,7 @@ namespace Sandwych.Reporting.OpenDocument
         public override void Save(Stream outStream) =>
             this.SaveAsync(outStream).GetAwaiter().GetResult();
 
-        public OdfBlobEntry AddOrGetImage(Blob imageBlob)
+        public DocumentBlobEntry AddOrGetImage(Blob imageBlob)
         {
             if (imageBlob == null)
             {
@@ -102,12 +102,12 @@ namespace Sandwych.Reporting.OpenDocument
 
             _manifestDocument.Value.AppendImageFileEntry(imageBlob.ExtensionName, fullPath);
 
-            var blobEntry = new OdfBlobEntry(fullPath, imageBlob);
+            var blobEntry = new DocumentBlobEntry(fullPath, imageBlob);
             this._blobs.Value.Add(blobEntry);
             return blobEntry;
         }
 
-        public IEnumerable<OdfBlobEntry> BlobEntries => _blobs.Value;
+        public IEnumerable<DocumentBlobEntry> BlobEntries => _blobs.Value;
 
         public override void SaveAs(IZipDocument destDoc)
         {
