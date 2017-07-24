@@ -22,17 +22,17 @@ namespace Sandwych.Reporting.OfficeML
 
         private string GetCompiledMainContent()
         {
-            using (var sw = new StringWriter())
-            using (var writer = XmlWriter.Create(sw))
+            var sb = new StringBuilder();
+            using (var writer = XmlWriter.Create(sb))
             {
                 this.TemplateDocument.XmlDocument.WriteTo(writer);
-                return sw.ToString();
             }
+            return sb.ToString();
         }
 
         protected override void CompileAndParse()
         {
-            // this.ProcessPlaceholders();
+            this.ProcessPlaceholders();
             var stringTemplate = this.GetCompiledMainContent();
 
             if (!FluidTemplate.TryParse(stringTemplate, out _fluidTemplate, out var errors))
@@ -44,11 +44,12 @@ namespace Sandwych.Reporting.OfficeML
 
         public override async Task<WordMLDocument> RenderAsync(TemplateContext context)
         {
-            using (var outputXmlWriter = new StringWriter())
+            var sb = new StringBuilder();
+            using (var outputXmlWriter = new StringWriter(sb))
             {
                 await _fluidTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, context.FluidContext);
-                return WordMLDocument.LoadXml(outputXmlWriter.ToString());
             }
+            return WordMLDocument.LoadXml(sb.ToString());
         }
 
         public override WordMLDocument Render(TemplateContext context) =>
@@ -62,20 +63,19 @@ namespace Sandwych.Reporting.OfficeML
             foreach (XmlElement phe in placeholders)
             {
                 var attr = phe.GetAttribute(WordMLDocument.DestAttribute);
-                var value = attr.Substring(WellknownConstants.DtlProtocolPrefix.Length).Trim('/', ' ');
-
-                value = UrlUtility.UrlDecode(value, Encoding.UTF8);
+                var value = UrlUtility.UrlDecode(attr, Encoding.UTF8);
+                value = value.Substring(WellknownConstants.DtlProtocolPrefix.Length).Trim('/', ' ');
 
                 if (value.Length < 2)
                 {
                     throw new SyntaxErrorException();
                 }
 
-                if (value[0] == '#')
+                if (value.Trim().StartsWith(WellknownConstants.DtlDirectiveChar))
                 {
                     this.ProcessDirectiveTag(phe, value.Substring(1));
                 }
-                else if (value[0] == '$')
+                else if (value.Trim().StartsWith(WellknownConstants.DtlReferenceChar))
                 {
                     this.ProcessReferenceTag(phe, value.Substring(1));
                 }

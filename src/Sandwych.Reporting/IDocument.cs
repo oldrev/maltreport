@@ -15,8 +15,13 @@ namespace Sandwych.Reporting
 
     public static class DocumentExtensions
     {
-        public static void Save(this IDocument self, string path) =>
-            self.SaveAsync(path).GetAwaiter().GetResult();
+        public static void Save(this IDocument self, string path)
+        {
+            using (var stream = File.Create(path))
+            {
+                self.Save(stream);
+            }
+        }
 
         public static async Task SaveAsync(this IDocument self, string path)
         {

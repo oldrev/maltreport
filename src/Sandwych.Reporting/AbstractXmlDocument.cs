@@ -38,9 +38,9 @@ namespace Sandwych.Reporting
             _nsManager = this.CreateXmlNamespaceManager(_xmlDocument);
         }
 
-        protected override Task OnLoadAsync(Stream inStream)
+        protected override async Task OnLoadAsync(Stream inStream)
         {
-            return Task.Factory.StartNew(() => this.OnLoad(inStream));
+            await Task.Factory.StartNew(() => this.OnLoad(inStream));
         }
 
         public override void Save(Stream outStream)
@@ -48,9 +48,9 @@ namespace Sandwych.Reporting
             _xmlDocument.Save(outStream);
         }
 
-        public override Task SaveAsync(Stream outStream)
+        public override async Task SaveAsync(Stream outStream)
         {
-            return Task.Factory.StartNew(() => this.Save(outStream));
+            await Task.Factory.StartNew(() => this.Save(outStream));
         }
 
         public static TDocument LoadXml(string xml)
