@@ -31,7 +31,9 @@ namespace Sandwych.Reporting.Xml
             Debug.Assert(_directive != null);
             Debug.Assert(w != null);
 
+            w.WriteRaw("{%");
             w.WriteRaw(this._directive);
+            w.WriteRaw("%}");
         }
 
         /// <summary>

@@ -10,8 +10,6 @@ namespace Sandwych.Reporting.OpenDocument
 {
     internal static class OdfCompiler
     {
-        private const string DtlProtocolPrefix = "dtl://";
-
         private static readonly Lazy<Regex> PlaceHolderValuePattern =
             new Lazy<Regex>(() => new Regex(@"^<\s*(.*)\s*>$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
 
@@ -85,29 +83,27 @@ namespace Sandwych.Reporting.OpenDocument
             foreach (XmlNode placeholder in placeholders)
             {
                 string value = ExtractTemplateExpression(placeholder);
-
-                if (value.StartsWith("{{") && value.EndsWith("}}"))
+                if (value.StartsWith(WellknownConstants.DtlReferenceChar))
                 {
-                    ProcessIdentifierTag(xml, placeholder, value);
+                    ProcessIdentifierTag(xml, placeholder, value.Substring(1));
                 }
-                else if (value.StartsWith("{%") && value.EndsWith("%}"))
+                else if (value.StartsWith(WellknownConstants.DtlDirectiveChar))
                 {
-                    var directiveNode = new DirectiveElement(xml, value);
+                    var directiveNode = new DirectiveElement(xml, value.Substring(1));
                     directiveNode.ReduceTagByCount(placeholder);
                 }
                 else
                 {
-                    throw new SyntaxErrorException();
+                    throw new SyntaxErrorException($"Syntax error: '{value}'");
                 }
             }
 
-            //处理 draw:frame 包含 draw:image 的情况
             var drawFrameElements = xml.SelectNodes("//" + OdfDocument.DrawFrameElement, xml.NamespaceManager);
             var dtlDrawFrames = new List<XmlNode>();
             foreach (XmlNode node in drawFrameElements)
             {
                 var nameAttr = node.Attributes["draw:name"];
-                if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value) && nameAttr.Value.Trim().StartsWith(DtlProtocolPrefix))
+                if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value) && nameAttr.Value.Trim('/', ' ').StartsWith(WellknownConstants.DtlProtocolPrefix))
                 {
                     dtlDrawFrames.Add(node);
                 }
@@ -127,11 +123,19 @@ namespace Sandwych.Reporting.OpenDocument
                 yield return tpe;
             }
 
+            foreach (XmlElement ele in MatchHrefPlaceholderElements(xml))
+            {
+                yield return ele;
+            }
+        }
+
+        private static IEnumerable<XmlElement> MatchHrefPlaceholderElements(OdfContentXmlDocument xml)
+        {
             var textAnchors = xml.GetElementsByTagName(OdfDocument.TextAnchorElement);
             foreach (XmlElement ta in textAnchors)
             {
                 var href = ta.GetAttribute("xlink:href");
-                if (href != null && href.Trim().StartsWith(DtlProtocolPrefix))
+                if (href != null && href.Trim(' ', '/').StartsWith(WellknownConstants.DtlProtocolPrefix))
                 {
                     yield return ta;
                 }
@@ -217,7 +221,7 @@ namespace Sandwych.Reporting.OpenDocument
             var nameAttr = drawFrameNode.Attributes["draw:name"];
             var drawImageNode = drawFrameNode.SelectSingleNode("//draw:image", nsmanager);
             drawFrameNode.RemoveChild(drawImageNode);
-            var userExpr = nameAttr.Value.Trim().Substring(DtlProtocolPrefix.Length);
+            var userExpr = nameAttr.Value.Trim(' ', '/').Substring(WellknownConstants.DtlProtocolPrefix.Length);
             var fluidExpr = "{{ " + userExpr + " }}";
             drawFrameNode.InnerText = fluidExpr;
         }

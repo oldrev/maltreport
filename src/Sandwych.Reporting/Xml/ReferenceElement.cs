@@ -23,7 +23,9 @@ namespace Sandwych.Reporting.Xml
             Debug.Assert(this.expression != null);
             Debug.Assert(w != null);
 
+            w.WriteRaw("{{");
             w.WriteRaw(this.expression);
+            w.WriteRaw("}}");
         }
     }
 }
