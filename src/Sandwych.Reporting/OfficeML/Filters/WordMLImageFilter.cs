@@ -1,7 +1,6 @@
 ﻿using System;
 using Fluid;
 using Fluid.Values;
-using Sandwych.Reporting.OfficeML.Values;
 using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.OfficeML.Filters
@@ -15,7 +14,7 @@ namespace Sandwych.Reporting.OfficeML.Filters
             var buf = input.ToObjectValue() as byte[];
             if (buf == null)
             {
-                throw new NotSupportedException($"The property of your image must be a 'byte[]' type");
+                return EmptyValue.Instance;
             }
 
             var base64 = Convert.ToBase64String(buf);
