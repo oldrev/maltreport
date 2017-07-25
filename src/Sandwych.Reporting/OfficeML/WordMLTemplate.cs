@@ -8,12 +8,17 @@ using System.Threading.Tasks;
 using Fluid;
 using Sandwych.Reporting.Xml;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Text.Encodings.Web;
+using Sandwych.Reporting.OfficeML.Filters;
 
 namespace Sandwych.Reporting.OfficeML
 {
     public class WordMLTemplate : AbstractTemplate<WordMLDocument>
     {
+        private static readonly Lazy<Regex> ImageFormatPattern =
+            new Lazy<Regex>(() => new Regex(@"^.*\|\s*image\s*:\s*'(.*)'\s*$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
+
         private IFluidTemplate _fluidTemplate;
 
         public WordMLTemplate(WordMLDocument templateDocument) : base(templateDocument)
@@ -44,6 +49,10 @@ namespace Sandwych.Reporting.OfficeML
 
         public override async Task<WordMLDocument> RenderAsync(TemplateContext context)
         {
+            //Internal filters:
+            var imageFilter = new WordMLImageFilter();
+            context.FluidContext.Filters.AddFilter(imageFilter.Name, imageFilter.Execute);
+
             var sb = new StringBuilder();
             using (var outputXmlWriter = new StringWriter(sb))
             {
@@ -83,7 +92,12 @@ namespace Sandwych.Reporting.OfficeML
                 {
                     throw new SyntaxErrorException($"Syntax error: '{attr}'");
                 }
+            }
 
+            var imagePlaceholderElements = this.MatchImagePlaceholderElements();
+            foreach (XmlElement ele in imagePlaceholderElements)
+            {
+                this.ProcessImagePlaceholderElement(ele);
             }
         }
 
@@ -119,6 +133,40 @@ namespace Sandwych.Reporting.OfficeML
             rEle.AppendChild(tEle);
             tEle.AppendChild(refEle);
             placeholderElement.ParentNode.ReplaceChild(rEle, placeholderElement);
+        }
+
+        private List<XmlElement> MatchImagePlaceholderElements()
+        {
+            var placeholderElements = new List<XmlElement>();
+            var shapeElements = this.TemplateDocument.XmlDocument
+                .SelectNodes("//" + WordMLDocument.ShapeElement, this.TemplateDocument.NamespaceManager);
+            foreach (XmlElement ele in shapeElements)
+            {
+                var altAttr = ele.Attributes["alt"];
+                if (altAttr != null && !string.IsNullOrWhiteSpace(altAttr.Value) && altAttr.Value.Trim().StartsWith(WellknownConstants.DtlReferenceProtocolPrefix))
+                {
+                    placeholderElements.Add(ele.ParentNode as XmlElement);
+                }
+            }
+
+            return placeholderElements;
+        }
+
+        private void ProcessImagePlaceholderElement(XmlElement ele)
+        {
+            var nsmanager = this.TemplateDocument.NamespaceManager;
+            var shapeEle = ele.SelectSingleNode("//" + WordMLDocument.ShapeElement, nsmanager);
+            var binDataEle = ele.SelectSingleNode("//" + WordMLDocument.BinDataElement, nsmanager);
+            var imageDataEle = shapeEle.SelectSingleNode("//" + WordMLDocument.ImageDataElement, nsmanager);
+            var refExpr = shapeEle.Attributes["alt"].Value.Trim().Substring(WellknownConstants.DtlReferenceProtocolPrefix.Length);
+            var imageFormat = ImageFormatPattern.Value.Match(refExpr).Groups[1].Value;
+            var id = Guid.NewGuid().ToString("N");
+            var wordmlImageUrl = $"wordml://{id}.{imageFormat}";
+            imageDataEle.Attributes["src"].Value = wordmlImageUrl;
+            binDataEle.Attributes["w:name"].Value = wordmlImageUrl;
+            binDataEle.InnerText = "{{" + refExpr + "}}";
+
+            shapeEle.Attributes["alt"].Value = string.Empty;
         }
 
 

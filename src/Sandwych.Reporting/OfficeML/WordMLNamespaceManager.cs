@@ -9,8 +9,9 @@ namespace Sandwych.Reporting.OfficeML
 {
     internal sealed class WordMLNamespaceManager : XmlNamespaceManager
     {
-        public const string WNamespace = @"http://schemas.microsoft.com/office/word/2003/wordml";
-        public const string ONamespace = @"urn:schemas-microsoft-com:office:office";
+        public const string WNamespace = "http://schemas.microsoft.com/office/word/2003/wordml";
+        public const string ONamespace = "urn:schemas-microsoft-com:office:office";
+        public const string VNamespace = "urn:schemas-microsoft-com:vml";
 
         public WordMLNamespaceManager(XmlNameTable xnt)
             : base(xnt)
@@ -22,6 +23,7 @@ namespace Sandwych.Reporting.OfficeML
         {
             this.AddNamespace("w", WNamespace);
             this.AddNamespace("o", ONamespace);
+            this.AddNamespace("v", VNamespace);
         }
     }
 }
