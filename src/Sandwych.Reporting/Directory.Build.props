@@ -1,0 +1,15 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <PackageId>MaltReport2</PackageId>
+    <Title>MaltReport: An Universal Document Generator</Title>
+    <Description>MaltReport is an universal document generator works like Razor for HTML. MaltReport is mainly inspired by the excellent Relatorio Project.</Description>
+    <PackageTags>document;document generator;template;libreoffice;</PackageTags>
+    <VersionPrefix>3.0.0</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
+  </PropertyGroup>
+
+  <Import Project="../../build/Shared.props" />
+
+</Project>
+
