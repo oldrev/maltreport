@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Fluid;
 using Fluid.Values;
 using Sandwych.Reporting.Textilize;
@@ -14,7 +14,7 @@ namespace Sandwych.Reporting.OfficeML.Filters
             var buf = input.ToObjectValue() as byte[];
             if (buf == null)
             {
-                return EmptyValue.Instance;
+                return NilValue.Instance;
             }
 
             var base64 = Convert.ToBase64String(buf);

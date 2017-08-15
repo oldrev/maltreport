@@ -1,4 +1,4 @@
-﻿using Fluid;
+using Fluid;
 using Sandwych.Reporting.OpenDocument.Filters;
 using Sandwych.Reporting.Textilize;
 using System.IO;
@@ -10,7 +10,7 @@ namespace Sandwych.Reporting.OpenDocument
 {
     public abstract class OdfTemplate : AbstractTemplate<OdfDocument>
     {
-        private IFluidTemplate _fluidTemplate = null;
+        private FluidTemplate _fluidTemplate = null;
 
         public OdfTemplate(OdfDocument templateDocument) : base(templateDocument)
         {

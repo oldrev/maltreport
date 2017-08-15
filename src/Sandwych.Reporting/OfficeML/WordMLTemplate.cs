@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -19,7 +19,7 @@ namespace Sandwych.Reporting.OfficeML
         private static readonly Lazy<Regex> ImageFormatPattern =
             new Lazy<Regex>(() => new Regex(@"^.*\|\s*image\s*:\s*'(.*)'\s*$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
 
-        private IFluidTemplate _fluidTemplate;
+        private FluidTemplate _fluidTemplate;
 
         public WordMLTemplate(WordMLDocument templateDocument) : base(templateDocument)
         {

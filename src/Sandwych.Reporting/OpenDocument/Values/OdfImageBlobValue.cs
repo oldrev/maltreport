@@ -1,7 +1,8 @@
-﻿using Fluid.Values;
+using Fluid.Values;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
+using System.Globalization;
 
 namespace Sandwych.Reporting.OpenDocument.Values
 {
@@ -22,7 +23,7 @@ namespace Sandwych.Reporting.OpenDocument.Values
 
         public override bool Equals(FluidValue other)
         {
-            if (other == EmptyValue.Instance)
+            if (other == NilValue.Instance)
             {
                 return _value == null;
             }
@@ -55,7 +56,7 @@ namespace Sandwych.Reporting.OpenDocument.Values
             return string.Empty;
         }
 
-        public override void WriteTo(TextWriter writer, TextEncoder encoder)
+        public override void WriteTo(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
             var blobEntry = _outputDocument.AddOrGetImage(_value);
 
