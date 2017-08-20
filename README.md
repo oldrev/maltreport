@@ -26,8 +26,8 @@ I do not have too much time working with the document, so to learn the usage of 
 
 ### Supported Platform
 
-* .NET Framework 4.5+
-* The support of .NET Core is working in progress.
+* .NET Framework 4.6.1
+* .NET Standard 2.0
 
 ### Installation
 
@@ -39,54 +39,16 @@ PM> Install-Package MaltReport2
 
 ## Demo & Usage:
 
-### Step 1: Organize your data into an IDictionary<string,object>
+### Step 1: Organize your data into Context
 
 ```csharp
-
-public class Employee {
-    public Employee(string name, string address) {
-        this.Name = name;
-        this.Address = address;
-    }
-
-    public string Name {get; private set; }
-    public string Address {get; private set; }
-
-}
-
-var renderContext = new Dictionary<string, object>() {
-    //Plain old types
-    {"title", "EMPLOYEES SHEET"},
-    {"property1", "Property Value 1"},
-    {"property2", "Property Value 2"},
-
-    //Strong-type objects
-    {"orm_employees",
-        new List<Employee>()
-        {
-            new Employee("Micheal Scott", "Address 1"),
-            new Employee("Andy Bernard", "Address 3"),
-            new Employee("Dwight Shurte", "Address 1"),
-            new Employee("Jim Halpert", "Address 2"),
-            new Employee("Pam Beesly", "Address 4"),
-        }
-    },
-    {"now", DateTime.Now}, 
-};
+TODO
 ```
 
 ### Step 2: Render your template
 
 ```csharp
-var template = new WordMLTemplate();
-template.Load("template1.xml"); //Load template file
-template.Compile(); //Compile template
-var resultDoc = template.Render(ctx); //Render template with data
-
-//Save output to a DOC file
-using (var resultFile3 = File.Open(@"c:\tmp\result.doc", FileMode.Create, FileAccess.ReadWrite)) { 
-    resultDoc.Save(resultFile3);
-}
+TODO
 ```
 
 ## License
