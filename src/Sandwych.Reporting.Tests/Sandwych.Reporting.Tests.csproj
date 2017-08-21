@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Remove="OfficeML\Templates\Template1.doc.xml" />
+    <None Remove="OpenDocument\Templates\Template1.odt" />
+    <None Remove="OpenDocument\Templates\Template2.ods" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\JpegImage.jpeg" />
+    <EmbeddedResource Include="OfficeML\Templates\Template1.doc.xml" />
+    <EmbeddedResource Include="OpenDocument\Templates\Template1.odt" />
+    <EmbeddedResource Include="OpenDocument\Templates\Template2.ods" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fluid.Core" Version="1.0.0-beta-9327" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.console" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta3-build3705" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sandwych.Reporting\Sandwych.Reporting.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,16 +1,16 @@
-# MaltReport
+﻿# MaltReport
 
 [![NuGet Stats](https://img.shields.io/nuget/v/MaltReport2.svg)](https://www.nuget.org/packages/MaltReport2) 
 [![Build status](https://ci.appveyor.com/api/projects/status/w9rc2jbb6v4o4jgk/branch/master?svg=true)](https://ci.appveyor.com/project/oldrev/maltreport/branch/master)
 
 
-MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, it is inspired by the excellent Relatorio Project.
+MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, 
+it is inspired by the excellent [Relatorio Project](http://relatorio.openhex.org/).
 
 There is a briefly introduction in Chinese: [MaltReport2 中文使用简介](http://www.cnblogs.com/oldrev/p/maltreport2_intro.html)
 
-MaltReport DO NOT REQUIRES MS-Office or LibreOffice to generate document. Instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fast & reliable.
-
-The template of your report is just a normal document can be created by LibreOffice or MS-Word/MS-Excel (ODT/ODS and XLS/DOC are fully supported), So you can use LibreOffice and MS-Word/Excel as a WYSIWYG report development tools.
+MaltReport DO NOT REQUIRES MS-Office or LibreOffice to generate document. 
+Instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fast & reliable.
 
 ## Documents
 
@@ -25,8 +25,8 @@ I do not have too much time working with the document, so to learn the usage of 
 
 ### Supported Platform
 
-* .NET Framework 4.5+
-* The support of .NET Core is working in progress.
+* .NET Framework 4.6.1
+* .NET Standard 2.0
 
 ### Installation
 
@@ -38,61 +38,23 @@ PM> Install-Package MaltReport2
 
 ## Demo & Usage:
 
-### Step 1: Organize your data into an IDictionary<string,object>
+### Step 1: Organize your data into Context
 
 ```csharp
-
-public class Employee {
-    public Employee(string name, string address) {
-        this.Name = name;
-        this.Address = address;
-    }
-
-    public string Name {get; private set; }
-    public string Address {get; private set; }
-
-}
-
-var renderContext = new Dictionary<string, object>() {
-    //Plain old types
-    {"title", "EMPLOYEES SHEET"},
-    {"property1", "Property Value 1"},
-    {"property2", "Property Value 2"},
-
-    //Strong-type objects
-    {"orm_employees",
-        new List<Employee>()
-        {
-            new Employee("Micheal Scott", "Address 1"),
-            new Employee("Andy Bernard", "Address 3"),
-            new Employee("Dwight Shurte", "Address 1"),
-            new Employee("Jim Halpert", "Address 2"),
-            new Employee("Pam Beesly", "Address 4"),
-        }
-    },
-    {"now", DateTime.Now}, 
-};
+TODO
 ```
 
 ### Step 2: Render your template
 
 ```csharp
-var template = new WordMLTemplate();
-template.Load("template1.xml"); //Load template file
-template.Compile(); //Compile template
-var resultDoc = template.Render(ctx); //Render template with data
-
-//Save output to a DOC file
-using (var resultFile3 = File.Open(@"c:\tmp\result.doc", FileMode.Create, FileAccess.ReadWrite)) { 
-    resultDoc.Save(resultFile3);
-}
+TODO
 ```
 
 ## License
 
 MaltReport is licensed in the MIT license.
 
-Author: Wei "oldrev" Li <oldrev<at>gmail.com>
+Author: Wei "oldrev" Li <oldrev@gmail.com>
 
 * Copyright (C) 2009 Wei "oldrev" Li
 * Copyright (C) 2010-2016 Sandwych Consulting LLC.
