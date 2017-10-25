@@ -19,8 +19,7 @@ test-results
 *.userprefs
 packages/
 *.nupkg
-/.vs
-/.vs/
+.vs
 
 /tools/
 /artifacts/
