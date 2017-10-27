@@ -41,14 +41,52 @@ PM> Install-Package MaltReport2
 ### Step 1: Organize your data into Context
 
 ```csharp
-TODO
+var employees = new Employee[]
+{
+    new Employee{ Name = "Micheal Scott", JobTitle = "Branch Manager" },
+    new Employee{ Name = "Pam Beesly", JobTitle = "Office Administrator" },
+    new Employee{ Name = "Jim Halpert", JobTitle = "Salesman" },
+    new Employee{ Name = "Dwight Schrute", JobTitle = "Salesman" },
+    new Employee{ Name = "Andy Bernard", JobTitle = "Salesman" },
+};
+
+var image = new ImageBlob("jpeg", File.ReadAllBytes("Image.jpeg"));
+
+var data = new Dictionary<string, object>()
+{
+    { "employees", employees },
+    { "image", image },
+};
+
+var context = new TemplateContext(data);
 ```
 
-### Step 2: Render your template
+### Step 2: Prepare your template
+
+TODO
+
+### Step 3: Load & render your template
 
 ```csharp
-TODO
+
+using (var stream = File.OpenRead("EmployeesTemplate.odt"))
+{
+    var odt = OdfDocument.Load(stream);
+    var template = new OdtTemplate(odt);
+
+    var result = template.Render(context);
+
+    var desktopDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+    var outputFile = Path.Combine(desktopDir, "generated.odt");
+
+    result.Save(outputFile);
+}
 ```
+
+### Step 4: Checkout the genertated document:
+
+TODO
+
 
 ## License
 

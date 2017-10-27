@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Sandwych.Reporting.OpenDocument.Filters;
+using System.Collections.Generic;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -35,8 +37,17 @@ namespace Sandwych.Reporting.OpenDocument
             return outputDocument;
         }
 
-        protected virtual void SetInternalFilters(OdfDocument outputDocument, FluidTemplateContext templateContext)
+        private void SetInternalFilters(OdfDocument outputDocument, FluidTemplateContext templateContext)
         {
+            foreach (var syncFilter in this.GetInternalSyncFilters(outputDocument))
+            {
+                templateContext.Filters.AddFilter(syncFilter.Name, syncFilter.Execute);
+            }
+        }
+
+        protected virtual IEnumerable<ISyncFilter> GetInternalSyncFilters(OdfDocument outputDocument)
+        {
+            yield return new OdfImageFilter(outputDocument);
         }
 
         public override OdfDocument Render(TemplateContext context) =>

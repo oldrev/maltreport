@@ -1,4 +1,4 @@
-﻿using Sandwych.Reporting.Textilize;
+using Sandwych.Reporting.Textilize;
 using System.IO;
 
 namespace Sandwych.Reporting.OpenDocument
@@ -10,11 +10,5 @@ namespace Sandwych.Reporting.OpenDocument
 
         }
 
-        protected override void SetInternalFilters(OdfDocument outputDocument, FluidTemplateContext templateContext)
-        {
-            base.SetInternalFilters(outputDocument, templateContext);
-
-            //TODO Add internal filters for cells generation
-        }
     }
 }
