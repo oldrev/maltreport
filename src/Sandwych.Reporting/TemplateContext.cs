@@ -9,15 +9,25 @@ namespace Sandwych.Reporting
 
         public FluidTemplateContext FluidContext => _fluidContext;
 
-        public TemplateContext(IReadOnlyDictionary<string, object> values, IEnumerable<ISyncFilter> filters = null)
+        public TemplateContext(
+            IReadOnlyDictionary<string, object> values,
+            IEnumerable<ISyncFilter> syncFilters = null, IEnumerable<IAsyncFilter> asyncFilters = null)
         {
             _fluidContext = new FluidTemplateContext(values);
 
-            if (filters != null)
+            if (syncFilters != null)
             {
-                foreach (var filter in filters)
+                foreach (var filter in syncFilters)
                 {
                     _fluidContext.Filters.AddFilter(filter.Name, filter.Execute);
+                }
+            }
+
+            if (asyncFilters != null)
+            {
+                foreach (var filter in asyncFilters)
+                {
+                    _fluidContext.Filters.AddAsyncFilter(filter.Name, filter.ExecuteAsync);
                 }
             }
         }

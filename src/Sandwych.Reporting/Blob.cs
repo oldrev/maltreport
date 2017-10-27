@@ -1,12 +1,22 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 
 namespace Sandwych.Reporting
 {
+
+    public interface IBlob : IEquatable<IBlob>
+    {
+        string Id { get; }
+        string ExtensionName { get; }
+        byte[] GetBuffer();
+        int Length { get; }
+        string FileName { get; }
+    }
+
     /// <summary>
     /// Blob in zipped document
     /// </summary>
-    public abstract class Blob : IEquatable<Blob>
+    public abstract class Blob : IBlob
     {
         private readonly string _extName;
         private readonly byte[] blob;
@@ -58,7 +68,7 @@ namespace Sandwych.Reporting
 
         public string FileName => _entryNameInDocument;
 
-        public bool Equals(Blob obj)
+        public bool Equals(IBlob obj)
         {
             if (ReferenceEquals(this, obj))
             {

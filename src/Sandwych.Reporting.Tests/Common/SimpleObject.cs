@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -15,7 +15,7 @@ namespace Sandwych.Reporting.Tests.Common
             {
                 var buf = new byte[resStream.Length];
                 resStream.Read(buf, 0, buf.Length);
-                this.JpegImage = buf;
+                this.JpegImage = new ImageBlob("jpg", buf);
             }
         }
 
@@ -28,7 +28,7 @@ namespace Sandwych.Reporting.Tests.Common
 
         public decimal DecimalValue => 3.14M;
 
-        public byte[] JpegImage { get; private set; }
+        public ImageBlob JpegImage { get; private set; }
     }
 
 }

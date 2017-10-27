@@ -1,5 +1,4 @@
 using Fluid;
-using Sandwych.Reporting.OpenDocument.Filters;
 using Sandwych.Reporting.Textilize;
 using System.IO;
 using System.Linq;
@@ -38,8 +37,6 @@ namespace Sandwych.Reporting.OpenDocument
 
         protected virtual void SetInternalFilters(OdfDocument outputDocument, FluidTemplateContext templateContext)
         {
-            var imageFilter = new OdfImageFilter(outputDocument);
-            templateContext.Filters.AddFilter(imageFilter.Name, imageFilter.Execute);
         }
 
         public override OdfDocument Render(TemplateContext context) =>

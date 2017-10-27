@@ -10,7 +10,6 @@ using Sandwych.Reporting.Xml;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text.Encodings.Web;
-using Sandwych.Reporting.OfficeML.Filters;
 
 namespace Sandwych.Reporting.OfficeML
 {
@@ -49,10 +48,6 @@ namespace Sandwych.Reporting.OfficeML
 
         public override async Task<WordMLDocument> RenderAsync(TemplateContext context)
         {
-            //Internal filters:
-            var imageFilter = new WordMLImageFilter();
-            context.FluidContext.Filters.AddFilter(imageFilter.Name, imageFilter.Execute);
-
             var sb = new StringBuilder();
             using (var outputXmlWriter = new StringWriter(sb))
             {
