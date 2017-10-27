@@ -63,7 +63,7 @@ var context = new TemplateContext(data);
 
 ### Step 2: Prepare your template
 
-TODO
+![Template](https://github.com/oldrev/maltreport/raw/dev/screenshots/hello-world/template.png)
 
 ### Step 3: Load & render your template
 
@@ -85,7 +85,7 @@ using (var stream = File.OpenRead("EmployeesTemplate.odt"))
 
 ### Step 4: Checkout the genertated document:
 
-TODO
+![Generated Document](https://github.com/oldrev/maltreport/raw/dev/screenshots/hello-world/generated.png)
 
 
 ## License
