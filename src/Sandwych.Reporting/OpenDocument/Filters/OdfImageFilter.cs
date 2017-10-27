@@ -7,13 +7,13 @@ namespace Sandwych.Reporting.OpenDocument.Filters
 {
     public struct OdfImageFilter : ISyncFilter
     {
-        private OdfDocument _outputDocument;
+        private OdfDocument _document;
 
         public string Name => "image";
 
         public OdfImageFilter(OdfDocument odfDoc)
         {
-            this._outputDocument = odfDoc;
+            this._document = odfDoc;
         }
 
         public FluidValue Execute(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
@@ -26,7 +26,7 @@ namespace Sandwych.Reporting.OpenDocument.Filters
 
             var imageFormat = arguments.At(0);
 
-            return new OdfImageBlobValue(this._outputDocument, blob);
+            return new OdfImageBlobValue(_document, blob);
         }
     }
 }

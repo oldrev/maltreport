@@ -25,33 +25,24 @@ namespace Sandwych.Reporting.OpenDocument
 
             var mainContentTemplate = this.TemplateDocument.ReadTextEntry(this.TemplateDocument.MainContentEntryPath);
 
-            this.SetInternalFilters(outputDocument, context.FluidContext);
-
+            var fluidContext = this.CreateFluidTemplateContext(outputDocument, context);
             using (var ws = outputDocument.OpenOrCreateEntryToWrite(outputDocument.MainContentEntryPath))
             using (var writer = new StreamWriter(ws))
             {
-                await _fluidTemplate.RenderAsync(writer, HtmlEncoder.Default, context.FluidContext);
+                await _fluidTemplate.RenderAsync(writer, HtmlEncoder.Default, fluidContext);
             }
 
             outputDocument.Flush();
             return outputDocument;
         }
 
-        private void SetInternalFilters(OdfDocument outputDocument, FluidTemplateContext templateContext)
-        {
-            foreach (var syncFilter in this.GetInternalSyncFilters(outputDocument))
-            {
-                templateContext.Filters.AddFilter(syncFilter.Name, syncFilter.Execute);
-            }
-        }
-
-        protected virtual IEnumerable<ISyncFilter> GetInternalSyncFilters(OdfDocument outputDocument)
-        {
-            yield return new OdfImageFilter(outputDocument);
-        }
-
         public override OdfDocument Render(TemplateContext context) =>
             this.RenderAsync(context).GetAwaiter().GetResult();
+
+        protected override IEnumerable<ISyncFilter> GetInternalSyncFilters(OdfDocument document)
+        {
+            yield return new OdfImageFilter(document);
+        }
 
         protected override void CompileAndParse()
         {

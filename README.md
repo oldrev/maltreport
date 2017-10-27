@@ -83,7 +83,7 @@ using (var stream = File.OpenRead("EmployeesTemplate.odt"))
 }
 ```
 
-### Step 4: Checkout the genertated document:
+### Step 4: Check the generated document out:
 
 ![Generated Document](https://github.com/oldrev/maltreport/raw/dev/screenshots/hello-world/generated.png)
 

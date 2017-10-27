@@ -8,14 +8,14 @@ namespace Sandwych.Reporting.OpenDocument.Values
 {
     public class OdfImageBlobValue : FluidValue
     {
+        private readonly OdfDocument _document;
         private readonly ImageBlob _value;
-        private readonly OdfDocument _outputDocument;
 
         public ImageBlob Blob => _value;
 
-        public OdfImageBlobValue(OdfDocument outputDocument, ImageBlob blob)
+        public OdfImageBlobValue(OdfDocument document, ImageBlob blob)
         {
-            _outputDocument = outputDocument;
+            _document = document;
             _value = blob;
         }
 
@@ -58,8 +58,7 @@ namespace Sandwych.Reporting.OpenDocument.Values
 
         public override void WriteTo(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
-            var blobEntry = _outputDocument.AddOrGetImage(_value);
-
+            var blobEntry = _document.AddOrGetImage(_value);
             this.WriteDrawImageElement(writer, blobEntry.EntryPath);
         }
 

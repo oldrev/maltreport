@@ -10,6 +10,7 @@ using Sandwych.Reporting.Xml;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text.Encodings.Web;
+using Sandwych.Reporting.OfficeML.Filters;
 
 namespace Sandwych.Reporting.OfficeML
 {
@@ -45,13 +46,13 @@ namespace Sandwych.Reporting.OfficeML
             }
         }
 
-
         public override async Task<WordMLDocument> RenderAsync(TemplateContext context)
         {
+            var fluidContext = this.CreateFluidTemplateContext(null, context);
             var sb = new StringBuilder();
             using (var outputXmlWriter = new StringWriter(sb))
             {
-                await _fluidTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, context.FluidContext);
+                await _fluidTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, fluidContext);
             }
             return WordMLDocument.LoadXml(sb.ToString());
         }
@@ -59,6 +60,10 @@ namespace Sandwych.Reporting.OfficeML
         public override WordMLDocument Render(TemplateContext context) =>
             this.RenderAsync(context).GetAwaiter().GetResult();
 
+        protected override IEnumerable<ISyncFilter> GetInternalSyncFilters(WordMLDocument document)
+        {
+            yield return new WordMLImageFilter();
+        }
 
         private void ProcessPlaceholders()
         {
