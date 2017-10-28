@@ -39,6 +39,7 @@ namespace Sandwych.Reporting
         protected virtual FluidTemplateContext CreateFluidTemplateContext(TDocument document, TemplateContext context)
         {
             var ftc = new FluidTemplateContext(context.Values);
+            ftc.CultureInfo = context.Culture;
             this.RegisterInternalFilters(document, ftc);
             return ftc;
         }
