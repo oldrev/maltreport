@@ -21,7 +21,7 @@ I do not have too much time working with the document, so to learn the usage of 
 
 ### Prerequisites
 
-* Visual Studio 2015: This project is written in C# 5.0 using Microsoft Visual Studio 2015 Community Edition.
+* Visual Studio 2017: This project is written in C# 7.0 using Microsoft Visual Studio 2017 Community Edition.
 
 ### Supported Platform
 
