@@ -14,8 +14,7 @@ Instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fa
 
 ## Documents
 
-I do not have too much time working with the document, so to learn the usage of MaltReport please see the Sandwych.Reporting.Demo project.
-
+* [Wiki](https://github.com/oldrev/maltreport/wiki)
 
 ## Getting Started
 
