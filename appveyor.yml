@@ -1,26 +1,37 @@
-# Build script
-init:
-  - git config --global core.autocrlf true
-
-# Build script
-build_script:
-  - ps: .\build.ps1 -Target "AppVeyor"
-
-# Tests
-test: off
-
-# Branches to build
+version: 3.0.{build}
 branches:
-  # Whitelist
   only:
-    - dev
-    - main
-    - master
-    - /r/.*/
-    - /release/.*/
-    - /hotfix/.*/
-    - /feature/.*/
+  - master
+  - dev
+image: Visual Studio 2017
+init:
+- cmd: git config --global core.autocrlf true
+install:
+- cmd: >-
+    ps: $env:BuildNumber= $env:APPVEYOR_BUILD_NUMBER
 
-# Build cache
-cache:
-- tools -> setup.cake
+    ps: $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = true
+
+    ps: $env:NUGET_XMLDOC_MODE = "skip"
+
+    ps: $env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
+cache: tools
+nuget:
+  disable_publish_on_pr: true
+build_script:
+- ps: >-
+    dotnet --version
+
+    dotnet restore
+
+    dotnet build -c Release
+
+    dotnet pack -c Release
+test: off
+deploy:
+- provider: NuGet
+  api_key:
+    secure: ix+W8lm+TdPIZDJ3JzdDydIBmL1L6w4z/J52hu4miTapf0tLYkJs/QDEhgQ990j6
+  skip_symbols: true
+  on:
+    branch: master
