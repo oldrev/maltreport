@@ -9,11 +9,8 @@ init:
 install:
 - ps: >-
     $env:BuildNumber= $env:APPVEYOR_BUILD_NUMBER
-
     $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = true
-
     $env:NUGET_XMLDOC_MODE = "skip"
-
     $env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
 cache: tools
 nuget:
@@ -21,10 +18,7 @@ nuget:
 build_script:
 - ps: >-
     dotnet --version
-
     dotnet restore
-
     dotnet build -c Release
-
-    dotnet pack -c Release
+    dotnet pack -c Release src\Sandwych.Reporting\Sandwych.Reporting.csproj
 test: off
