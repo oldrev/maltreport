@@ -96,3 +96,7 @@ Author: Wei "oldrev" Li <oldrev@gmail.com>
 * Copyright (C) 2009 Wei "oldrev" Li
 * Copyright (C) 2010-2016 Sandwych Consulting LLC.
 * Copyright (C) 2017-TODAY Binary Stars Technologies LLC. & Contributors
+
+## CREDITS
+
+* [Fluid](https://github.com/sebastienros/fluid)
