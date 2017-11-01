@@ -12,7 +12,11 @@ nuget:
 build_script:
 - ps: >-
     dotnet --version
+
     dotnet restore
+
     dotnet build -c Release
+
     dotnet pack -c Release src\Sandwych.Reporting\Sandwych.Reporting.csproj
+
 test: off
