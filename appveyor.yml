@@ -6,12 +6,6 @@ branches:
 image: Visual Studio 2017
 init:
 - cmd: git config --global core.autocrlf true
-install:
-- ps: >-
-    $env:BuildNumber= $env:APPVEYOR_BUILD_NUMBER
-    $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = true
-    $env:NUGET_XMLDOC_MODE = "skip"
-    $env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
 cache: tools
 nuget:
   disable_publish_on_pr: true
