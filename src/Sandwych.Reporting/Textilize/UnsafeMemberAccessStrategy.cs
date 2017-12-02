@@ -1,6 +1,7 @@
-﻿using Fluid;
+using Fluid;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Sandwych.Reporting.Textilize
 {
@@ -14,21 +15,32 @@ namespace Sandwych.Reporting.Textilize
             _parent = parent;
         }
 
-        public object Get(object obj, string name)
+        public IMemberAccessor GetAccessor(object obj, string name)
         {
-            // Look for specific property map
-            if (_map.TryGetValue(Key(obj.GetType(), name), out var getter))
+            var type = obj.GetType();
+
+            if (_map.Count > 0)
             {
-                return getter.Get(obj, name);
+                while (type != null)
+                {
+                    // Look for specific property map
+                    if (_map.TryGetValue(Key(type, name), out var accessor))
+                    {
+                        return accessor;
+                    }
+
+                    // Look for a catch-all getter
+                    if (_map.TryGetValue(Key(type, "*"), out accessor))
+                    {
+                        return accessor;
+                    }
+
+                    type = type.GetTypeInfo().BaseType;
+                }
             }
 
-            // Look for a catch-all getter
-            if (_map.TryGetValue(Key(obj.GetType(), "*"), out getter))
-            {
-                return getter.Get(obj, name);
-            }
+            var parentAccessor = _parent?.GetAccessor(obj, name);
 
-            var parentAccessor = _parent?.Get(obj, name);
             if (parentAccessor != null)
             {
                 return parentAccessor;
@@ -37,7 +49,7 @@ namespace Sandwych.Reporting.Textilize
             //Register the object type and try again
             this.Register(obj.GetType());
 
-            return this.Get(obj, name);
+            return this.GetAccessor(obj, name);
         }
 
         public void Register(Type type, string name, IMemberAccessor getter)
