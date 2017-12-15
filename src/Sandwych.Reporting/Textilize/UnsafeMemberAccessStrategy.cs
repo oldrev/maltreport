@@ -1,3 +1,7 @@
+/**
+ * This class is copy from: https://github.com/sebastienros/fluid/issues/11#issuecomment-351401013
+ * A big slute to @pfeigl
+ * */
 using Fluid;
 using System;
 using System.Collections.Generic;
@@ -7,56 +11,23 @@ namespace Sandwych.Reporting.Textilize
 {
     public class UnsafeMemberAccessStrategy : IMemberAccessStrategy
     {
-        private readonly Dictionary<string, IMemberAccessor> _map = new Dictionary<string, IMemberAccessor>();
-        private readonly IMemberAccessStrategy _parent;
-
-        public UnsafeMemberAccessStrategy(IMemberAccessStrategy parent)
-        {
-            _parent = parent;
-        }
+        private readonly MemberAccessStrategy baseMemberAccessStrategy = new MemberAccessStrategy();
 
         public IMemberAccessor GetAccessor(object obj, string name)
         {
-            var type = obj.GetType();
-
-            if (_map.Count > 0)
+            var accessor = baseMemberAccessStrategy.GetAccessor(obj, name);
+            if (accessor != null)
             {
-                while (type != null)
-                {
-                    // Look for specific property map
-                    if (_map.TryGetValue(Key(type, name), out var accessor))
-                    {
-                        return accessor;
-                    }
-
-                    // Look for a catch-all getter
-                    if (_map.TryGetValue(Key(type, "*"), out accessor))
-                    {
-                        return accessor;
-                    }
-
-                    type = type.GetTypeInfo().BaseType;
-                }
+                return accessor;
             }
 
-            var parentAccessor = _parent?.GetAccessor(obj, name);
-
-            if (parentAccessor != null)
-            {
-                return parentAccessor;
-            }
-
-            //Register the object type and try again
-            this.Register(obj.GetType());
-
-            return this.GetAccessor(obj, name);
+            baseMemberAccessStrategy.Register(obj.GetType());
+            return baseMemberAccessStrategy.GetAccessor(obj, name);
         }
 
         public void Register(Type type, string name, IMemberAccessor getter)
         {
-            _map[Key(type, name)] = getter;
+            baseMemberAccessStrategy.Register(type, name, getter);
         }
-
-        private string Key(Type type, string name) => $"{type.Name}.{name}";
     }
 }
