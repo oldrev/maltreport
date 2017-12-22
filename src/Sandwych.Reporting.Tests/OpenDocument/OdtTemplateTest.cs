@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Sandwych.Reporting.OpenDocument;
 using Sandwych.Reporting.Tests.Common;
 using Xunit;
 
 namespace Sandwych.Reporting.Tests.OpenDocument
 {
-
-    public class OdtTemplateTest
+    public class OdtTemplateTest : AbstractTest
     {
         private const string Template1OdtName = "Sandwych.Reporting.Tests.OpenDocument.Templates.Template1.odt";
 
@@ -41,7 +41,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
 
             var result = template.Render(context);
 
-            result.Save(@"c:\tmp\out.odt");
+            result.Save(Path.Combine(this.TempPath, "odt-out.odt"));
         }
 
     }

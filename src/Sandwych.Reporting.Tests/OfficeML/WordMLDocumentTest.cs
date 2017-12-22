@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using Sandwych.Reporting.OfficeML;
 using Sandwych.Reporting.OpenDocument;
@@ -8,7 +9,7 @@ using Xunit;
 namespace Sandwych.Reporting.Tests.OfficeML
 {
 
-    public class WordMLDocumentTest
+    public class WordMLDocumentTest : AbstractTest
     {
         private const string Template1OdtName = "Sandwych.Reporting.Tests.OfficeML.Templates.Template1.doc.xml";
 
@@ -32,7 +33,7 @@ namespace Sandwych.Reporting.Tests.OfficeML
 
             var result = template.Render(context);
 
-            result.Save(@"c:\tmp\out.doc.xml");
+            result.Save(Path.Combine(this.TempPath, "wordml-out.doc.xml"));
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Sandwych.Reporting.OpenDocument;
 using Sandwych.Reporting.Tests.Common;
 using Xunit;
@@ -7,7 +8,7 @@ using Xunit;
 namespace Sandwych.Reporting.Tests.OpenDocument
 {
 
-    public class OdsTemplateTest
+    public class OdsTemplateTest : AbstractTest
     {
         private const string Template2OdsName = "Sandwych.Reporting.Tests.OpenDocument.Templates.Template2.ods";
 
@@ -41,7 +42,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
 
             var result = template.Render(context);
 
-            result.Save(@"c:\tmp\out.ods");
+            result.Save(Path.Combine(this.TempPath, "ods-out.ods"));
         }
 
     }
