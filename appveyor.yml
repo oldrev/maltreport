@@ -12,7 +12,6 @@ build_script:
   - dotnet build -c Release
   - dotnet pack -c Release .\src\Sandwych.Reporting\Sandwych.Reporting.csproj
 test_script:
-  - mkdir c:\tmp
   - dotnet test .\src\Sandwych.Reporting.Tests\Sandwych.Reporting.Tests.csproj
 artifacts:
   - path: 'src\Sandwych.Reporting\**\*.nupkg'
