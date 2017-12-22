@@ -14,36 +14,18 @@ using Sandwych.Reporting.OfficeML.Filters;
 
 namespace Sandwych.Reporting.OfficeML
 {
-    public class WordMLTemplate : AbstractTemplate<WordMLDocument>
+    public class WordMLTemplate : AbstractXmlTemplate<WordMLDocument>
     {
         private static readonly Lazy<Regex> ImageFormatPattern =
             new Lazy<Regex>(() => new Regex(@"^.*\|\s*image\s*:\s*'(.*)'\s*$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
-
-        private FluidTemplate _fluidTemplate;
 
         public WordMLTemplate(WordMLDocument templateDocument) : base(templateDocument)
         {
         }
 
-        private string GetCompiledMainContent()
-        {
-            var sb = new StringBuilder();
-            using (var writer = XmlWriter.Create(sb))
-            {
-                this.TemplateDocument.XmlDocument.WriteTo(writer);
-            }
-            return sb.ToString();
-        }
-
-        protected override void CompileAndParse()
+        protected override void PrepareTemplate()
         {
             this.ProcessPlaceholders();
-            var stringTemplate = this.GetCompiledMainContent();
-
-            if (!FluidTemplate.TryParse(stringTemplate, out _fluidTemplate, out var errors))
-            {
-                throw new SyntaxErrorException(errors.Aggregate((x, y) => x + "\n" + y));
-            }
         }
 
         public override async Task<WordMLDocument> RenderAsync(TemplateContext context)
@@ -52,7 +34,7 @@ namespace Sandwych.Reporting.OfficeML
             var sb = new StringBuilder();
             using (var outputXmlWriter = new StringWriter(sb))
             {
-                await _fluidTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, fluidContext);
+                await this.TextTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, fluidContext);
             }
             return WordMLDocument.LoadXml(sb.ToString());
         }

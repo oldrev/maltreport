@@ -44,7 +44,7 @@ namespace Sandwych.Reporting.OpenDocument
             yield return new OdfImageFilter(document);
         }
 
-        protected override void CompileAndParse()
+        protected override void PrepareTemplate()
         {
             this.TemplateDocument.Compile();
 

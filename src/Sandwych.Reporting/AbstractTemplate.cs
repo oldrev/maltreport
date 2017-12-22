@@ -7,8 +7,8 @@ using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractTemplate<TDocument> : ITemplate<TDocument>
-        where TDocument : IDocument, new()
+    public abstract class AbstractTemplate<TDocument> 
+        where TDocument : class
     {
         private readonly TDocument _document;
         private readonly static ISyncFilter[] s_emptySyncFilters = new ISyncFilter[] { };
@@ -19,14 +19,14 @@ namespace Sandwych.Reporting
         public AbstractTemplate(TDocument document)
         {
             _document = document;
-            this.CompileAndParse();
+            this.PrepareTemplate();
         }
 
         public abstract TDocument Render(TemplateContext context);
 
         public abstract Task<TDocument> RenderAsync(TemplateContext context);
 
-        protected abstract void CompileAndParse();
+        protected abstract void PrepareTemplate();
 
         protected static ISyncFilter[] EmptySyncFilters => s_emptySyncFilters;
 

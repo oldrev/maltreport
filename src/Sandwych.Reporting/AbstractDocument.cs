@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractDocument<TDocument> : IDocument
+    public abstract class AbstractDocument<TDocument> 
         where TDocument : AbstractDocument<TDocument>, new()
     {
         public abstract byte[] AsBuffer();
@@ -43,6 +43,25 @@ namespace Sandwych.Reporting
         {
             return LoadAsync(filePath).GetAwaiter().GetResult();
         }
+
+        public void Save(string path)
+        {
+            using (var stream = File.Create(path))
+            {
+                this.Save(stream);
+            }
+        }
+
+        public async Task SaveAsync(string path)
+        {
+            using (var stream = File.Create(path))
+            {
+                await this.SaveAsync(stream);
+            }
+        }
+
+        public string ToBase64String() =>
+            Convert.ToBase64String(this.AsBuffer());
 
     }
 

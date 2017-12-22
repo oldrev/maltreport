@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Sandwych.Reporting.IO
@@ -6,12 +6,13 @@ namespace Sandwych.Reporting.IO
     /// <summary>
     ///  Memory stream of write-only
     /// </summary>
-    internal sealed class OutputMemoryStream : MemoryStream
+    internal sealed class OutputMemoryStream<TDocument> : MemoryStream
+        where TDocument : AbstractZipDocument<TDocument>, new()
     {
         private readonly string _entryPath;
-        private readonly IZipDocument _zipDocument;
+        private readonly AbstractZipDocument<TDocument> _zipDocument;
 
-        public OutputMemoryStream(string name, IZipDocument zipDocument)
+        public OutputMemoryStream(string name, AbstractZipDocument<TDocument> zipDocument)
         {
             this._entryPath = name;
             _zipDocument = zipDocument;

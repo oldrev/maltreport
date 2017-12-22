@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -109,7 +109,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         public IEnumerable<DocumentBlobEntry> BlobEntries => _blobs.Value;
 
-        public override void SaveAs(IZipDocument destDoc)
+        public override void SaveAs(OdfDocument destDoc)
         {
             this.Flush();
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -7,6 +7,7 @@ using System.Xml;
 
 namespace Sandwych.Reporting
 {
+
     public abstract class AbstractXmlDocument<TDocument> : AbstractDocument<TDocument>
         where TDocument : AbstractXmlDocument<TDocument>, new()
     {
@@ -19,6 +20,11 @@ namespace Sandwych.Reporting
         public AbstractXmlDocument()
         {
             _xmlDocument = new XmlDocument();
+        }
+
+        public AbstractXmlDocument(XmlDocument xml)
+        {
+            _xmlDocument = xml;
         }
 
         public abstract XmlNamespaceManager CreateXmlNamespaceManager(XmlDocument xmlDoc);
@@ -56,7 +62,7 @@ namespace Sandwych.Reporting
         public static TDocument LoadXml(string xml)
         {
             var doc = new TDocument();
-            doc._xmlDocument.LoadXml(xml);
+            doc.XmlDocument.LoadXml(xml);
             doc._nsManager = doc.CreateXmlNamespaceManager(doc._xmlDocument);
             return doc;
         }

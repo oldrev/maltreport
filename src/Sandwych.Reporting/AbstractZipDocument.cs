@@ -1,14 +1,16 @@
-﻿using Sandwych.Reporting.IO;
+using Sandwych.Reporting.IO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractZipDocument<TDocument> : AbstractDocument<TDocument>, IZipDocument
+    public abstract class AbstractZipDocument<TDocument> : AbstractDocument<TDocument>
         where TDocument : AbstractZipDocument<TDocument>, new()
     {
         private readonly IDictionary<string, byte[]> _documentEntries = new Dictionary<string, byte[]>();
@@ -144,7 +146,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        public virtual void SaveAs(IZipDocument destDoc)
+        public virtual void SaveAs(TDocument destDoc)
         {
             if (destDoc == null)
             {
@@ -159,6 +161,58 @@ namespace Sandwych.Reporting
                 {
                     CopyStream(inStream, outStream);
                 }
+            }
+        }
+
+        public Stream OpenEntryToRead(string entryPath)
+        {
+            return new MemoryStream(this.GetEntryBuffer(entryPath));
+        }
+
+        public Stream OpenOrCreateEntryToWrite(string entryPath)
+        {
+            var oms = new OutputMemoryStream<TDocument>(entryPath, this);
+            return oms;
+        }
+
+        public TextReader GetEntryTextReader(string entryPath) =>
+            new StreamReader(this.OpenEntryToRead(entryPath));
+
+        public TextWriter GetEntryTextWriter(string entryPath) =>
+            new StreamWriter(this.OpenOrCreateEntryToWrite(entryPath));
+
+        public void WriteXmlEntry(string entryPath, XmlDocument xml)
+        {
+            using (var cos = this.OpenOrCreateEntryToWrite(entryPath))
+            using (var writer = XmlWriter.Create(cos, new XmlWriterSettings { Encoding = Encoding.UTF8 }))
+            {
+                xml.WriteTo(writer);
+            }
+        }
+
+        public XmlDocument ReadXmlEntry(string entryPath)
+        {
+            using (var contentStream = this.OpenEntryToRead(entryPath))
+            {
+                var xml = new XmlDocument();
+                xml.Load(contentStream);
+                return xml;
+            }
+        }
+
+        public string ReadTextEntry(string entryPath)
+        {
+            using (var tr = this.GetEntryTextReader(entryPath))
+            {
+                return tr.ReadToEnd();
+            }
+        }
+
+        public void WriteTextEntry(string entryPath, string content)
+        {
+            using (var tw = this.GetEntryTextWriter(entryPath))
+            {
+                tw.Write(content);
             }
         }
     }
