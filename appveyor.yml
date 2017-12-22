@@ -19,7 +19,7 @@ deploy:
   - provider: NuGet
     on:
       branch: dev
-    server: https://www.myget.org/F/fluid/api/v2/package
+    server: https://www.myget.org/F/maltreport/api/v2/package
     skip_symbols: true
     artifact: /.*\.nupkg/
   - provider: NuGet
