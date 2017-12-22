@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Fluid;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sandwych.Reporting.Tests
 {
@@ -11,10 +11,11 @@ namespace Sandwych.Reporting.Tests
         public int Number { get; set; }
     }
 
+    [TestFixture]
     public class FluidTest
     {
 
-        [Fact]
+        [Test]
         public void FluidShouldWorksFine()
         {
             var model = new
@@ -37,10 +38,10 @@ namespace Sandwych.Reporting.Tests
             context.SetValue("p", model);
             var result = template.Render(context);
 
-            Assert.Equal($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
+            Assert.AreEqual($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
         }
 
-        [Fact]
+        [Test]
         public void FluidShouldWorksWithDynamicObject()
         {
             dynamic model = new
@@ -62,7 +63,7 @@ namespace Sandwych.Reporting.Tests
             context.MemberAccessStrategy.Register(typeof(Item));
             var result = template.Render(context);
 
-            Assert.Equal($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
+            Assert.AreEqual($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
 
         }
 

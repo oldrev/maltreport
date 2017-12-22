@@ -1,18 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Sandwych.Reporting.OpenDocument;
 using Sandwych.Reporting.Tests.Common;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sandwych.Reporting.Tests.OpenDocument
 {
 
+    [TestFixture]
     public class OdsTemplateTest : AbstractTest
     {
         private const string Template2OdsName = "Sandwych.Reporting.Tests.OpenDocument.Templates.Template2.ods";
 
-        [Fact]
+        [Test]
         public void CanCompileOdsDocumentTemplate()
         {
             using (var stream = DocumentTestHelper.GetResource(Template2OdsName))
@@ -22,7 +23,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
             }
         }
 
-        [Fact]
+        [Test]
         public void CanRenderOdsTemplate()
         {
             OdfTemplate template;

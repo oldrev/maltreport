@@ -1,19 +1,20 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using Sandwych.Reporting.OfficeML;
 using Sandwych.Reporting.OpenDocument;
 using Sandwych.Reporting.Tests.Common;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sandwych.Reporting.Tests.OfficeML
 {
 
+    [TestFixture]
     public class WordMLDocumentTest : AbstractTest
     {
         private const string Template1OdtName = "Sandwych.Reporting.Tests.OfficeML.Templates.Template1.doc.xml";
 
-        [Fact]
+        [Test]
         public void CanRenderWordMLTemplate()
         {
             WordMLTemplate template;

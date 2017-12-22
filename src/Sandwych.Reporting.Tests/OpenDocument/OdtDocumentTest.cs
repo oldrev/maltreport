@@ -1,16 +1,17 @@
-﻿using System;
+using System;
 using Sandwych.Reporting.OpenDocument;
-using Xunit;
+using NUnit.Framework;
 
 namespace Sandwych.Reporting.Tests.OpenDocument
 {
 
+    [TestFixture]
     public class OdtDocumentTest
     {
         private const string Template1OdtName = "Sandwych.Reporting.Tests.OpenDocument.Templates.Template1.odt";
 
 
-        [Fact]
+        [Test]
         public void CanLoadOdfDocumentAsTemplate()
         {
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
