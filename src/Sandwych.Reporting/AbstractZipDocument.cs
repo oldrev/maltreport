@@ -17,10 +17,10 @@ namespace Sandwych.Reporting
 
         public IDictionary<string, byte[]> Entries => _documentEntries;
 
-        protected override void OnLoad(Stream inStream) =>
-            this.OnLoadAsync(inStream).GetAwaiter().GetResult();
+        public override void Load(Stream inStream) =>
+            this.LoadAsync(inStream).GetAwaiter().GetResult();
 
-        protected override async Task OnLoadAsync(Stream inStream)
+        public override async Task LoadAsync(Stream inStream)
         {
             if (inStream == null)
             {

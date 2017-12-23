@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
+
     public abstract class AbstractDocument<TDocument> : IDocument
         where TDocument : AbstractDocument<TDocument>, new()
     {
         public bool IsNew { get; private set; } = false;
         public abstract byte[] AsBuffer();
-        protected abstract void OnLoad(Stream inStream);
-        protected abstract Task OnLoadAsync(Stream inStream);
+        public abstract void Load(Stream inStream);
+        public abstract Task LoadAsync(Stream inStream);
         public abstract void Save(Stream outStream);
         public abstract Task SaveAsync(Stream outStream);
 
@@ -24,14 +25,14 @@ namespace Sandwych.Reporting
         public static async Task<TDocument> LoadFromAsync(Stream inStream)
         {
             var doc = new TDocument();
-            await doc.OnLoadAsync(inStream);
+            await doc.LoadAsync(inStream);
             return doc;
         }
 
         public static TDocument LoadFrom(Stream inStream)
         {
             var doc = new TDocument();
-            doc.OnLoad(inStream);
+            doc.Load(inStream);
             return doc;
         }
 
@@ -40,7 +41,7 @@ namespace Sandwych.Reporting
             using (var inStream = File.OpenRead(filePath))
             {
                 var doc = new TDocument();
-                await doc.OnLoadAsync(inStream);
+                await doc.LoadAsync(inStream);
                 return doc;
             }
         }

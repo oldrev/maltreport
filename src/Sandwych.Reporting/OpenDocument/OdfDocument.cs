@@ -53,9 +53,9 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        protected override async Task OnLoadAsync(Stream inStream)
+        public override async Task LoadAsync(Stream inStream)
         {
-            await base.OnLoadAsync(inStream);
+            await base.LoadAsync(inStream);
         }
 
         public override async Task SaveAsync(Stream outStream)

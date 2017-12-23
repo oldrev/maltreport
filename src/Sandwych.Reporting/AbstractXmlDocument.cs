@@ -33,16 +33,16 @@ namespace Sandwych.Reporting
             }
         }
 
-        protected override void OnLoad(Stream inStream)
+        public override void Load(Stream inStream)
         {
             _xmlDocument.Load(inStream);
             _nsManager = this.CreateXmlNamespaceManager(_xmlDocument);
             this.OnLoaded();
         }
 
-        protected override async Task OnLoadAsync(Stream inStream)
+        public override async Task LoadAsync(Stream inStream)
         {
-            await Task.Factory.StartNew(() => this.OnLoad(inStream));
+            await Task.Factory.StartNew(() => this.Load(inStream));
         }
 
         public override void Save(Stream outStream)

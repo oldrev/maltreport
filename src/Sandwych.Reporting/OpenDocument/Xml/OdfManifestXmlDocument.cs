@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Sandwych.Reporting.OpenDocument.Xml
 {
-    public class OdfManifestXmlDocument : OdfXmlDocument
+    public class OdfManifestXmlDocument : AbstractOdfXmlDocument
     {
         public const string PicturesFullPath = @"Pictures/";
 
