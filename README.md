@@ -25,15 +25,11 @@ Instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fa
 ### Supported Platform
 
 * .NET Framework 4.6.1
-* .NET Standard 2.0
+* .NET Standard 1.6+
 
 ### Installation
 
-MaltReport can be installed from [NuGet](https://www.nuget.org/packages/MaltReport2) or type following commands in the NuGet Console:
-
-```
-PM> Install-Package MaltReport2
-```
+MaltReport can be installed from [NuGet](https://www.nuget.org/packages/MaltReport2).
 
 ## Demo & Usage:
 
