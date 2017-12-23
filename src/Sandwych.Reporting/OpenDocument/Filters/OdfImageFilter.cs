@@ -5,7 +5,7 @@ using System;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
-    public struct OdfImageFilter : ISyncFilter
+    public class OdfImageFilter : ISyncFilter
     {
         private OdfDocument _document;
 
@@ -23,8 +23,6 @@ namespace Sandwych.Reporting.OpenDocument.Filters
             {
                 throw new NotSupportedException($"The property of your image must be a 'ImageBlob' type");
             }
-
-            var imageFormat = arguments.At(0);
 
             return new OdfImageBlobValue(_document, blob);
         }

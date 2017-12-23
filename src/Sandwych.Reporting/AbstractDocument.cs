@@ -19,7 +19,7 @@ namespace Sandwych.Reporting
 
         protected virtual void OnLoaded()
         {
-            this.IsNew = true;
+            this.IsNew = false;
         }
 
         public static async Task<TDocument> LoadFromAsync(Stream inStream)
