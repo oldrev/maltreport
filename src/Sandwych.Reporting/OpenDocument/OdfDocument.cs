@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using Sandwych.Reporting.OpenDocument.Xml;
 
 namespace Sandwych.Reporting.OpenDocument
 {

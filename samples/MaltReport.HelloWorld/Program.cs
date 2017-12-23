@@ -31,7 +31,7 @@ namespace MaltReport.HelloWorld
 
             using (var stream = File.OpenRead("EmployeesTemplate.odt"))
             {
-                var odt = OdfDocument.Load(stream);
+                var odt = OdfDocument.LoadFrom(stream);
                 var template = new OdtTemplate(odt);
 
 

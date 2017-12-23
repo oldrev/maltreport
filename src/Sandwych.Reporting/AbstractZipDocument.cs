@@ -48,6 +48,8 @@ namespace Sandwych.Reporting
                     }
                 }
             }
+
+            this.OnLoaded();
         }
 
         public override async Task SaveAsync(Stream outStream)

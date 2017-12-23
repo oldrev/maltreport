@@ -1,6 +1,6 @@
-﻿using System.IO;
+using System.IO;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.OpenDocument.Xml
 {
     public class OdfContentXmlDocument : OdfXmlDocument
     {

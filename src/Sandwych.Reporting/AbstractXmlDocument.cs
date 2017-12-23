@@ -17,14 +17,9 @@ namespace Sandwych.Reporting
         public XmlNamespaceManager NamespaceManager => _nsManager;
         public XmlDocument XmlDocument => _xmlDocument;
 
-        public AbstractXmlDocument()
+        protected AbstractXmlDocument()
         {
             _xmlDocument = new XmlDocument();
-        }
-
-        public AbstractXmlDocument(XmlDocument xml)
-        {
-            _xmlDocument = xml;
         }
 
         public abstract XmlNamespaceManager CreateXmlNamespaceManager(XmlDocument xmlDoc);
@@ -42,6 +37,7 @@ namespace Sandwych.Reporting
         {
             _xmlDocument.Load(inStream);
             _nsManager = this.CreateXmlNamespaceManager(_xmlDocument);
+            this.OnLoaded();
         }
 
         protected override async Task OnLoadAsync(Stream inStream)
@@ -59,7 +55,7 @@ namespace Sandwych.Reporting
             await Task.Factory.StartNew(() => this.Save(outStream));
         }
 
-        public static TDocument LoadXml(string xml)
+        public static TDocument LoadFromText(string xml)
         {
             var doc = new TDocument();
             doc.XmlDocument.LoadXml(xml);

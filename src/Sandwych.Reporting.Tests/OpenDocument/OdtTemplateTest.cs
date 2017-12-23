@@ -17,7 +17,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         {
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
             {
-                var odt = OdfDocument.Load(stream);
+                var odt = OdfDocument.LoadFrom(stream);
                 var template = new OdtTemplate(odt);
             }
         }
@@ -28,7 +28,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
             OdfTemplate template;
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
             {
-                var odt = OdfDocument.Load(stream);
+                var odt = OdfDocument.LoadFrom(stream);
                 template = new OdtTemplate(odt);
             }
 

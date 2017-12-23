@@ -7,8 +7,8 @@ using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractTemplate<TDocument> 
-        where TDocument : class
+    public abstract class AbstractTemplate<TDocument>
+        where TDocument : IDocument
     {
         private readonly TDocument _document;
         private readonly static ISyncFilter[] s_emptySyncFilters = new ISyncFilter[] { };
@@ -18,6 +18,11 @@ namespace Sandwych.Reporting
 
         public AbstractTemplate(TDocument document)
         {
+            if (document.IsNew)
+            {
+                throw new ArgumentOutOfRangeException(nameof(document), "The template document must not be new(empty)");
+            }
+
             _document = document;
             this.PrepareTemplate();
         }

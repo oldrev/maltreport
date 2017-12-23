@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.OpenDocument.Xml
 {
     public class OdfManifestXmlDocument : OdfXmlDocument
     {

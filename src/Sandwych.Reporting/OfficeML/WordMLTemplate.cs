@@ -36,7 +36,7 @@ namespace Sandwych.Reporting.OfficeML
             {
                 await this.TextTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, fluidContext);
             }
-            return WordMLDocument.LoadXml(sb.ToString());
+            return WordMLDocument.LoadFromText(sb.ToString());
         }
 
         public override WordMLDocument Render(TemplateContext context) =>

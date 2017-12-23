@@ -1,7 +1,7 @@
-﻿using System.IO;
+using System.IO;
 using System.Xml;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.OpenDocument.Xml
 {
     public abstract class OdfXmlDocument : XmlDocument
     {

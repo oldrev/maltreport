@@ -1,10 +1,11 @@
-﻿using Sandwych.Reporting.Xml;
+using Sandwych.Reporting.Xml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
+using Sandwych.Reporting.OpenDocument.Xml;
 
 namespace Sandwych.Reporting.OpenDocument
 {
