@@ -173,7 +173,7 @@ namespace Sandwych.Reporting
 
         public Stream OpenOrCreateEntryToWrite(string entryPath)
         {
-            var oms = new OutputMemoryStream<TDocument>(entryPath, this);
+            var oms = new ZipDocumentEntryOutputMemoryStream<TDocument>(entryPath, this);
             return oms;
         }
 

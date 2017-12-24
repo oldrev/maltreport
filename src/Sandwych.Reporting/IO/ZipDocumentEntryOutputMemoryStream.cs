@@ -6,13 +6,13 @@ namespace Sandwych.Reporting.IO
     /// <summary>
     ///  Memory stream of write-only
     /// </summary>
-    internal sealed class OutputMemoryStream<TDocument> : MemoryStream
+    internal sealed class ZipDocumentEntryOutputMemoryStream<TDocument> : MemoryStream
         where TDocument : AbstractZipDocument<TDocument>, new()
     {
         private readonly string _entryPath;
         private readonly AbstractZipDocument<TDocument> _zipDocument;
 
-        public OutputMemoryStream(string name, AbstractZipDocument<TDocument> zipDocument)
+        public ZipDocumentEntryOutputMemoryStream(string name, AbstractZipDocument<TDocument> zipDocument)
         {
             this._entryPath = name;
             _zipDocument = zipDocument;
@@ -20,9 +20,17 @@ namespace Sandwych.Reporting.IO
 
         protected override void Dispose(bool disposing)
         {
-            _zipDocument.SetEntryBuffer(this._entryPath, this.ToArray());
-
-            base.Dispose(disposing);
+            try
+            {
+                if (disposing)
+                {
+                    _zipDocument.SetEntryBuffer(this._entryPath, this.ToArray());
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
 
         public override bool CanRead
