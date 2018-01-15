@@ -38,9 +38,6 @@ namespace Sandwych.Reporting.OfficeML
             return ExcelMLDocument.LoadFromText(sb.ToString());
         }
 
-        public override ExcelMLDocument Render(TemplateContext context) =>
-            this.RenderAsync(context).GetAwaiter().GetResult();
-
         private void ProcessPlaceholders()
         {
             var xml = this.TemplateDocument.XmlDocument;

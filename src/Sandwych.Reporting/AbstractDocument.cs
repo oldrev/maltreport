@@ -48,7 +48,7 @@ namespace Sandwych.Reporting
 
         public static TDocument LoadFrom(string filePath)
         {
-            return LoadFromAsync(filePath).GetAwaiter().GetResult();
+            return Task.Run(() => LoadFromAsync(filePath)).Result;
         }
 
         public static TDocument LoadFrom(byte[] buffer)

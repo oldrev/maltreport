@@ -27,7 +27,8 @@ namespace Sandwych.Reporting
             this.PrepareTemplate();
         }
 
-        public abstract TDocument Render(TemplateContext context);
+        public TDocument Render(TemplateContext context) =>
+            Task.Run(() => this.RenderAsync(context)).Result;
 
         public abstract Task<TDocument> RenderAsync(TemplateContext context);
 

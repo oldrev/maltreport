@@ -39,9 +39,6 @@ namespace Sandwych.Reporting.OfficeML
             return WordMLDocument.LoadFromText(sb.ToString());
         }
 
-        public override WordMLDocument Render(TemplateContext context) =>
-            this.RenderAsync(context).GetAwaiter().GetResult();
-
         protected override IEnumerable<ISyncFilter> GetInternalSyncFilters(WordMLDocument document)
         {
             yield return new WordMLImageFilter();

@@ -18,7 +18,7 @@ namespace Sandwych.Reporting
         public IDictionary<string, byte[]> Entries => _documentEntries;
 
         public override void Load(Stream inStream) =>
-            this.LoadAsync(inStream).GetAwaiter().GetResult();
+            Task.Run(() => this.LoadAsync(inStream)).Wait();
 
         public override async Task LoadAsync(Stream inStream)
         {
@@ -64,7 +64,7 @@ namespace Sandwych.Reporting
         }
 
         public override void Save(Stream outStream) =>
-            this.SaveAsync(outStream).GetAwaiter().GetResult();
+            Task.Run(() => this.SaveAsync(outStream)).Wait();
 
         protected async Task AddZipEntryAsync(ZipArchive archive, string name)
         {

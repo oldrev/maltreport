@@ -36,9 +36,6 @@ namespace Sandwych.Reporting.OpenDocument
             return outputDocument;
         }
 
-        public override OdfDocument Render(TemplateContext context) =>
-            this.RenderAsync(context).GetAwaiter().GetResult();
-
         protected override IEnumerable<ISyncFilter> GetInternalSyncFilters(OdfDocument document)
         {
             yield return new OdfImageFilter(document);
