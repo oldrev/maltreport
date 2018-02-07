@@ -21,5 +21,5 @@ install:
   - dotnet restore
 
 script:
-  - dotnet build src/Sandwych.Reporting/Sandwych.Reporting.csproj -f netstandard2.0
+  - dotnet build src/Sandwych.Reporting/Sandwych.Reporting.csproj -f netstandard1.6
   - dotnet test src/Sandwych.Reporting.Tests/Sandwych.Reporting.Tests.csproj
