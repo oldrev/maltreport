@@ -2,6 +2,7 @@
 
 [![NuGet Stats](https://img.shields.io/nuget/v/MaltReport2.svg)](https://www.nuget.org/packages/MaltReport2) 
 [![Build status](https://ci.appveyor.com/api/projects/status/7kj4cnl64negfdn6/branch/master?svg=true)](https://ci.appveyor.com/project/oldrev/maltreport/branch/master)
+[![Build Status](https://travis-ci.org/oldrev/maltreport.svg?branch=master)](https://travis-ci.org/oldrev/maltreport)
 
 
 MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, 
