@@ -13,16 +13,16 @@ namespace Sandwych.Reporting.Textilize
     {
         private readonly MemberAccessStrategy baseMemberAccessStrategy = new MemberAccessStrategy();
 
-        public IMemberAccessor GetAccessor(object obj, string name)
+        public IMemberAccessor GetAccessor(Type type, string name)
         {
-            var accessor = baseMemberAccessStrategy.GetAccessor(obj, name);
+            var accessor = baseMemberAccessStrategy.GetAccessor(type, name);
             if (accessor != null)
             {
                 return accessor;
             }
 
-            baseMemberAccessStrategy.Register(obj.GetType());
-            return baseMemberAccessStrategy.GetAccessor(obj, name);
+            baseMemberAccessStrategy.Register(type);
+            return baseMemberAccessStrategy.GetAccessor(type, name);
         }
 
         public void Register(Type type, string name, IMemberAccessor getter)

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="1.0.0-beta-9446" />
+    <PackageReference Include="Fluid.Core" Version="1.0.0-beta-9480" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">

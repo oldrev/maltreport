@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="1.0.0-beta-9446" />
+    <PackageReference Include="Fluid.Core" Version="1.0.0-beta-9480" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
-    <PackageReference Include="NUnit" Version="3.10.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
   </ItemGroup>
 
   <ItemGroup>
