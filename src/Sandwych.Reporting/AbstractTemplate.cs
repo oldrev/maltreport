@@ -59,6 +59,8 @@ namespace Sandwych.Reporting
 
             foreach (var asyncFilter in this.GetInternalAsyncFilters(document))
             {
+
+    //public delegate ValueTask<FluidValue> AsyncFilterDelegate(FluidValue input, FilterArguments arguments, TemplateContext context);
                 templateContext.Filters.AddAsyncFilter(asyncFilter.Name, asyncFilter.ExecuteAsync);
             }
         }
