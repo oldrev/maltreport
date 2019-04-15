@@ -1,4 +1,4 @@
-﻿using Fluid;
+using Fluid;
 using Fluid.Values;
 using System.Threading.Tasks;
 
@@ -16,6 +16,6 @@ namespace Sandwych.Reporting
 
     public interface IAsyncFilter : IFilter
     {
-        Task<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context);
+        ValueTask<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context);
     }
 }
