@@ -13,6 +13,7 @@
     <None Remove="OfficeML\Templates\Template1.doc.xml" />
     <None Remove="OpenDocument\Templates\Template1.odt" />
     <None Remove="OpenDocument\Templates\Template2.ods" />
+    <None Remove="OpenDocument\Templates\Template3.odt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
     <EmbeddedResource Include="OfficeML\Templates\Template1.doc.xml" />
     <EmbeddedResource Include="OpenDocument\Templates\Template1.odt" />
     <EmbeddedResource Include="OpenDocument\Templates\Template2.ods" />
+    <EmbeddedResource Include="OpenDocument\Templates\Template3.odt" />
   </ItemGroup>
 
   <ItemGroup>
