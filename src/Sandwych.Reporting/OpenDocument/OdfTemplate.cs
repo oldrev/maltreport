@@ -9,6 +9,9 @@ using System.Collections.Generic;
 
 namespace Sandwych.Reporting.OpenDocument
 {
+    using System.Xml;
+    using System.Xml.Linq;
+
     public abstract class OdfTemplate : AbstractTemplate<OdfDocument>
     {
         private FluidTemplate _fluidTemplate = null;
@@ -48,10 +51,35 @@ namespace Sandwych.Reporting.OpenDocument
             this.TemplateDocument.Flush();
 
             var mainContentText = this.TemplateDocument.GetEntryTextReader(this.TemplateDocument.MainContentEntryPath).ReadToEnd();
-            if (!FluidTemplate.TryParse(mainContentText, out this._fluidTemplate, out var errors))
+            var sanitizedMainContentText = Sanitize(mainContentText);
+
+            if (!FluidTemplate.TryParse(sanitizedMainContentText, out this._fluidTemplate, out var errors))
             {
                 throw new SyntaxErrorException(errors.Aggregate((x, y) => x + "\n" + y));
             }
+        }
+
+        /// <summary>
+        /// Removes superfluous elements around the interpolation ( {﻿{...}} )
+        ///
+        /// e.g. <text:p text:style-name="P1">{{<text:span text:style-name="T2">so</text:span>.<text:span text:style-name="T2">StringValue</text:span>}}</text:p>
+        ///      is transformed in
+        ///      <text:p text:style-name="P1">{{so.StringValue}}</text:p>
+        /// </summary>
+        /// <param name="mainContentText"></param>
+        /// <returns>Sanitized text</returns>
+        private static string Sanitize(string mainContentText)
+        {
+            var doc = XDocument.Parse(mainContentText);
+
+            // TODO: Is very coarse grained, can probably be refined.
+            foreach (var element in doc.Descendants().Where(
+                x => x.Nodes().Any(y => y.NodeType == XmlNodeType.Text && ((XText)y).Value.Contains("{{"))))
+            {
+                element.Value = element.Value;
+            }
+
+            return doc.ToString();
         }
     }
 }
