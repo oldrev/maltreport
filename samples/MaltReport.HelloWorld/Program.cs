@@ -41,7 +41,7 @@ namespace MaltReport.HelloWorld
                 var outputFile = Path.Combine(desktopDir, "generated.odt");
 
                 result.Save(outputFile);
-                Console.WriteLine("All done, checkout the generated document: {0}", outputFile);
+                Console.WriteLine("All done, checkout the generated document: '{0}'", outputFile);
             }
 
             Console.WriteLine("Press any key to exit.");

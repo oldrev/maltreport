@@ -11,10 +11,11 @@ namespace Sandwych.Reporting.OpenDocument
 {
     using System.Xml;
     using System.Xml.Linq;
+    using Fluid.Parser;
 
     public abstract class OdfTemplate : AbstractTemplate<OdfDocument>
     {
-        private FluidTemplate _fluidTemplate = null;
+        private IFluidTemplate _fluidTemplate = null;
 
         public OdfTemplate(OdfDocument templateDocument) : base(templateDocument)
         {
@@ -39,7 +40,7 @@ namespace Sandwych.Reporting.OpenDocument
             return outputDocument;
         }
 
-        protected override IEnumerable<ISyncFilter> GetInternalSyncFilters(OdfDocument document)
+        protected override IEnumerable<IAsyncFilter> GetInternalAsyncFilters(OdfDocument document)
         {
             yield return new OdfImageFilter(document);
         }
@@ -53,9 +54,10 @@ namespace Sandwych.Reporting.OpenDocument
             var mainContentText = this.TemplateDocument.GetEntryTextReader(this.TemplateDocument.MainContentEntryPath).ReadToEnd();
             var sanitizedMainContentText = Sanitize(mainContentText);
 
-            if (!FluidTemplate.TryParse(sanitizedMainContentText, out this._fluidTemplate, out var errors))
+            var parser = new FluidParser();
+            if (!parser.TryParse(sanitizedMainContentText, out this._fluidTemplate, out var errors))
             {
-                throw new SyntaxErrorException(errors.Aggregate((x, y) => x + "\n" + y));
+                throw new SyntaxErrorException(errors);
             }
         }
 

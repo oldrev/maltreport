@@ -9,11 +9,6 @@ namespace Sandwych.Reporting
         string Name { get; }
     }
 
-    public interface ISyncFilter : IFilter
-    {
-        FluidValue Execute(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context);
-    }
-
     public interface IAsyncFilter : IFilter
     {
         ValueTask<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context);

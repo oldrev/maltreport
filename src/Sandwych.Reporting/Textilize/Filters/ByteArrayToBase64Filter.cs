@@ -1,16 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Fluid;
 using Fluid.Values;
 
 namespace Sandwych.Reporting.Textilize.Filters
 {
-    public struct ByteArrayToBase64Filter : ISyncFilter
+    public struct ByteArrayToBase64Filter : IAsyncFilter
     {
         public string Name => "base64";
 
-        public FluidValue Execute(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
+        public ValueTask<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
         {
             var buf = input.ToObjectValue() as byte[];
 
@@ -20,7 +21,8 @@ namespace Sandwych.Reporting.Textilize.Filters
             }
 
             var base64Str = Convert.ToBase64String(buf);
-            return new StringValue(base64Str);
+            return new ValueTask<FluidValue>(new StringValue(base64Str));
         }
+
     }
 }

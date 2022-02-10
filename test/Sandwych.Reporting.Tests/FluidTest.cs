@@ -30,11 +30,12 @@ namespace Sandwych.Reporting.Tests
             };
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
 
-            Assert.True(FluidTemplate.TryParse(source, out var template));
+            var parser = new FluidParser(); 
+            Assert.True(parser.TryParse(source, out var template));
 
             var context = new Fluid.TemplateContext();
-            context.MemberAccessStrategy.Register(model.GetType()); // Allows any public property of the model to be used
-            context.MemberAccessStrategy.Register(typeof(Item));
+            context.Options.MemberAccessStrategy.Register(model.GetType()); // Allows any public property of the model to be used
+            context.Options.MemberAccessStrategy.Register(typeof(Item));
             context.SetValue("p", model);
             var result = template.Render(context);
 
@@ -55,12 +56,13 @@ namespace Sandwych.Reporting.Tests
                 }
             };
 
+            var parser = new FluidParser();
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
-            Assert.True(FluidTemplate.TryParse(source, out var template));
+            Assert.True(parser.TryParse(source, out var template));
             var context = new Fluid.TemplateContext();
             context.SetValue("p", model);
-            context.MemberAccessStrategy.Register(model.GetType() as Type);
-            context.MemberAccessStrategy.Register(typeof(Item));
+            context.Options.MemberAccessStrategy.Register(model.GetType() as Type);
+            context.Options.MemberAccessStrategy.Register(typeof(Item));
             var result = template.Render(context);
 
             Assert.AreEqual($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);

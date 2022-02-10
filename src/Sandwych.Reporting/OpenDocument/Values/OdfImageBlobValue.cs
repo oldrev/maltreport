@@ -41,7 +41,7 @@ namespace Sandwych.Reporting.OpenDocument.Values
             return true;
         }
 
-        public override double ToNumberValue()
+        public override decimal ToNumberValue()
         {
             return 0;
         }

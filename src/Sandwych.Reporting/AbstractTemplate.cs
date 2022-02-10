@@ -11,7 +11,6 @@ namespace Sandwych.Reporting
         where TDocument : IDocument
     {
         private readonly TDocument _document;
-        private readonly static ISyncFilter[] s_emptySyncFilters = new ISyncFilter[] { };
         private readonly static IAsyncFilter[] s_emptyAsyncFilters = new IAsyncFilter[] { };
 
         public TDocument TemplateDocument => _document;
@@ -34,11 +33,7 @@ namespace Sandwych.Reporting
 
         protected abstract void PrepareTemplate();
 
-        protected static ISyncFilter[] EmptySyncFilters => s_emptySyncFilters;
-
         protected static IAsyncFilter[] EmptyAsyncFilters => s_emptyAsyncFilters;
-
-        protected virtual IEnumerable<ISyncFilter> GetInternalSyncFilters(TDocument document) => s_emptySyncFilters;
 
         protected virtual IEnumerable<IAsyncFilter> GetInternalAsyncFilters(TDocument document) => s_emptyAsyncFilters;
 
@@ -52,16 +47,11 @@ namespace Sandwych.Reporting
 
         private void RegisterInternalFilters(TDocument document, FluidTemplateContext templateContext)
         {
-            foreach (var syncFilter in this.GetInternalSyncFilters(document))
-            {
-                templateContext.Filters.AddFilter(syncFilter.Name, syncFilter.Execute);
-            }
-
             foreach (var asyncFilter in this.GetInternalAsyncFilters(document))
             {
 
     //public delegate ValueTask<FluidValue> AsyncFilterDelegate(FluidValue input, FilterArguments arguments, TemplateContext context);
-                templateContext.Filters.AddAsyncFilter(asyncFilter.Name, asyncFilter.ExecuteAsync);
+                templateContext.Options.Filters.AddFilter(asyncFilter.Name, asyncFilter.ExecuteAsync);
             }
         }
 

@@ -7,13 +7,13 @@ namespace Sandwych.Reporting.Textilize
     {
         public FluidTemplateContext(IReadOnlyDictionary<string, object> context)
         {
-            this.MemberAccessStrategy = new UnsafeMemberAccessStrategy();
+            this.Options.MemberAccessStrategy = UnsafeMemberAccessStrategy.Instance;
             foreach (var pair in context)
             {
-                this.SetValue(pair.Key, Fluid.Values.FluidValue.Create(pair.Value));
+                this.SetValue(pair.Key, Fluid.Values.FluidValue.Create(pair.Value, this.Options));
                 if (pair.Value != null)
                 {
-                    this.MemberAccessStrategy.Register(pair.Value.GetType());
+                    this.Options.MemberAccessStrategy.Register(pair.Value.GetType());
                 }
             }
         }

@@ -40,7 +40,7 @@ namespace Sandwych.Reporting.OpenDocument.Values
             throw new NotSupportedException();
         }
 
-        public override double ToNumberValue()
+        public override decimal ToNumberValue()
         {
             throw new NotSupportedException();
         }
