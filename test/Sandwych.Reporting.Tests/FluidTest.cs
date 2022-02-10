@@ -60,7 +60,7 @@ namespace Sandwych.Reporting.Tests
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
             Assert.True(parser.TryParse(source, out var template));
             var context = new Fluid.TemplateContext();
-            context.SetValue("p", model);
+            context.SetValue("p", Fluid.Values.FluidValue.Create(model, new TemplateOptions()));
             context.Options.MemberAccessStrategy.Register(model.GetType() as Type);
             context.Options.MemberAccessStrategy.Register(typeof(Item));
             var result = template.Render(context);

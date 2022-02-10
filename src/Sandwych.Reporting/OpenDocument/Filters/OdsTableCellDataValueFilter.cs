@@ -19,7 +19,7 @@ namespace Sandwych.Reporting.OpenDocument.Filters
             var formatType = arguments.At(1);
 
 
-            return new ValueTask<FluidValue>(new OdsTableCellDataValue("123-123-123", null));
+            return new ValueTask<FluidValue>(new OdsTableCellDataValue("TODO", null));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Sandwych.Reporting.OpenDocument.Filters
 {
     public class OdfImageFilter : IAsyncFilter
     {
-        private OdfDocument _document;
+        private readonly OdfDocument _document;
 
         public string Name => "image";
 

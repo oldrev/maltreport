@@ -8,13 +8,13 @@ namespace Sandwych.Reporting.OpenDocument.Values
 {
     public class OdsTableCellDataValue : FluidValue, IEquatable<OdsTableCellDataValue>
     {
-        private string CellFormat { get; }
-        private object Value { get; }
+        private readonly string _cellFormat;
+        private readonly object _value;
 
         public OdsTableCellDataValue(string cellFormat, object value)
         {
-            this.CellFormat = cellFormat;
-            this.Value = value;
+            _cellFormat = cellFormat;
+            _value = value;
             this.Type = FluidValues.Array;
         }
 
@@ -24,7 +24,7 @@ namespace Sandwych.Reporting.OpenDocument.Values
         {
             if (other == NilValue.Instance)
             {
-                return this.Value == null;
+                return _value == null;
             }
 
             if (other is OdsTableCellDataValue)
