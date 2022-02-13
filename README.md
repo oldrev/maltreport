@@ -1,4 +1,4 @@
-﻿# MaltReport
+# MaltReport
 
 [![NuGet Stats](https://img.shields.io/nuget/v/MaltReport2.svg)](https://www.nuget.org/packages/MaltReport2) 
 [![Build status](https://ci.appveyor.com/api/projects/status/7kj4cnl64negfdn6/branch/master?svg=true)](https://ci.appveyor.com/project/oldrev/maltreport/branch/master)
@@ -65,18 +65,15 @@ var context = new TemplateContext(data);
 
 ```csharp
 
-using (var stream = File.OpenRead("EmployeesTemplate.odt"))
-{
-    var odt = OdfDocument.LoadFrom(stream);
-    var template = new OdtTemplate(odt);
+var templateDocument = await OdfDocument.LoadFromAsync("EmployeesTemplate.odt");
+var template = new OdtTemplate(templateDocument);
 
-    var result = template.Render(context);
+var result = template.Render(context);
 
-    var desktopDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-    var outputFile = Path.Combine(desktopDir, "generated.odt");
+var desktopDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+var outputFile = Path.Combine(desktopDir, "generated.odt");
 
-    result.Save(outputFile);
-}
+result.Save(outputFile);
 ```
 
 ### Step 4: Check the generated document out:
