@@ -21,12 +21,13 @@ Instead MaltReport manipulates ODT/ODS/XLS/DOC file by itself, so it could be fa
 
 ### Prerequisites
 
-* Visual Studio 2017: This project is written in C# 7.0 using Microsoft Visual Studio 2017 Community Edition.
+* Visual Studio 2022: This project is written in C# 9.0 using Microsoft Visual Studio 2022 Community Edition.
 
 ### Supported Platform
 
-* .NET Framework 4.6.1
-* .NET Standard 1.6+
+* .NET 5.0/6.0
+* .NET Framework 4.6.1+
+* .NET Standard 2.0+
 
 ### Installation
 
@@ -87,10 +88,8 @@ MaltReport is licensed in the MIT license.
 
 Author: Wei "oldrev" Li <oldrev@gmail.com>
 
-* Copyright (C) 2009 Wei "oldrev" Li
-* Copyright (C) 2010-2016 Sandwych Consulting LLC.
-* Copyright (C) 2017-TODAY Binary Stars Technologies LLC. & Contributors
+See `LICENSE.txt` for details.
 
 ## CREDITS
 
-* [Fluid](https://github.com/sebastienros/fluid)
+* [Fluid Template Engine](https://github.com/sebastienros/fluid)
