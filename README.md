@@ -1,8 +1,9 @@
 # MaltReport
 
+[![Linux Build][linux-build-badge]][linux-build]
+[![MacOS Build][macos-build-badge]][macos-build]
+[![Windows Build][windows-build-badge]][windows-build]
 [![NuGet Stats](https://img.shields.io/nuget/v/MaltReport2.svg)](https://www.nuget.org/packages/MaltReport2) 
-[![Build status](https://ci.appveyor.com/api/projects/status/7kj4cnl64negfdn6/branch/master?svg=true)](https://ci.appveyor.com/project/oldrev/maltreport/branch/master)
-[![Build Status](https://travis-ci.org/oldrev/maltreport.svg?branch=master)](https://travis-ci.org/oldrev/maltreport)
 
 
 MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, 
@@ -93,3 +94,12 @@ See `LICENSE.txt` for details.
 ## CREDITS
 
 * [Fluid Template Engine](https://github.com/sebastienros/fluid)
+
+
+
+[linux-build-badge]: https://github.com/oldrev/maltreport/workflows/Linux%20Build/badge.svg
+[linux-build]: https://github.com/oldrev/maltreport/actions?query=workflow%3A%22Linux+Build%22
+[macos-build-badge]: https://github.com/oldrev/maltreport/workflows/MacOS%20Build/badge.svg
+[macos-build]: https://github.com/oldrev/maltreport/actions?query=workflow%3A%22MacOS+Build%22
+[windows-build-badge]: https://github.com/oldrev/maltreport/workflows/Windows%20Build/badge.svg
+[windows-build]: https://github.com/oldrev/maltreport/actions?query=workflow%3A%22Windows+Build%22
