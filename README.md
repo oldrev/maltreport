@@ -1,8 +1,6 @@
 # MaltReport
 
-[![Linux Build][linux-build-badge]][linux-build]
-[![MacOS Build][macos-build-badge]][macos-build]
-[![Windows Build][windows-build-badge]][windows-build]
+[![Build](https://github.com/oldrev/maltreport/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/oldrev/maltreport/actions/workflows/build-and-test.yml)
 [![NuGet Stats](https://img.shields.io/nuget/v/MaltReport2.svg)](https://www.nuget.org/packages/MaltReport2) 
 
 
