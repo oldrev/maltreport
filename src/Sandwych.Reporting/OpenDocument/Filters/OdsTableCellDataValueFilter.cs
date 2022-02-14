@@ -8,7 +8,7 @@ using Sandwych.Reporting.OpenDocument.Values;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
-    public class OdsTableCellDataValueFilter : IAsyncFilter
+    public struct OdsTableCellDataValueFilter : IAsyncFilter
     {
         public string Name => "_rtl_ods_table_cell_datavalue";
 

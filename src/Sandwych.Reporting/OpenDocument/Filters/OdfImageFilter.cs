@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
-    public class OdfImageFilter : IAsyncFilter
+    public struct OdfImageFilter : IAsyncFilter
     {
         private readonly OdfDocument _document;
 
