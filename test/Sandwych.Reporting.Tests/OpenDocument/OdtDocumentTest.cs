@@ -1,6 +1,7 @@
 using System;
 using Sandwych.Reporting.OpenDocument;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.Tests.OpenDocument
 {
@@ -12,11 +13,11 @@ namespace Sandwych.Reporting.Tests.OpenDocument
 
 
         [Test]
-        public void CanLoadOdfDocumentAsTemplate()
+        public async Task CanLoadOdfDocumentAsTemplate()
         {
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
             {
-                var odt = OdfDocument.LoadFrom(stream);
+                var odt = await OdfDocument.LoadFromAsync(stream);
                 var template = new OdtTemplate(odt);
             }
 

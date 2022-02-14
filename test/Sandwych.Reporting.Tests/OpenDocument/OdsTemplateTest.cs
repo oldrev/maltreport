@@ -4,6 +4,7 @@ using System.IO;
 using Sandwych.Reporting.OpenDocument;
 using Sandwych.Reporting.Tests.Common;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.Tests.OpenDocument
 {
@@ -14,22 +15,22 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         private const string Template2OdsName = "Sandwych.Reporting.Tests.OpenDocument.Templates.Template2.ods";
 
         [Test]
-        public void CanCompileOdsDocumentTemplate()
+        public async Task CanCompileOdsDocumentTemplate()
         {
             using (var stream = DocumentTestHelper.GetResource(Template2OdsName))
             {
-                var ods = OdfDocument.LoadFrom(stream);
+                var ods = await OdfDocument.LoadFromAsync(stream);
                 var template = new OdsTemplate(ods);
             }
         }
 
         [Test]
-        public void CanRenderOdsTemplate()
+        public async Task CanRenderOdsTemplate()
         {
             OdfTemplate template;
             using (var stream = DocumentTestHelper.GetResource(Template2OdsName))
             {
-                var ods = OdfDocument.LoadFrom(stream);
+                var ods = await OdfDocument.LoadFromAsync(stream);
                 template = new OdsTemplate(ods);
             }
 
@@ -41,9 +42,9 @@ namespace Sandwych.Reporting.Tests.OpenDocument
             };
             var context = new TemplateContext(values);
 
-            var result = template.Render(context);
+            var result = await template.RenderAsync(context);
 
-            result.Save(Path.Combine(this.TempPath, "ods-out.ods"));
+            await result.SaveAsync(Path.Combine(this.TempPath, "ods-out.ods"));
         }
 
     }

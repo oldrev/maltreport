@@ -5,6 +5,7 @@ using Sandwych.Reporting.OfficeML;
 using Sandwych.Reporting.OpenDocument;
 using Sandwych.Reporting.Tests.Common;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.Tests.OfficeML
 {
@@ -15,7 +16,7 @@ namespace Sandwych.Reporting.Tests.OfficeML
         private const string Template1OdtName = "Sandwych.Reporting.Tests.OfficeML.Templates.Template1.doc.xml";
 
         [Test]
-        public void CanRenderWordMLTemplate()
+        public async Task CanRenderWordMLTemplate()
         {
             WordMLTemplate template;
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
@@ -32,9 +33,9 @@ namespace Sandwych.Reporting.Tests.OfficeML
             };
             var context = new TemplateContext(values);
 
-            var result = template.Render(context);
+            var result = await template.RenderAsync(context);
 
-            result.Save(Path.Combine(this.TempPath, "wordml-out.doc.xml"));
+            await result.SaveAsync(Path.Combine(this.TempPath, "wordml-out.doc.xml"));
         }
 
 

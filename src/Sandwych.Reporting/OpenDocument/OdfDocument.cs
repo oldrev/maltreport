@@ -33,6 +33,11 @@ namespace Sandwych.Reporting.OpenDocument
             _manifestDocument = new Lazy<OdfManifestXmlDocument>(this.LoadManifestDocument, true);
         }
 
+        public async Task FlushAsync()
+        {
+            await Task.Run(this.Flush);
+        }
+
         public void Flush()
         {
             //Before save to other doc, we must save manifest
@@ -40,7 +45,7 @@ namespace Sandwych.Reporting.OpenDocument
             {
                 using (var s = this.OpenOrCreateEntryToWrite(ManifestEntryPath))
                 {
-                    _manifestDocument.Value.Save(s);
+                    _manifestDocument.Value?.Save(s);
                 }
             }
         }
@@ -60,7 +65,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         public override async Task SaveAsync(Stream outStream)
         {
-            this.Flush();
+            await this.FlushAsync();
 
             //ODF 格式约定 mimetype 必须为 ZIP 包里的第一个文件
             if (!this.Entries.ContainsKey(MimeTypeEntryPath))
@@ -113,8 +118,13 @@ namespace Sandwych.Reporting.OpenDocument
         public override void SaveAs(OdfDocument destDoc)
         {
             this.Flush();
-
             base.SaveAs(destDoc);
+        }
+
+        public override async Task SaveAsAsync(OdfDocument destDoc)
+        {
+            await this.FlushAsync();
+            await base.SaveAsAsync(destDoc);
         }
 
         public void WriteMainContentXml(OdfContentXmlDocument xml) =>

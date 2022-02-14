@@ -4,6 +4,7 @@ using System.IO;
 using Sandwych.Reporting.OpenDocument;
 using Sandwych.Reporting.Tests.Common;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.Tests.OpenDocument
 {
@@ -14,22 +15,22 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         private const string Template3OdtName = "Sandwych.Reporting.Tests.OpenDocument.Templates.Template3.odt";
 
         [Test]
-        public void CanCompileOdtDocumentTemplate()
+        public async Task CanCompileOdtDocumentTemplate()
         {
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
             {
-                var odt = OdfDocument.LoadFrom(stream);
+                var odt = await OdfDocument.LoadFromAsync(stream);
                 var template = new OdtTemplate(odt);
             }
         }
 
         [Test]
-        public void CanRenderOdtTemplate()
+        public async Task CanRenderOdtTemplate()
         {
             OdfTemplate template;
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
             {
-                var odt = OdfDocument.LoadFrom(stream);
+                var odt = await OdfDocument.LoadFromAsync(stream);
                 template = new OdtTemplate(odt);
             }
 
@@ -41,19 +42,19 @@ namespace Sandwych.Reporting.Tests.OpenDocument
             };
             var context = new TemplateContext(values);
 
-            var result = template.Render(context);
+            var result = await template.RenderAsync(context);
 
-            result.Save(Path.Combine(this.TempPath, "odt-out.odt"));
+            await result.SaveAsync(Path.Combine(this.TempPath, "odt-out.odt"));
         }
 
 
         [Test]
-        public void CanRenderOdt3Template()
+        public async Task CanRenderOdt3Template()
         {
             OdfTemplate template;
             using (var stream = DocumentTestHelper.GetResource(Template3OdtName))
             {
-                var odt = OdfDocument.LoadFrom(stream);
+                var odt = await OdfDocument.LoadFromAsync(stream);
                 template = new OdtTemplate(odt);
             }
 
@@ -65,9 +66,9 @@ namespace Sandwych.Reporting.Tests.OpenDocument
                          };
             var context = new TemplateContext(values);
 
-            var result = template.Render(context);
+            var result = await template.RenderAsync(context);
 
-            result.Save(Path.Combine(this.TempPath, "odt-out.odt"));
+            await result.SaveAsync(Path.Combine(this.TempPath, "odt-out.odt"));
         }
     }
 }

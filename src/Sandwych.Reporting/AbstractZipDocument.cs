@@ -127,7 +127,10 @@ namespace Sandwych.Reporting
             }
         }
 
-        protected static void CopyStream(Stream src, Stream dest)
+        protected static void CopyStream(Stream src, Stream dest) =>
+            Task.Run(() => CopyStreamAsync(src, dest)).Wait();
+
+        protected static async Task CopyStreamAsync(Stream src, Stream dest)
         {
             if (src == null)
             {
@@ -142,13 +145,16 @@ namespace Sandwych.Reporting
             var bufSize = 1024 * 8;
             var buf = new byte[bufSize];
             int nRead = 0;
-            while ((nRead = src.Read(buf, 0, bufSize)) > 0)
+            while ((nRead = await src.ReadAsync(buf, 0, bufSize)) > 0)
             {
-                dest.Write(buf, 0, nRead);
+                await dest.WriteAsync(buf, 0, nRead);
             }
         }
 
-        public virtual void SaveAs(TDocument destDoc)
+        public virtual void SaveAs(TDocument destDoc) =>
+            Task.Run(() => this.SaveAsAsync(destDoc)).Wait();
+
+        public virtual async Task SaveAsAsync(TDocument destDoc)
         {
             if (destDoc == null)
             {
@@ -161,7 +167,7 @@ namespace Sandwych.Reporting
                 using (var inStream = this.OpenEntryToRead(item))
                 using (var outStream = destDoc.OpenOrCreateEntryToWrite(item))
                 {
-                    CopyStream(inStream, outStream);
+                    await CopyStreamAsync(inStream, outStream);
                 }
             }
         }

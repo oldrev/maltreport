@@ -34,10 +34,10 @@ var templateDocument = await OdfDocument.LoadFromAsync("EmployeesTemplate.odt");
 var template = new OdtTemplate(templateDocument);
 
 // Rendering step
-var result = template.Render(context);
+var result = await template.RenderAsync(context);
 
 // Got result:
-result.Save(outputFile);
+await result.SaveAsync(outputFile);
 Console.WriteLine("All done, checkout the generated document: '{0}'", outputFile);
 
 Console.WriteLine("Press any key to exit.");

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Fluid;
 using NUnit.Framework;
 
@@ -16,7 +17,7 @@ namespace Sandwych.Reporting.Tests
     {
 
         [Test]
-        public void FluidShouldWorksFine()
+        public async Task FluidShouldWorksFine()
         {
             var model = new
             {
@@ -37,13 +38,13 @@ namespace Sandwych.Reporting.Tests
             context.Options.MemberAccessStrategy.Register(model.GetType()); // Allows any public property of the model to be used
             context.Options.MemberAccessStrategy.Register(typeof(Item));
             context.SetValue("p", model);
-            var result = template.Render(context);
+            var result = await template.RenderAsync(context);
 
             Assert.AreEqual($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
         }
 
         [Test]
-        public void FluidShouldWorksWithDynamicObject()
+        public async Task FluidShouldWorksWithDynamicObject()
         {
             dynamic model = new
             {
@@ -63,7 +64,7 @@ namespace Sandwych.Reporting.Tests
             context.SetValue("p", Fluid.Values.FluidValue.Create(model, new TemplateOptions()));
             context.Options.MemberAccessStrategy.Register(model.GetType() as Type);
             context.Options.MemberAccessStrategy.Register(typeof(Item));
-            var result = template.Render(context);
+            var result = await template.RenderAsync(context);
 
             Assert.AreEqual($"Hello {model.Str1} {model.Str2} [{model.Numbers[0].Number}{model.Numbers[1].Number}]", result);
 
