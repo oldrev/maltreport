@@ -54,7 +54,7 @@ namespace Sandwych.Reporting.OfficeML
             foreach (XmlElement phe in placeholders)
             {
                 var attr = phe.GetAttribute(ExcelMLDocument.HRefAttribute);
-                var value = attr.Substring(5).Trim('/', ' ');
+                var value = attr.Substring(5).Trim('/').Trim();
 
                 if (value.Length < 2)
                 {
