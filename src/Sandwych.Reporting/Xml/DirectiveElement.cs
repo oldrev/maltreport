@@ -1,4 +1,4 @@
-﻿//Creation Time: 2010-08-20
+//Creation Time: 2010-08-20
 using System.Diagnostics;
 using System.Xml;
 
@@ -7,7 +7,7 @@ namespace Sandwych.Reporting.Xml
     /// <summary>
     /// VTL Directive XML Element
     /// </summary>
-    internal sealed class DirectiveElement : XmlElement
+    public class DirectiveElement : XmlElement
     {
         public const string ElementName = "report-directive";
 
