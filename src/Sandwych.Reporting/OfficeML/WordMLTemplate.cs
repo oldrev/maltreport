@@ -52,7 +52,7 @@ namespace Sandwych.Reporting.OfficeML
             {
                 var attr = phe.GetAttribute(WordMLDocument.DestAttribute);
                 var value = UrlUtility.UrlDecode(attr, Encoding.UTF8);
-                value = value.Substring(WellknownConstants.DtlProtocolPrefix.Length).Trim('/', ' ');
+                value = value.Substring(WellknownConstants.DtlProtocolPrefix.Length).Trim('/').Trim();
 
                 if (value.Length < 2)
                 {

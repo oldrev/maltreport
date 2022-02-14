@@ -104,7 +104,7 @@ namespace Sandwych.Reporting.OpenDocument
             foreach (XmlNode node in drawFrameElements)
             {
                 var nameAttr = node.Attributes["draw:name"];
-                if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value) && nameAttr.Value.Trim(' ').StartsWith(WellknownConstants.DtlReferenceChar))
+                if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value) && nameAttr.Value.Trim().StartsWith(WellknownConstants.DtlReferenceChar))
                 {
                     dtlDrawFrames.Add(node);
                 }
@@ -136,7 +136,7 @@ namespace Sandwych.Reporting.OpenDocument
             foreach (XmlElement ta in textAnchors)
             {
                 var href = ta.GetAttribute("xlink:href");
-                if (href != null && href.Trim(' ', '/').StartsWith(WellknownConstants.DtlProtocolPrefix))
+                if (href != null && href.Trim('/').Trim().StartsWith(WellknownConstants.DtlProtocolPrefix))
                 {
                     yield return ta;
                 }
@@ -222,7 +222,7 @@ namespace Sandwych.Reporting.OpenDocument
             var nameAttr = drawFrameNode.Attributes["draw:name"];
             var drawImageNode = drawFrameNode.SelectSingleNode("//draw:image", nsmanager);
             drawFrameNode.RemoveChild(drawImageNode);
-            var userExpr = nameAttr.Value.Trim(' ').Substring(1);
+            var userExpr = nameAttr.Value.Trim().Substring(1);
             var fluidExpr = "{{ " + userExpr + " }}";
             drawFrameNode.InnerText = fluidExpr;
         }
