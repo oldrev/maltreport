@@ -17,9 +17,6 @@ namespace Sandwych.Reporting
 
         public IDictionary<string, byte[]> Entries => _documentEntries;
 
-        public override void Load(Stream inStream) =>
-            Task.Run(() => this.LoadAsync(inStream)).Wait();
-
         public override async Task LoadAsync(Stream inStream)
         {
             if (inStream == null)
@@ -62,9 +59,6 @@ namespace Sandwych.Reporting
                 }
             }
         }
-
-        public override void Save(Stream outStream) =>
-            Task.Run(() => this.SaveAsync(outStream)).Wait();
 
         protected async Task AddZipEntryAsync(ZipArchive archive, string name)
         {
@@ -116,15 +110,6 @@ namespace Sandwych.Reporting
                 throw new ArgumentNullException(nameof(entryPath));
             }
             return this._documentEntries.ContainsKey(entryPath);
-        }
-
-        public override byte[] AsBuffer()
-        {
-            using (var ms = new MemoryStream())
-            {
-                this.Save(ms);
-                return ms.ToArray();
-            }
         }
 
         protected static void CopyStream(Stream src, Stream dest) =>

@@ -9,8 +9,7 @@ namespace Sandwych.Reporting
     public interface IDocument
     {
         bool IsNew { get; }
-        byte[] AsBuffer();
-        void Save(Stream outStream);
         Task SaveAsync(Stream outStream);
+        Task LoadAsync(Stream inStream);
     }
 }

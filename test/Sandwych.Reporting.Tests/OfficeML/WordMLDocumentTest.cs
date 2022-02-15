@@ -21,7 +21,7 @@ namespace Sandwych.Reporting.Tests.OfficeML
             WordMLTemplate template;
             using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
             {
-                var templateDocument = WordMLDocument.LoadFrom(stream);
+                var templateDocument = await WordMLDocument.LoadFromAsync(stream);
                 template = new WordMLTemplate(templateDocument);
             }
 

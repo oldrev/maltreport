@@ -85,9 +85,6 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        public override void Save(Stream outStream) =>
-            Task.Run(() => this.SaveAsync(outStream)).Wait();
-
         public DocumentBlobEntry AddOrGetImage(Blob imageBlob)
         {
             if (imageBlob == null)

@@ -24,35 +24,19 @@ namespace Sandwych.Reporting
 
         public abstract XmlNamespaceManager CreateXmlNamespaceManager(XmlDocument xmlDoc);
 
-        public override byte[] AsBuffer()
-        {
-            using (var ms = new MemoryStream())
-            {
-                _xmlDocument.Save(ms);
-                return ms.ToArray();
-            }
-        }
-
-        public override void Load(Stream inStream)
-        {
-            _xmlDocument.Load(inStream);
-            _nsManager = this.CreateXmlNamespaceManager(_xmlDocument);
-            this.OnLoaded();
-        }
-
         public override async Task LoadAsync(Stream inStream)
         {
-            await Task.Factory.StartNew(() => this.Load(inStream));
-        }
-
-        public override void Save(Stream outStream)
-        {
-            _xmlDocument.Save(outStream);
+            await Task.Factory.StartNew(() =>
+            {
+                _xmlDocument.Load(inStream);
+                _nsManager = this.CreateXmlNamespaceManager(_xmlDocument);
+                this.OnLoaded();
+            });
         }
 
         public override async Task SaveAsync(Stream outStream)
         {
-            await Task.Factory.StartNew(() => this.Save(outStream));
+            await Task.Factory.StartNew(() => _xmlDocument.Save(outStream));
         }
 
         public static TDocument LoadFromText(string xml)
