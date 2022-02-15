@@ -58,6 +58,12 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
+        public void RemoveManifestedFileEntry(string fullPath)
+        {
+            this._manifestDocument.Value.RemoveFileEntry(fullPath);
+            this.Entries.Remove(fullPath);
+        }
+
         public override async Task LoadAsync(Stream inStream)
         {
             await base.LoadAsync(inStream);
@@ -85,7 +91,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        public DocumentBlobEntry AddOrGetImage(Blob imageBlob)
+        public DocumentBlobEntry AddOrGetImageEntry(Blob imageBlob)
         {
             if (imageBlob == null)
             {

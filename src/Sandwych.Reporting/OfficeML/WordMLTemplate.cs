@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text.Encodings.Web;
 using Sandwych.Reporting.OfficeML.Filters;
+using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.OfficeML
 {
@@ -39,7 +40,7 @@ namespace Sandwych.Reporting.OfficeML
             return WordMLDocument.LoadFromText(sb.ToString());
         }
 
-        protected override IEnumerable<IAsyncFilter> GetInternalAsyncFilters(WordMLDocument document)
+        protected override IEnumerable<IFluidFilter> GetInternalFilters(WordMLDocument document)
         {
             yield return new WordMLImageFilter();
         }

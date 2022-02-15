@@ -27,10 +27,7 @@ namespace Sandwych.Reporting.OpenDocument.Xml
         public void CreatePicturesEntryElement()
         {
             //看看是否有 "Pictures/" 这一项
-            var xpath = string.Format(
-                CultureInfo.InvariantCulture,
-                @"/manifest:manifest/manifest:file-entry[@manifest:full-path=""{0}""]", PicturesFullPath);
-            var picturesEntryNode = this.SelectSingleNode(xpath, this.NamespaceManager);
+            var picturesEntryNode = this.GetFileEntryNodeOrDefaultByFullPath(PicturesFullPath);
 
             if (picturesEntryNode == null)
             {
@@ -40,6 +37,20 @@ namespace Sandwych.Reporting.OpenDocument.Xml
                 picturesEntryElement.SetAttribute("full-path", OdfNamespaceManager.ManifestNamespace, PicturesFullPath);
                 manifestElement.AppendChild(picturesEntryElement);
             }
+        }
+
+        public void RemoveFileEntry(string fullPath)
+        {
+            if (fullPath == null)
+            {
+                throw new ArgumentNullException(nameof(fullPath));
+            }
+            var node = this.GetFileEntryNodeOrDefaultByFullPath(fullPath);
+            if(node == null)
+            {
+                throw new FileNotFoundException(fullPath);
+            }
+            node.ParentNode.RemoveChild(node);
         }
 
         /// <summary>
@@ -77,5 +88,15 @@ namespace Sandwych.Reporting.OpenDocument.Xml
             var mediaType = @"image/" + extensionName.ToLowerInvariant();
             this.AppendFileEntry(mediaType, fullPath);
         }
+
+        private XmlNode GetFileEntryNodeOrDefaultByFullPath(string fullPath)
+        {
+
+            var xpath = string.Format(
+                CultureInfo.InvariantCulture,
+                @"/manifest:manifest/manifest:file-entry[@manifest:full-path=""{0}""]", fullPath);
+            return this.SelectSingleNode(xpath, this.NamespaceManager);
+        }
+
     }
 }

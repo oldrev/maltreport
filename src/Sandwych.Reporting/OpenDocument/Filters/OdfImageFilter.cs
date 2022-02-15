@@ -1,23 +1,26 @@
 using Fluid;
 using Fluid.Values;
 using Sandwych.Reporting.OpenDocument.Values;
+using Sandwych.Reporting.Textilize;
 using System;
 using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
-    public struct OdfImageFilter : IAsyncFilter
+    public struct OdfImageFilter : IFluidFilter
     {
         private readonly OdfDocument _document;
 
-        public string Name => "image";
+        public const string FilterName = "__odf-image-filter";
+
+        public string Name => FilterName;
 
         public OdfImageFilter(OdfDocument odfDoc)
         {
             this._document = odfDoc;
         }
 
-        public ValueTask<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
+        public ValueTask<FluidValue> InvokeAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
         {
             var blob = input.ToObjectValue() as ImageBlob;
             if (blob == null)
@@ -25,7 +28,9 @@ namespace Sandwych.Reporting.OpenDocument.Filters
                 throw new NotSupportedException($"The property of your image must be a 'ImageBlob' type");
             }
 
-            return new ValueTask<FluidValue>(new OdfImageBlobValue(_document, blob));
+            var blobEntry = _document.AddOrGetImageEntry(blob);
+
+            return new ValueTask<FluidValue>(new OdfImageBlobValue(blobEntry));
         }
 
     }

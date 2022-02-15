@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using Fluid;
 using Fluid.Values;
 using Sandwych.Reporting.OpenDocument.Values;
+using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
-    public struct OdsTableCellDataValueFilter : IAsyncFilter
+    public struct OdsTableCellDataValueFilter : IFluidFilter
     {
         public string Name => "_rtl_ods_table_cell_datavalue";
 
-        public ValueTask<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
+        public ValueTask<FluidValue> InvokeAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
         {
             //TODO check arguments
             var cellType = arguments.At(0);

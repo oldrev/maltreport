@@ -40,7 +40,7 @@ namespace Sandwych.Reporting.OpenDocument
             return outputDocument;
         }
 
-        protected override IEnumerable<IAsyncFilter> GetInternalAsyncFilters(OdfDocument document)
+        protected override IEnumerable<IFluidFilter> GetInternalFilters(OdfDocument document)
         {
             yield return new OdfImageFilter(document);
         }

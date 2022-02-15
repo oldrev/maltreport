@@ -103,6 +103,12 @@ namespace Sandwych.Reporting
 
         public void SetEntryBuffer(string entryPath, byte[] buffer) => _documentEntries[entryPath] = buffer;
 
+        public async Task SetEntryAsync(string entryPath, Stream inStream)
+        {
+            var buf = await inStream.ReadAllBytesAsync();
+            this.SetEntryBuffer(entryPath, buf);
+        }
+
         public bool EntryExists(string entryPath)
         {
             if (string.IsNullOrEmpty(entryPath))

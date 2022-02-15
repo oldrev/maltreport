@@ -26,9 +26,9 @@ namespace Sandwych.Reporting.OpenDocument
                 return _value == null;
             }
 
-            if (other is OdfImageBlobValue otherImageValue)
+            if (other is FluidBlobValue otherBlobValue)
             {
-                return otherImageValue.Blob.Equals(this.Blob);
+                return otherBlobValue.Blob.Equals(this.Blob);
             }
 
             return false;

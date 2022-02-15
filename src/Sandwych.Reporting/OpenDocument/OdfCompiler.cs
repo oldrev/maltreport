@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Sandwych.Reporting.OpenDocument.Xml;
+using Sandwych.Reporting.OpenDocument.Filters;
 
 namespace Sandwych.Reporting.OpenDocument
 {
@@ -25,7 +26,7 @@ namespace Sandwych.Reporting.OpenDocument
             var xml = template.ReadMainContentXml();
 
             // First pass, process all simple tags
-            PreprocessElements(xml);
+            PreprocessElements(template, xml);
 
             // Second pass, process all looping table things
             ProcessTableRows(xml);
@@ -77,7 +78,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        private static void PreprocessElements(OdfContentXmlDocument xml)
+        private static void PreprocessElements(OdfDocument template, OdfContentXmlDocument xml)
         {
             var placeholders = FindAllPlaceholderElements(xml).ToArray();
 
@@ -112,7 +113,7 @@ namespace Sandwych.Reporting.OpenDocument
 
             foreach (var node in dtlDrawFrames)
             {
-                ProcessDrawFrameElement(node, xml.NamespaceManager);
+                ProcessDrawFrameElement(template, node, xml.NamespaceManager);
             }
         }
 
@@ -212,7 +213,7 @@ namespace Sandwych.Reporting.OpenDocument
             }
         }
 
-        private static void ProcessDrawFrameElement(XmlNode drawFrameNode, XmlNamespaceManager nsmanager)
+        private static void ProcessDrawFrameElement(OdfDocument template, XmlNode drawFrameNode, XmlNamespaceManager nsmanager)
         {
             if (drawFrameNode.Name != OdfDocument.DrawFrameElement)
             {
@@ -221,10 +222,14 @@ namespace Sandwych.Reporting.OpenDocument
 
             var nameAttr = drawFrameNode.Attributes["draw:name"];
             var drawImageNode = drawFrameNode.SelectSingleNode("//draw:image", nsmanager);
-            drawFrameNode.RemoveChild(drawImageNode);
             var userExpr = nameAttr.Value.Trim().Substring(1);
-            var fluidExpr = "{{ " + userExpr + " }}";
-            drawFrameNode.InnerText = fluidExpr;
+            var fluidExpr = "{{ " + userExpr + " | " + OdfImageFilter.FilterName + " }}";
+            nameAttr.Value = string.Empty;
+
+            template.RemoveManifestedFileEntry(drawImageNode.Attributes["xlink:href"].Value);
+
+            drawFrameNode.RemoveChild(drawImageNode);
+            drawFrameNode.InnerText = drawFrameNode.InnerText + fluidExpr;
         }
     }
 }

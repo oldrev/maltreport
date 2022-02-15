@@ -19,12 +19,12 @@ var employees = new Employee[]
     new Employee{ Name = "Andy Bernard", JobTitle = "Salesman" },
 };
 
-var image = new ImageBlob("jpeg", File.ReadAllBytes("Image.jpeg"));
+var myImage = new ImageBlob("jpeg", File.ReadAllBytes("Image.jpeg"));
 
 var data = new Dictionary<string, object>()
 {
     { "employees", employees },
-    { "image", image },
+    { "myImage", myImage },
 };
 
 var context = new TemplateContext(data);

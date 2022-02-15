@@ -7,11 +7,11 @@ using Fluid.Values;
 
 namespace Sandwych.Reporting.Textilize.Filters
 {
-    public struct ByteArrayToBase64Filter : IAsyncFilter
+    public struct ByteArrayToBase64Filter : IFluidFilter
     {
         public string Name => "base64";
 
-        public ValueTask<FluidValue> ExecuteAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
+        public ValueTask<FluidValue> InvokeAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
         {
             var buf = input.ToObjectValue() as byte[];
 

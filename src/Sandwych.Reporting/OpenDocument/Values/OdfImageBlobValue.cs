@@ -8,29 +8,20 @@ namespace Sandwych.Reporting.OpenDocument.Values
 {
     public class OdfImageBlobValue : FluidValue
     {
-        private readonly OdfDocument _document;
-        private readonly ImageBlob _value;
+        public DocumentBlobEntry DocumentBlobEntry { get; }
 
-        public ImageBlob Blob => _value;
-
-        public OdfImageBlobValue(OdfDocument document, ImageBlob blob)
+        public OdfImageBlobValue(DocumentBlobEntry entry)
         {
-            _document = document;
-            _value = blob;
+            this.DocumentBlobEntry = entry;
         }
 
         public override FluidValues Type => throw new NotImplementedException();
 
         public override bool Equals(FluidValue other)
         {
-            if (other == NilValue.Instance)
-            {
-                return _value == null;
-            }
-
             if (other is OdfImageBlobValue otherImageValue)
             {
-                return otherImageValue.Blob.Equals(this.Blob);
+                return otherImageValue.DocumentBlobEntry.Equals(this.DocumentBlobEntry.Blob);
             }
 
             return false;
@@ -48,7 +39,7 @@ namespace Sandwych.Reporting.OpenDocument.Values
 
         public override object ToObjectValue()
         {
-            return _value;
+            return this.DocumentBlobEntry.Blob;
         }
 
         public override string ToStringValue()
@@ -58,13 +49,9 @@ namespace Sandwych.Reporting.OpenDocument.Values
 
         public override void WriteTo(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
-            var blobEntry = _document.AddOrGetImage(_value);
-            this.WriteDrawImageElement(writer, blobEntry.EntryPath);
-        }
-
-        private void WriteDrawImageElement(TextWriter tw, string imagePath)
-        {
-            tw.Write($"<draw:image xlink:href=\"{imagePath}\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\" />");
+            var imagePath = this.DocumentBlobEntry.EntryPath;
+            writer.Write(
+                $"<draw:image xlink:href=\"{imagePath}\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\" />");
         }
     }
 }
