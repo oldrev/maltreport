@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -24,19 +25,19 @@ namespace Sandwych.Reporting
 
         public abstract XmlNamespaceManager CreateXmlNamespaceManager(XmlDocument xmlDoc);
 
-        public override async Task LoadAsync(Stream inStream)
+        public override async Task LoadAsync(Stream inStream, CancellationToken ct = default)
         {
             await Task.Factory.StartNew(() =>
             {
                 _xmlDocument.Load(inStream);
                 _nsManager = this.CreateXmlNamespaceManager(_xmlDocument);
                 this.OnLoaded();
-            });
+            }, ct);
         }
 
-        public override async Task SaveAsync(Stream outStream)
+        public override async Task SaveAsync(Stream outStream, CancellationToken ct = default)
         {
-            await Task.Factory.StartNew(() => _xmlDocument.Save(outStream));
+            await Task.Factory.StartNew(() => _xmlDocument.Save(outStream), ct);
         }
 
         public static TDocument LoadFromText(string xml)

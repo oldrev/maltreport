@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Sandwych.Reporting.OpenDocument.Xml;
 
@@ -33,9 +34,9 @@ namespace Sandwych.Reporting.OpenDocument
             _manifestDocument = new Lazy<OdfManifestXmlDocument>(this.LoadManifestDocument, true);
         }
 
-        public async Task FlushAsync()
+        public async Task FlushAsync(CancellationToken ct = default)
         {
-            await Task.Run(this.Flush);
+            await Task.Run(() => this.Flush(), ct);
         }
 
         public void Flush()
@@ -64,14 +65,14 @@ namespace Sandwych.Reporting.OpenDocument
             this.Entries.Remove(fullPath);
         }
 
-        public override async Task LoadAsync(Stream inStream)
+        public override async Task LoadAsync(Stream inStream, CancellationToken ct = default)
         {
-            await base.LoadAsync(inStream);
+            await base.LoadAsync(inStream, ct);
         }
 
-        public override async Task SaveAsync(Stream outStream)
+        public override async Task SaveAsync(Stream outStream, CancellationToken ct = default)
         {
-            await this.FlushAsync();
+            await this.FlushAsync(ct);
 
             //ODF 格式约定 mimetype 必须为 ZIP 包里的第一个文件
             if (!this.Entries.ContainsKey(MimeTypeEntryPath))
@@ -81,12 +82,12 @@ namespace Sandwych.Reporting.OpenDocument
 
             using (var zip = new ZipArchive(outStream, ZipArchiveMode.Create))
             {
-                await this.AddZipEntryAsync(zip, MimeTypeEntryPath);
+                await this.AddZipEntryAsync(zip, MimeTypeEntryPath, ct);
                 this.Entries.Remove(MimeTypeEntryPath);
 
                 foreach (var item in this.Entries)
                 {
-                    await this.AddZipEntryAsync(zip, item.Key);
+                    await this.AddZipEntryAsync(zip, item.Key, ct);
                 }
             }
         }

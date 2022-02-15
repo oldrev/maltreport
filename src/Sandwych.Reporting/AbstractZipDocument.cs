@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -17,7 +18,7 @@ namespace Sandwych.Reporting
 
         public IDictionary<string, byte[]> Entries => _documentEntries;
 
-        public override async Task LoadAsync(Stream inStream)
+        public override async Task LoadAsync(Stream inStream, CancellationToken ct = default)
         {
             if (inStream == null)
             {
@@ -36,7 +37,7 @@ namespace Sandwych.Reporting
                 {
                     using (var zs = ze.Open())
                     {
-                        var buf = await zs.ReadAllBytesAsync();
+                        var buf = await zs.ReadAllBytesAsync(ct);
                         if (buf.Length != ze.Length)
                         {
                             throw new IOException("Failed to read zip entry: " + ze.FullName);
@@ -49,7 +50,7 @@ namespace Sandwych.Reporting
             this.OnLoaded();
         }
 
-        public override async Task SaveAsync(Stream outStream)
+        public override async Task SaveAsync(Stream outStream, CancellationToken ct = default)
         {
             using (var zip = new ZipArchive(outStream, ZipArchiveMode.Create))
             {
@@ -60,7 +61,7 @@ namespace Sandwych.Reporting
             }
         }
 
-        protected async Task AddZipEntryAsync(ZipArchive archive, string name)
+        protected async Task AddZipEntryAsync(ZipArchive archive, string name, CancellationToken ct = default)
         {
             Debug.Assert(archive != null);
             Debug.Assert(!string.IsNullOrEmpty(name));
@@ -90,7 +91,7 @@ namespace Sandwych.Reporting
             var zae = archive.CreateEntry(name, cl);
             using (var zs = zae.Open())
             {
-                await zs.WriteAsync(data, 0, data.Length);
+                await zs.WriteAsync(data, 0, data.Length, ct);
             }
         }
 
