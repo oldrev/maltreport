@@ -1,10 +1,10 @@
-﻿//Creation Time: 2010-08-20
+//Creation Time: 2010-08-20
 using System.Diagnostics;
 using System.Xml;
 
 namespace Sandwych.Reporting.Xml
 {
-    internal sealed class ReferenceElement : XmlElement
+    public class ReferenceElement : XmlElement
     {
         public const string ElementName = "report-reference";
         private string expression = null;
