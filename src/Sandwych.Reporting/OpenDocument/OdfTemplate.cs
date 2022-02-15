@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace Sandwych.Reporting.OpenDocument
 {
+    using System.Threading;
     using System.Xml;
     using System.Xml.Linq;
     using Fluid.Parser;
@@ -22,10 +23,10 @@ namespace Sandwych.Reporting.OpenDocument
 
         }
 
-        public override async Task<OdfDocument> RenderAsync(TemplateContext context)
+        public override async Task<OdfDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
             var outputDocument = new OdfDocument();
-            await this.TemplateDocument.SaveAsAsync(outputDocument);
+            await this.TemplateDocument.SaveAsAsync(outputDocument, ct);
 
             var mainContentTemplate = this.TemplateDocument.ReadTextEntry(this.TemplateDocument.MainContentEntryPath);
 

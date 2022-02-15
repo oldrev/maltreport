@@ -125,10 +125,10 @@ namespace Sandwych.Reporting.OpenDocument
             base.SaveAs(destDoc);
         }
 
-        public override async Task SaveAsAsync(OdfDocument destDoc)
+        public override async Task SaveAsAsync(OdfDocument destDoc, CancellationToken ct = default)
         {
-            await this.FlushAsync();
-            await base.SaveAsAsync(destDoc);
+            await this.FlushAsync(ct);
+            await base.SaveAsAsync(destDoc, ct);
         }
 
         public void WriteMainContentXml(OdfContentXmlDocument xml) =>

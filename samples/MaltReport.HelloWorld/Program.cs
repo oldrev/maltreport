@@ -19,7 +19,7 @@ var employees = new Employee[]
     new Employee{ Name = "Andy Bernard", JobTitle = "Salesman" },
 };
 
-var myImage = new ImageBlob("jpeg", File.ReadAllBytes("Image.jpeg"));
+var myImage = new ImageBlob("jpeg", await File.ReadAllBytesAsync("Image.jpeg"));
 
 var data = new Dictionary<string, object>()
 {

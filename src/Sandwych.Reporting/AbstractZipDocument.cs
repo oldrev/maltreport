@@ -122,7 +122,7 @@ namespace Sandwych.Reporting
         protected static void CopyStream(Stream src, Stream dest) =>
             Task.Run(() => CopyStreamAsync(src, dest)).Wait();
 
-        protected static async Task CopyStreamAsync(Stream src, Stream dest)
+        protected static async Task CopyStreamAsync(Stream src, Stream dest, CancellationToken ct = default)
         {
             if (src == null)
             {
@@ -139,14 +139,18 @@ namespace Sandwych.Reporting
             int nRead = 0;
             while ((nRead = await src.ReadAsync(buf, 0, bufSize)) > 0)
             {
-                await dest.WriteAsync(buf, 0, nRead);
+                if(ct != default && ct.IsCancellationRequested)
+                {
+                    ct.ThrowIfCancellationRequested();
+                }
+                await dest.WriteAsync(buf, 0, nRead, ct);
             }
         }
 
         public virtual void SaveAs(TDocument destDoc) =>
             Task.Run(() => this.SaveAsAsync(destDoc)).Wait();
 
-        public virtual async Task SaveAsAsync(TDocument destDoc)
+        public virtual async Task SaveAsAsync(TDocument destDoc, CancellationToken ct = default)
         {
             if (destDoc == null)
             {
@@ -159,7 +163,7 @@ namespace Sandwych.Reporting
                 using (var inStream = this.OpenEntryToRead(item))
                 using (var outStream = destDoc.OpenOrCreateEntryToWrite(item))
                 {
-                    await CopyStreamAsync(inStream, outStream);
+                    await CopyStreamAsync(inStream, outStream, ct);
                 }
             }
         }

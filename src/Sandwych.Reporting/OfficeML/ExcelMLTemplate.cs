@@ -10,6 +10,7 @@ using Sandwych.Reporting.Xml;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text.Encodings.Web;
+using System.Threading;
 
 namespace Sandwych.Reporting.OfficeML
 {
@@ -27,7 +28,7 @@ namespace Sandwych.Reporting.OfficeML
             this.ProcessPlaceholders();
         }
 
-        public override async Task<ExcelMLDocument> RenderAsync(TemplateContext context)
+        public override async Task<ExcelMLDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
             var fluidContext = this.CreateFluidTemplateContext(null, context);
             var sb = new StringBuilder();

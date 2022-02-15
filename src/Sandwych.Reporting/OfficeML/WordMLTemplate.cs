@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Text.Encodings.Web;
 using Sandwych.Reporting.OfficeML.Filters;
 using Sandwych.Reporting.Textilize;
+using System.Threading;
 
 namespace Sandwych.Reporting.OfficeML
 {
@@ -29,7 +30,7 @@ namespace Sandwych.Reporting.OfficeML
             this.ProcessPlaceholders();
         }
 
-        public override async Task<WordMLDocument> RenderAsync(TemplateContext context)
+        public override async Task<WordMLDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
             var fluidContext = this.CreateFluidTemplateContext(null, context);
             var sb = new StringBuilder();

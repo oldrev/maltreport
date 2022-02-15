@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Sandwych.Reporting.Textilize;
 
@@ -29,7 +30,7 @@ namespace Sandwych.Reporting
         public TDocument Render(TemplateContext context) =>
             Task.Run(() => this.RenderAsync(context)).Result;
 
-        public abstract Task<TDocument> RenderAsync(TemplateContext context);
+        public abstract Task<TDocument> RenderAsync(TemplateContext context, CancellationToken ct = default);
 
         protected abstract void PrepareTemplate();
 
