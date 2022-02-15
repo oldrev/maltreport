@@ -12,10 +12,10 @@ var outputFile = Path.Combine(desktopDir, "generated.odt");
 
 var employees = new Employee[]
 {
-    new Employee{ Name = "Micheal Scott", JobTitle = "Branch Manager" },
+    new Employee{ Name = "Micheal Scott", JobTitle = "Regional Manager" },
     new Employee{ Name = "Pam Beesly", JobTitle = "Office Administrator" },
     new Employee{ Name = "Jim Halpert", JobTitle = "Salesman" },
-    new Employee{ Name = "Dwight Schrute", JobTitle = "Salesman" },
+    new Employee{ Name = "Dwight Schrute", JobTitle = "Assistant to the Regional Manager" },
     new Employee{ Name = "Andy Bernard", JobTitle = "Salesman" },
 };
 
