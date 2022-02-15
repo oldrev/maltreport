@@ -68,11 +68,11 @@ namespace Sandwych.Reporting.OpenDocument.Xml
         }
 
         /// <summary>
-        /// 添加一个图片文件条目
+        /// Add a image entry to Odf's manifest
         /// </summary>
-        /// <param name="extensionName"></param>
         /// <param name="fullPath"></param>
-        public void AppendImageFileEntry(string extensionName, string fullPath)
+        /// <param name="extensionName"></param>
+        public void AppendImageFileEntry(string fullPath, string extensionName)
         {
             var mediaType = @"image/" + extensionName.ToLowerInvariant();
             this.AppendFileEntry(mediaType, fullPath);

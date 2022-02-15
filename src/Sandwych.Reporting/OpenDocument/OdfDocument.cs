@@ -103,7 +103,7 @@ namespace Sandwych.Reporting.OpenDocument
 
             this.SetEntryBuffer(fullPath, imageBlob.GetBuffer());
 
-            _manifestDocument.Value.AppendImageFileEntry(imageBlob.ExtensionName, fullPath);
+            _manifestDocument.Value.AppendImageFileEntry(fullPath, imageBlob.ExtensionName);
 
             var blobEntry = new DocumentBlobEntry(fullPath, imageBlob);
             this._blobs.Value.Add(blobEntry);

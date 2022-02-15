@@ -18,10 +18,8 @@ namespace Sandwych.Reporting
     /// </summary>
     public abstract class Blob : IBlob
     {
-        private readonly string _extName;
-        private readonly byte[] blob;
+        private readonly byte[] _blobBuffer;
         private readonly string _entryNameInDocument;
-        private readonly string _blobHash;
 
         public Blob(string extensionName, byte[] buffer)
         {
@@ -40,31 +38,31 @@ namespace Sandwych.Reporting
                 throw new ArgumentNullException(nameof(buffer));
             }
 
-            this._extName = extensionName.ToLowerInvariant();
-            this.blob = buffer;
-            this._blobHash = ComputeBlobMD5Hash();
-            this._entryNameInDocument = this.MakeDocumentFileName();
+            this.ExtensionName = extensionName.ToLowerInvariant();
+            _blobBuffer = buffer;
+            this.Id = ComputeBlobMD5Hash();
+            _entryNameInDocument = this.MakeDocumentFileName();
         }
 
         private string ComputeBlobMD5Hash()
         {
             using (var md5 = MD5.Create())
             {
-                var hash = md5.ComputeHash(this.blob);
+                var hash = md5.ComputeHash(this._blobBuffer);
                 return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
             }
         }
 
         private string MakeDocumentFileName() =>
-            $"__blob_{_blobHash}.{this.ExtensionName}";
+            $"__blob_{this.Id}.{this.ExtensionName}";
 
-        public string Id => _blobHash;
+        public string Id { get; }
 
-        public string ExtensionName => _extName;
+        public string ExtensionName { get; }
 
-        public byte[] GetBuffer() => blob;
+        public byte[] GetBuffer() => _blobBuffer;
 
-        public int Length => blob.Length;
+        public int Length => _blobBuffer.Length;
 
         public string FileName => _entryNameInDocument;
 
@@ -88,6 +86,6 @@ namespace Sandwych.Reporting
             return false;
         }
 
-        public override int GetHashCode() => _blobHash.GetHashCode();
+        public override int GetHashCode() => this.Id.GetHashCode();
     }
 }

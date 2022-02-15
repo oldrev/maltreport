@@ -1,4 +1,4 @@
-﻿namespace Sandwych.Reporting
+namespace Sandwych.Reporting
 {
     public class DocumentBlobEntry
     {
@@ -8,7 +8,7 @@
             this.Blob = blob;
         }
 
-        public string EntryPath { get; private set; }
-        public Blob Blob { get; private set; }
+        public string EntryPath { get; }
+        public Blob Blob { get; }
     }
 }
