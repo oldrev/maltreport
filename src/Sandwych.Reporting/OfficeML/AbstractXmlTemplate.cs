@@ -6,7 +6,7 @@ using System.Xml;
 using Fluid;
 using Fluid.Parser;
 
-namespace Sandwych.Reporting
+namespace Sandwych.Reporting.OfficeML
 {
     public abstract class AbstractXmlTemplate<TDocument> : AbstractTemplate<TDocument>
         where TDocument : AbstractXmlDocument<TDocument>, new()

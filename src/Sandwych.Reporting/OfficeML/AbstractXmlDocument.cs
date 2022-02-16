@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Sandwych.Reporting
+namespace Sandwych.Reporting.OfficeML
 {
 
     public abstract class AbstractXmlDocument<TDocument> : AbstractDocument<TDocument>
