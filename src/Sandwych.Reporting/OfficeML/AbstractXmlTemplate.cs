@@ -18,7 +18,7 @@ namespace Sandwych.Reporting.OfficeML
         {
             this.PrepareTemplate();
 
-            FluidParser parser = new FluidParser();
+            var parser = FluidParserHolder.Parser;
             var stringTemplate = this.GetStringTemplate();
             if (!parser.TryParse(stringTemplate, out var fluidTemplate, out var errors))
             {

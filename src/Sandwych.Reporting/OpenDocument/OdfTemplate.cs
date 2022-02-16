@@ -55,7 +55,7 @@ namespace Sandwych.Reporting.OpenDocument
             var mainContentText = this.TemplateDocument.GetEntryTextReader(this.TemplateDocument.MainContentEntryPath).ReadToEnd();
             var sanitizedMainContentText = Sanitize(mainContentText);
 
-            var parser = new FluidParser();
+            var parser = FluidParserHolder.Parser;
             if (!parser.TryParse(sanitizedMainContentText, out this._fluidTemplate, out var errors))
             {
                 throw new SyntaxErrorException(errors);

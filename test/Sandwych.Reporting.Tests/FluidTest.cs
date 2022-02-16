@@ -31,7 +31,7 @@ namespace Sandwych.Reporting.Tests
             };
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
 
-            var parser = new FluidParser(); 
+            var parser = FluidParserHolder.Parser;
             Assert.True(parser.TryParse(source, out var template));
 
             var context = new Fluid.TemplateContext();
@@ -57,7 +57,7 @@ namespace Sandwych.Reporting.Tests
                 }
             };
 
-            var parser = new FluidParser();
+            var parser = FluidParserHolder.Parser;
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
             Assert.True(parser.TryParse(source, out var template));
             var context = new Fluid.TemplateContext();
