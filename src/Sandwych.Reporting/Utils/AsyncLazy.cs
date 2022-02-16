@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.Utils
 {
-    public class AsyncLazy<T> : Lazy<Task<T>>
+    public sealed class AsyncLazy<T> : Lazy<Task<T>>
     {
         public AsyncLazy(Func<T> valueFactory) :
             base(() => Task.Factory.StartNew(valueFactory))
@@ -17,6 +17,6 @@ namespace Sandwych.Reporting.Utils
             base(() => Task.Factory.StartNew(() => taskFactory()).Unwrap())
         { }
 
-        public TaskAwaiter<T> GetAwaiter() { return Value.GetAwaiter(); }
+        public TaskAwaiter<T> GetAwaiter() => Value.GetAwaiter();
     }
 }

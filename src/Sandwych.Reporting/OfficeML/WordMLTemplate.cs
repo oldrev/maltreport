@@ -13,6 +13,7 @@ using System.Text.Encodings.Web;
 using Sandwych.Reporting.OfficeML.Filters;
 using Sandwych.Reporting.Textilize;
 using System.Threading;
+using Sandwych.Reporting.Utils;
 
 namespace Sandwych.Reporting.OfficeML
 {
