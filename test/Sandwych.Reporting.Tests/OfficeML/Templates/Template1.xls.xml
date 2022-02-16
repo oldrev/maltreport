@@ -66,7 +66,7 @@
   <Table ss:ExpandedColumnCount="5" ss:ExpandedRowCount="3" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
    <Row ss:AutoFitHeight="0">
-    <Cell ss:MergeAcross="4" ss:StyleID="m42260448" ss:HRef="rtl:///#foreach($c in $chars)"><Data
+    <Cell ss:MergeAcross="4" ss:StyleID="m42260448" ss:HRef="dtl:///#foreach($c in $chars)"><Data
       ss:Type="String">#foreach($c in $chars)</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
@@ -77,7 +77,7 @@
     <Cell ss:StyleID="s71"><Data ss:Type="String">$c</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:MergeAcross="4" ss:StyleID="m42260468" ss:HRef="rtl:///#end"><Data
+    <Cell ss:MergeAcross="4" ss:StyleID="m42260468" ss:HRef="dtl:///#end"><Data
       ss:Type="String">#end</Data></Cell>
    </Row>
   </Table>

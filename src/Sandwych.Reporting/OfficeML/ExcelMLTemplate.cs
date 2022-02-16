@@ -97,7 +97,7 @@ namespace Sandwych.Reporting.OfficeML
                 if (e.HasAttribute(ExcelMLDocument.HRefAttribute))
                 {
                     var attr = e.GetAttribute(ExcelMLDocument.HRefAttribute);
-                    if (attr.StartsWith("rtl://", StringComparison.Ordinal))
+                    if (attr.StartsWith(WellknownConstants.DtlProtocolPrefix, StringComparison.Ordinal))
                     {
                         placeholders.Add(e);
                     }
