@@ -15,11 +15,9 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Test]
         public async Task CanLoadOdfDocumentAsTemplate()
         {
-            using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
-            {
-                var odt = await OdfDocument.LoadFromAsync(stream);
-                var template = new OdtTemplate(odt);
-            }
+            using var stream = DocumentTestHelper.GetResource(Template1OdtName);
+            var odt = await OdfDocument.LoadFromAsync(stream);
+            var template = new OdtTemplate(odt);
 
         }
 

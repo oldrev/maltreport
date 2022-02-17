@@ -27,10 +27,10 @@ namespace Sandwych.Reporting
             this.PrepareTemplate();
         }
 
-        public TDocument Render(TemplateContext context) =>
+        public virtual IDocument Render(TemplateContext context) =>
             Task.Run(() => this.RenderAsync(context)).Result;
 
-        public abstract Task<TDocument> RenderAsync(TemplateContext context, CancellationToken ct = default);
+        public abstract Task<IDocument> RenderAsync(TemplateContext context, CancellationToken ct = default);
 
         protected abstract void PrepareTemplate();
 

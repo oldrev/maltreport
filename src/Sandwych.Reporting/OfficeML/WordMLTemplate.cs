@@ -31,7 +31,7 @@ namespace Sandwych.Reporting.OfficeML
             this.ProcessPlaceholders();
         }
 
-        public override async Task<WordMLDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
+        public override async Task<IDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
             var fluidContext = this.CreateFluidTemplateContext(null, context);
             var sb = new StringBuilder();

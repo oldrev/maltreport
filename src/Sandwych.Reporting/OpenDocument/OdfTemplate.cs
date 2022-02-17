@@ -23,7 +23,7 @@ namespace Sandwych.Reporting.OpenDocument
 
         }
 
-        public override async Task<OdfDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
+        public override async Task<IDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
             var outputDocument = new OdfDocument();
             await this.TemplateDocument.SaveAsAsync(outputDocument, ct);

@@ -17,22 +17,18 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Test]
         public async Task CanCompileOdsDocumentTemplate()
         {
-            using (var stream = DocumentTestHelper.GetResource(Template2OdsName))
-            {
-                var ods = await OdfDocument.LoadFromAsync(stream);
-                var template = new OdsTemplate(ods);
-            }
+            using var stream = DocumentTestHelper.GetResource(Template2OdsName);
+            var ods = await OdfDocument.LoadFromAsync(stream);
+            var template = new OdsTemplate(ods);
         }
 
         [Test]
         public async Task CanRenderOdsTemplate()
         {
             OdfTemplate template;
-            using (var stream = DocumentTestHelper.GetResource(Template2OdsName))
-            {
-                var ods = await OdfDocument.LoadFromAsync(stream);
-                template = new OdsTemplate(ods);
-            }
+            using var stream = DocumentTestHelper.GetResource(Template2OdsName);
+            var ods = await OdfDocument.LoadFromAsync(stream);
+            template = new OdsTemplate(ods);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()

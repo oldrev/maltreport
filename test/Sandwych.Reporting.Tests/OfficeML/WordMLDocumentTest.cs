@@ -19,11 +19,9 @@ namespace Sandwych.Reporting.Tests.OfficeML
         public async Task CanRenderWordMLTemplate()
         {
             WordMLTemplate template;
-            using (var stream = DocumentTestHelper.GetResource(Template1OdtName))
-            {
-                var templateDocument = await WordMLDocument.LoadFromAsync(stream);
-                template = new WordMLTemplate(templateDocument);
-            }
+            using var stream = DocumentTestHelper.GetResource(Template1OdtName);
+            var templateDocument = await WordMLDocument.LoadFromAsync(stream);
+            template = new WordMLTemplate(templateDocument);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Sandwych.Reporting.Utils
 {
-    internal static class UrlUtility
+    public static class UrlUtility
     {
         public static string UrlDecode(string s, Encoding e)
         {
