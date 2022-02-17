@@ -26,10 +26,17 @@ namespace Sandwych.Reporting
 
         public static async Task SaveAsync(this IDocument self, string filePath)
         {
-            using (var fs = File.Create(filePath))
-            {
-                await self.SaveAsync(fs);
-            }
+            using var fs = File.Create(filePath);
+            await self.SaveAsync(fs);
         }
+
+        public static async Task<byte[]> ToBufferAsync(this IDocument self)
+        {
+            using var ms = new MemoryStream();
+            await self.SaveAsync(ms);
+            return ms.ToArray();
+        }
+
+
     }
 }
