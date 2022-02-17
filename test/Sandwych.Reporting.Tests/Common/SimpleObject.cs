@@ -11,12 +11,10 @@ namespace Sandwych.Reporting.Tests.Common
 
         public SimpleObject()
         {
-            using (var resStream = DocumentTestHelper.GetResource(PngImagePath))
-            {
-                var buf = new byte[resStream.Length];
-                resStream.Read(buf, 0, buf.Length);
-                this.JpegImage = new ImageBlob("jpg", buf);
-            }
+            using var resStream = DocumentTestHelper.GetResource(PngImagePath);
+            var buf = new byte[resStream.Length];
+            resStream.Read(buf, 0, buf.Length);
+            this.JpegImage = new ImageBlob("jpg", buf);
         }
 
 

@@ -34,15 +34,12 @@ namespace Sandwych.Reporting.OfficeML
         public override async Task<IDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
             var fluidContext = this.CreateFluidTemplateContext(null, context);
-            var sb = new StringBuilder();
-            using (var outputXmlWriter = new StringWriter(sb))
-            {
-                await this.TextTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, fluidContext);
-            }
-            return WordMLDocument.LoadFromText(sb.ToString());
+            using var outputWriter = new StringWriter();
+            await this.TextTemplate.RenderAsync(outputWriter, HtmlEncoder.Default, fluidContext);
+            return WordMLDocument.LoadFromText(outputWriter.ToString());
         }
 
-        protected override IEnumerable<IFluidFilter> GetInternalFilters(WordMLDocument document)
+        protected override IEnumerable<IFluidFilter> GetInternalFiltersToRegister(WordMLDocument document)
         {
             yield return new WordMLImageFilter();
         }

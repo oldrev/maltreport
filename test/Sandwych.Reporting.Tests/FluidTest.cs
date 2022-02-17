@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Fluid;
+using Fluid.Ast;
+using Fluid.Parser;
 using NUnit.Framework;
 
 namespace Sandwych.Reporting.Tests
@@ -31,7 +33,7 @@ namespace Sandwych.Reporting.Tests
             };
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
 
-            var parser = FluidParserHolder.Parser;
+            var parser = FluidParserHolder.Instance;
             Assert.True(parser.TryParse(source, out var template));
 
             var context = new Fluid.TemplateContext();
@@ -57,7 +59,7 @@ namespace Sandwych.Reporting.Tests
                 }
             };
 
-            var parser = FluidParserHolder.Parser;
+            var parser = FluidParserHolder.Instance;
             var source = "Hello {{p.Str1}} {{ p.Str2 }} [{% for i in p.Numbers %}{{i.Number}}{% endfor %}]";
             Assert.True(parser.TryParse(source, out var template));
             var context = new Fluid.TemplateContext();
@@ -70,6 +72,13 @@ namespace Sandwych.Reporting.Tests
 
         }
 
-
+        [Test]
+        public void TestParseFailedBehaviour()
+        {
+            var result = FluidParserHolder.Instance.TryParse("{{ 1 ", out var template, out var error);
+            Assert.IsFalse(result);
+            Assert.IsNull(template);
+            TestContext.Out.WriteLine($"Parser error messages: {error}");
+        }
     }
 }

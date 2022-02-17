@@ -44,19 +44,15 @@ namespace Sandwych.Reporting.OpenDocument
             //Before save to other doc, we must save manifest
             if (_manifestDocument.IsValueCreated)
             {
-                using (var s = this.OpenOrCreateEntryToWrite(ManifestEntryPath))
-                {
-                    _manifestDocument.Value?.Save(s);
-                }
+                using var s = this.OpenOrCreateEntryToWrite(ManifestEntryPath);
+                _manifestDocument.Value?.Save(s);
             }
         }
 
         private OdfManifestXmlDocument LoadManifestDocument()
         {
-            using (var s = this.OpenEntryToRead(ManifestEntryPath))
-            {
-                return new OdfManifestXmlDocument(s);
-            }
+            using var s = this.OpenEntryToRead(ManifestEntryPath);
+            return new OdfManifestXmlDocument(s);
         }
 
         public void RemoveManifestedFileEntry(string fullPath)
@@ -80,15 +76,13 @@ namespace Sandwych.Reporting.OpenDocument
                 throw new InvalidDataException("Entry 'mimetype' not found");
             }
 
-            using (var zip = new ZipArchive(outStream, ZipArchiveMode.Create))
-            {
-                await this.AddZipEntryAsync(zip, MimeTypeEntryPath, ct);
-                this.Entries.Remove(MimeTypeEntryPath);
+            using var zip = new ZipArchive(outStream, ZipArchiveMode.Create);
+            await this.AddZipEntryAsync(zip, MimeTypeEntryPath, ct);
+            this.Entries.Remove(MimeTypeEntryPath);
 
-                foreach (var item in this.Entries)
-                {
-                    await this.AddZipEntryAsync(zip, item.Key, ct);
-                }
+            foreach (var item in this.Entries)
+            {
+                await this.AddZipEntryAsync(zip, item.Key, ct);
             }
         }
 
@@ -136,11 +130,11 @@ namespace Sandwych.Reporting.OpenDocument
 
         public OdfContentXmlDocument ReadMainContentXml()
         {
-            using (var s = this.OpenEntryToRead(MainContentEntryPath))
-            {
-                var doc = new OdfContentXmlDocument(s);
-                return doc;
-            }
+            using var s = this.OpenEntryToRead(MainContentEntryPath);
+            var doc = new OdfContentXmlDocument(s);
+            return doc;
         }
+
     } //class
+
 } //namespace

@@ -14,6 +14,6 @@ namespace Sandwych.Reporting
             return parser;
         }, true);
 
-        public static FluidParser Parser => _parser.Value;
+        public static FluidParser Instance => _parser.Value;
     }
 }

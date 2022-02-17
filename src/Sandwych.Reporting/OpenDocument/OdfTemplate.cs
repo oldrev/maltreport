@@ -16,7 +16,7 @@ namespace Sandwych.Reporting.OpenDocument
 
     public abstract class OdfTemplate : AbstractTemplate<OdfDocument>
     {
-        private IFluidTemplate _fluidTemplate = null;
+        private IFluidTemplate _mainFluidTemplate = null;
 
         public OdfTemplate(OdfDocument templateDocument) : base(templateDocument)
         {
@@ -28,20 +28,16 @@ namespace Sandwych.Reporting.OpenDocument
             var outputDocument = new OdfDocument();
             await this.TemplateDocument.SaveAsAsync(outputDocument, ct);
 
-            var mainContentTemplate = this.TemplateDocument.ReadTextEntry(this.TemplateDocument.MainContentEntryPath);
-
             var fluidContext = this.CreateFluidTemplateContext(outputDocument, context);
-            using (var ws = outputDocument.OpenOrCreateEntryToWrite(outputDocument.MainContentEntryPath))
-            using (var writer = new StreamWriter(ws))
-            {
-                await _fluidTemplate.RenderAsync(writer, HtmlEncoder.Default, fluidContext);
-            }
-
-            outputDocument.Flush();
+            using var ws = outputDocument.OpenOrCreateEntryToWrite(outputDocument.MainContentEntryPath);
+            using var writer = new StreamWriter(ws);
+            await _mainFluidTemplate.RenderAsync(writer, HtmlEncoder.Default, fluidContext);
+            await writer.FlushAsync();
+            await outputDocument.FlushAsync();
             return outputDocument;
         }
 
-        protected override IEnumerable<IFluidFilter> GetInternalFilters(OdfDocument document)
+        protected override IEnumerable<IFluidFilter> GetInternalFiltersToRegister(OdfDocument document)
         {
             yield return new OdfImageFilter(document);
         }
@@ -55,10 +51,10 @@ namespace Sandwych.Reporting.OpenDocument
             var mainContentText = this.TemplateDocument.GetEntryTextReader(this.TemplateDocument.MainContentEntryPath).ReadToEnd();
             var sanitizedMainContentText = Sanitize(mainContentText);
 
-            var parser = FluidParserHolder.Parser;
-            if (!parser.TryParse(sanitizedMainContentText, out this._fluidTemplate, out var errors))
+            var parser = FluidParserHolder.Instance;
+            if (!parser.TryParse(sanitizedMainContentText, out this._mainFluidTemplate, out var error))
             {
-                throw new SyntaxErrorException(errors);
+                throw new SyntaxErrorException(error);
             }
         }
 

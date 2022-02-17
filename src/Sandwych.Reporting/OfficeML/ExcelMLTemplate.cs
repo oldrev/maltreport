@@ -31,12 +31,9 @@ namespace Sandwych.Reporting.OfficeML
         public override async Task<IDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
             var fluidContext = this.CreateFluidTemplateContext(null, context);
-            var sb = new StringBuilder();
-            using (var outputXmlWriter = new StringWriter(sb))
-            {
-                await this.TextTemplate.RenderAsync(outputXmlWriter, HtmlEncoder.Default, fluidContext);
-            }
-            return ExcelMLDocument.LoadFromText(sb.ToString());
+            using var outputWriter = new StringWriter();
+            await this.TextTemplate.RenderAsync(outputWriter, HtmlEncoder.Default, fluidContext);
+            return ExcelMLDocument.LoadFromText(outputWriter.ToString());
         }
 
         private void ProcessPlaceholders()

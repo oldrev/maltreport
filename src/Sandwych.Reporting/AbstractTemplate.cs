@@ -36,19 +36,19 @@ namespace Sandwych.Reporting
 
         protected static IFluidFilter[] EmptyFilters => s_emptyFilters;
 
-        protected virtual IEnumerable<IFluidFilter> GetInternalFilters(TDocument document) => s_emptyFilters;
+        protected virtual IEnumerable<IFluidFilter> GetInternalFiltersToRegister(TDocument outputDocument) => s_emptyFilters;
 
-        protected virtual FluidTemplateContext CreateFluidTemplateContext(TDocument document, TemplateContext context)
+        protected virtual FluidTemplateContext CreateFluidTemplateContext(TDocument outputDocument, TemplateContext context)
         {
             var ftc = new FluidTemplateContext(context.Values);
             ftc.CultureInfo = context.Culture;
-            this.RegisterInternalFilters(document, ftc);
+            this.RegisterInternalFilters(outputDocument, ftc);
             return ftc;
         }
 
-        private void RegisterInternalFilters(TDocument document, FluidTemplateContext templateContext)
+        private void RegisterInternalFilters(TDocument outputDocument, FluidTemplateContext templateContext)
         {
-            foreach (var asyncFilter in this.GetInternalFilters(document))
+            foreach (var asyncFilter in this.GetInternalFiltersToRegister(outputDocument))
             {
                 templateContext.Options.Filters.AddFilter(asyncFilter.Name, asyncFilter.InvokeAsync);
             }

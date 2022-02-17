@@ -31,20 +31,16 @@ namespace Sandwych.Reporting
             }
 
             // Load zipped content into the memory
-            using (var archive = new ZipArchive(inStream, ZipArchiveMode.Read))
+            using var archive = new ZipArchive(inStream, ZipArchiveMode.Read);
+            foreach (ZipArchiveEntry ze in archive.Entries)
             {
-                foreach (ZipArchiveEntry ze in archive.Entries)
+                using var zs = ze.Open();
+                var buf = await zs.ReadAllBytesAsync(ct);
+                if (buf.Length != ze.Length)
                 {
-                    using (var zs = ze.Open())
-                    {
-                        var buf = await zs.ReadAllBytesAsync(ct);
-                        if (buf.Length != ze.Length)
-                        {
-                            throw new IOException("Failed to read zip entry: " + ze.FullName);
-                        }
-                        _documentEntries[ze.FullName] = buf;
-                    }
+                    throw new IOException("Failed to read zip entry: " + ze.FullName);
                 }
+                _documentEntries[ze.FullName] = buf;
             }
 
             this.OnLoaded();
@@ -52,12 +48,10 @@ namespace Sandwych.Reporting
 
         public override async Task SaveAsync(Stream outStream, CancellationToken ct = default)
         {
-            using (var zip = new ZipArchive(outStream, ZipArchiveMode.Create))
+            using var zip = new ZipArchive(outStream, ZipArchiveMode.Create);
+            foreach (var item in _documentEntries)
             {
-                foreach (var item in _documentEntries)
-                {
-                    await this.AddZipEntryAsync(zip, item.Key);
-                }
+                await this.AddZipEntryAsync(zip, item.Key);
             }
         }
 
@@ -89,10 +83,8 @@ namespace Sandwych.Reporting
                     break;
             }
             var zae = archive.CreateEntry(name, cl);
-            using (var zs = zae.Open())
-            {
-                await zs.WriteAsync(data, 0, data.Length, ct);
-            }
+            using var zs = zae.Open();
+            await zs.WriteAsync(data, 0, data.Length, ct);
         }
 
         public IEnumerable<string> EntryPaths
@@ -139,7 +131,7 @@ namespace Sandwych.Reporting
             int nRead = 0;
             while ((nRead = await src.ReadAsync(buf, 0, bufSize)) > 0)
             {
-                if(ct != default && ct.IsCancellationRequested)
+                if (ct != default && ct.IsCancellationRequested)
                 {
                     ct.ThrowIfCancellationRequested();
                 }
@@ -160,11 +152,9 @@ namespace Sandwych.Reporting
             //A Copy on write approach
             foreach (var item in this.EntryPaths)
             {
-                using (var inStream = this.OpenEntryToRead(item))
-                using (var outStream = destDoc.OpenOrCreateEntryToWrite(item))
-                {
-                    await CopyStreamAsync(inStream, outStream, ct);
-                }
+                using var inStream = this.OpenEntryToRead(item);
+                using var outStream = destDoc.OpenOrCreateEntryToWrite(item);
+                await CopyStreamAsync(inStream, outStream, ct);
             }
         }
 
@@ -187,37 +177,29 @@ namespace Sandwych.Reporting
 
         public void WriteXmlEntry(string entryPath, XmlDocument xml)
         {
-            using (var cos = this.OpenOrCreateEntryToWrite(entryPath))
-            using (var writer = XmlWriter.Create(cos, new XmlWriterSettings { Encoding = Encoding.UTF8 }))
-            {
-                xml.WriteTo(writer);
-            }
+            using var cos = this.OpenOrCreateEntryToWrite(entryPath);
+            using var writer = XmlWriter.Create(cos, new XmlWriterSettings { Encoding = Encoding.UTF8 });
+            xml.WriteTo(writer);
         }
 
         public XmlDocument ReadXmlEntry(string entryPath)
         {
-            using (var contentStream = this.OpenEntryToRead(entryPath))
-            {
-                var xml = new XmlDocument();
-                xml.Load(contentStream);
-                return xml;
-            }
+            using var contentStream = this.OpenEntryToRead(entryPath);
+            var xml = new XmlDocument();
+            xml.Load(contentStream);
+            return xml;
         }
 
         public string ReadTextEntry(string entryPath)
         {
-            using (var tr = this.GetEntryTextReader(entryPath))
-            {
-                return tr.ReadToEnd();
-            }
+            using var tr = this.GetEntryTextReader(entryPath);
+            return tr.ReadToEnd();
         }
 
         public void WriteTextEntry(string entryPath, string content)
         {
-            using (var tw = this.GetEntryTextWriter(entryPath))
-            {
-                tw.Write(content);
-            }
+            using var tw = this.GetEntryTextWriter(entryPath);
+            tw.Write(content);
         }
     }
 }

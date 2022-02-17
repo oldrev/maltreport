@@ -18,7 +18,7 @@ namespace Sandwych.Reporting.OfficeML
         {
             this.PrepareTemplate();
 
-            var parser = FluidParserHolder.Parser;
+            var parser = FluidParserHolder.Instance;
             var stringTemplate = this.GetStringTemplate();
             if (!parser.TryParse(stringTemplate, out var fluidTemplate, out var errors))
             {
@@ -30,10 +30,9 @@ namespace Sandwych.Reporting.OfficeML
         private string GetStringTemplate()
         {
             var sb = new StringBuilder();
-            using (var writer = XmlWriter.Create(sb))
-            {
-                this.TemplateDocument.XmlDocument.WriteTo(writer);
-            }
+            using var writer = XmlWriter.Create(sb);
+            this.TemplateDocument.XmlDocument.WriteTo(writer);
+            writer.Flush();
             return sb.ToString();
         }
 

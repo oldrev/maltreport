@@ -29,12 +29,10 @@ namespace Sandwych.Reporting
 
         public static async Task<TDocument> LoadFromAsync(string filePath, CancellationToken ct = default)
         {
-            using (var inStream = File.OpenRead(filePath))
-            {
-                var doc = new TDocument();
-                await doc.LoadAsync(inStream, ct);
-                return doc;
-            }
+            using var inStream = File.OpenRead(filePath);
+            var doc = new TDocument();
+            await doc.LoadAsync(inStream, ct);
+            return doc;
         }
 
     }

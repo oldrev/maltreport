@@ -46,11 +46,9 @@ namespace Sandwych.Reporting
 
         private string ComputeBlobMD5Hash()
         {
-            using (var md5 = MD5.Create())
-            {
-                var hash = md5.ComputeHash(this._blobBuffer);
-                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            }
+            using var md5 = MD5.Create();
+            var hash = md5.ComputeHash(this._blobBuffer);
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
 
         private string MakeDocumentFileName() =>
