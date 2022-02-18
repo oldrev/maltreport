@@ -9,7 +9,7 @@ using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
-    public struct OdsTableCellDataValueFilter : IFluidFilter
+    public class OdsTableCellDataValueFilter : IFluidFilter
     {
         public string Name => "_rtl_ods_table_cell_datavalue";
 

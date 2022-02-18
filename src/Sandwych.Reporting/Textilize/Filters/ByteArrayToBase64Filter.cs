@@ -7,7 +7,7 @@ using Fluid.Values;
 
 namespace Sandwych.Reporting.Textilize.Filters
 {
-    public struct ByteArrayToBase64Filter : IFluidFilter
+    public class ByteArrayToBase64Filter : IFluidFilter
     {
         public string Name => "base64";
 

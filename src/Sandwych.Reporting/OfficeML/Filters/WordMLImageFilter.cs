@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OfficeML.Filters
 {
-    public struct WordMLImageFilter : IFluidFilter
+    public class WordMLImageFilter : IFluidFilter
     {
         public string Name => "image";
 

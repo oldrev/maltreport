@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sandwych.Reporting.OpenDocument.Filters
 {
-    public struct OdfImageFilter : IFluidFilter
+    public class OdfImageFilter : IFluidFilter
     {
         private readonly OdfDocument _document;
 
@@ -17,7 +17,7 @@ namespace Sandwych.Reporting.OpenDocument.Filters
 
         public OdfImageFilter(OdfDocument odfDoc)
         {
-            this._document = odfDoc;
+            _document = odfDoc;
         }
 
         public ValueTask<FluidValue> InvokeAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
