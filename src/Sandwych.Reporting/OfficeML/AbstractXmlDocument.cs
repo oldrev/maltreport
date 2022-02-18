@@ -40,6 +40,15 @@ namespace Sandwych.Reporting.OfficeML
             await Task.Factory.StartNew(() => _xmlDocument.Save(outStream), ct);
         }
 
+        public override async Task<TDocument> DuplicateAsync(CancellationToken ct = default)
+        {
+            var newDoc = new TDocument();
+            using var ms = new MemoryStream();
+            await this.SaveAsync(ms);
+            await newDoc.LoadAsync(ms);
+            return newDoc;
+        }
+
         public static TDocument LoadFromText(string xml)
         {
             var doc = new TDocument();

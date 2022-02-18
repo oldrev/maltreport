@@ -31,7 +31,7 @@ namespace Sandwych.Reporting
             }
 
             // Load zipped content into the memory
-            using var archive = new ZipArchive(inStream, ZipArchiveMode.Read);
+            using var archive = new ZipArchive(inStream, ZipArchiveMode.Read, leaveOpen: true);
             foreach (ZipArchiveEntry ze in archive.Entries)
             {
                 using var zs = ze.Open();
@@ -48,7 +48,7 @@ namespace Sandwych.Reporting
 
         public override async Task SaveAsync(Stream outStream, CancellationToken ct = default)
         {
-            using var zip = new ZipArchive(outStream, ZipArchiveMode.Create);
+            using var zip = new ZipArchive(outStream, ZipArchiveMode.Create, leaveOpen: true);
             foreach (var item in _documentEntries)
             {
                 await this.AddZipEntryAsync(zip, item.Key);

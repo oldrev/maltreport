@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Sandwych.Reporting
 {
 
-    public abstract class AbstractDocument<TDocument> : IDocument
+    public abstract class AbstractDocument<TDocument> : ITypedDocument<TDocument>
         where TDocument : AbstractDocument<TDocument>, new()
     {
         public bool IsNew { get; protected set; } = true;
@@ -33,6 +33,16 @@ namespace Sandwych.Reporting
             var doc = new TDocument();
             await doc.LoadAsync(inStream, ct);
             return doc;
+        }
+
+        public virtual async Task<TDocument> DuplicateAsync(CancellationToken ct = default)
+        {
+            using var ms = new MemoryStream();
+            await this.SaveAsync(ms);
+            ms.Position = 0;
+            var newDoc = new TDocument();
+            await newDoc.LoadAsync(ms);
+            return newDoc;
         }
 
     }

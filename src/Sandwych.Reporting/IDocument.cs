@@ -13,4 +13,9 @@ namespace Sandwych.Reporting
         Task SaveAsync(Stream outStream, CancellationToken ct = default);
         Task LoadAsync(Stream inStream, CancellationToken ct = default);
     }
+
+    public interface ITypedDocument<TDocument> : IDocument where TDocument : IDocument, ITypedDocument<TDocument>
+    {
+        Task<TDocument> DuplicateAsync(CancellationToken ct = default);
+    }
 }
