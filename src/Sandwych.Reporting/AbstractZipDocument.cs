@@ -139,25 +139,6 @@ namespace Sandwych.Reporting
             }
         }
 
-        public virtual void SaveAs(TDocument destDoc) =>
-            Task.Run(() => this.SaveAsAsync(destDoc)).Wait();
-
-        public virtual async Task SaveAsAsync(TDocument destDoc, CancellationToken ct = default)
-        {
-            if (destDoc == null)
-            {
-                throw new ArgumentNullException("destDoc");
-            }
-
-            //A Copy on write approach
-            foreach (var item in this.EntryPaths)
-            {
-                using var inStream = this.OpenEntryToRead(item);
-                using var outStream = destDoc.OpenOrCreateEntryToWrite(item);
-                await CopyStreamAsync(inStream, outStream, ct);
-            }
-        }
-
         public Stream OpenEntryToRead(string entryPath)
         {
             return new MemoryStream(this.GetEntryBuffer(entryPath));

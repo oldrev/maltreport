@@ -76,7 +76,7 @@ namespace Sandwych.Reporting.OpenDocument
                 throw new InvalidDataException("Entry 'mimetype' not found");
             }
 
-            using var zip = new ZipArchive(outStream, ZipArchiveMode.Create);
+            using var zip = new ZipArchive(outStream, ZipArchiveMode.Create, leaveOpen: true);
             await this.AddZipEntryAsync(zip, MimeTypeEntryPath, ct);
             this.Entries.Remove(MimeTypeEntryPath);
 
@@ -112,18 +112,6 @@ namespace Sandwych.Reporting.OpenDocument
         }
 
         public IEnumerable<DocumentBlobEntry> BlobEntries => _blobs.Value;
-
-        public override void SaveAs(OdfDocument destDoc)
-        {
-            this.Flush();
-            base.SaveAs(destDoc);
-        }
-
-        public override async Task SaveAsAsync(OdfDocument destDoc, CancellationToken ct = default)
-        {
-            await this.FlushAsync(ct);
-            await base.SaveAsAsync(destDoc, ct);
-        }
 
         public void WriteMainContentXml(OdfContentXmlDocument xml) =>
             this.WriteXmlEntry(this.MainContentEntryPath, xml);
