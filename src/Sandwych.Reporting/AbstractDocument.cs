@@ -9,7 +9,7 @@ namespace Sandwych.Reporting
 {
 
     public abstract class AbstractDocument<TDocument> : ITypedDocument<TDocument>
-        where TDocument : AbstractDocument<TDocument>, new()
+        where TDocument : ITypedDocument<TDocument>, new()
     {
         public bool IsNew { get; protected set; } = true;
         public abstract Task LoadAsync(Stream inStream, CancellationToken ct = default);
