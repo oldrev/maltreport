@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace Sandwych.Reporting.Tests.Common
 {
     public class SimpleObject
     {
-        private const string PngImagePath = "Sandwych.Reporting.Tests.Assets.JpegImage.jpeg";
+        private const string PngImagePath = "Sandwych.Reporting.Tests.Resources.Assets.JpegImage.jpeg";
 
         public SimpleObject()
         {
-            using var resStream = DocumentTestHelper.GetResource(PngImagePath);
+            using var resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(PngImagePath);
             var buf = new byte[resStream.Length];
             resStream.Read(buf, 0, buf.Length);
             this.JpegImage = new ImageBlob("jpg", buf);

@@ -19,6 +19,18 @@ namespace Sandwych.Reporting.Tests
             }
         }
 
+        public static Stream GetResource(string path)
+        {
+            var fullPath = "Sandwych.Reporting.Tests.Resources." + path;
+            return typeof(AbstractTest).GetTypeInfo().Assembly.GetManifestResourceStream(fullPath);
+        }
+
+        public static Stream GetTemplate(string path) =>
+            GetResource("Templates." + path);
+
+
+
+
     }
 
 }

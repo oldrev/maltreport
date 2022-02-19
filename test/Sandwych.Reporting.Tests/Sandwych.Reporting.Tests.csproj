@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -9,26 +9,18 @@
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
-
     <ItemGroup>
-        <None Remove="OfficeML\Templates\Template1.doc.xml" />
-        <None Remove="OpenDocument\Templates\Template1.odt" />
-        <None Remove="OpenDocument\Templates\Template2.ods" />
-        <None Remove="OpenDocument\Templates\Template3.odt" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="Assets\JpegImage.jpeg" />
-        <EmbeddedResource Include="OfficeML\Templates\Template1.doc.xml" />
-        <EmbeddedResource Include="OpenDocument\Templates\Template1.odt" />
-        <EmbeddedResource Include="OpenDocument\Templates\Template2.ods" />
-        <EmbeddedResource Include="OpenDocument\Templates\Template3.odt" />
+        <EmbeddedResource Include="Resources\Assets\JpegImage.jpeg" />
+        <EmbeddedResource Include="Resources\Templates\OfficeML\Template1.doc.xml" />
+        <EmbeddedResource Include="Resources\Templates\Odf\Template1.odt" />
+        <EmbeddedResource Include="Resources\Templates\Odf\Template2.ods" />
+        <EmbeddedResource Include="Resources\Templates\Odf\Template3.odt" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Fluid.Core" Version="2.2.14" />
         <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
         <PackageReference Include="NUnit" Version="3.13.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
         <PackageReference Include="coverlet.collector" Version="3.1.2">

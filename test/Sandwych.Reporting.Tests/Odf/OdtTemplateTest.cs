@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Sandwych.Reporting.OpenDocument;
+using Sandwych.Reporting.Odf;
 using Sandwych.Reporting.Tests.Common;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace Sandwych.Reporting.Tests.OpenDocument
+namespace Sandwych.Reporting.Tests.Odf
 {
     [TestFixture]
     public class OdtTemplateTest : AbstractTest
@@ -17,7 +17,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Test]
         public async Task CanCompileOdtDocumentTemplate()
         {
-            using var stream = DocumentTestHelper.GetResource(Template1OdtName);
+            using var stream = GetTemplate("Odf.Template1.odt");
             var odt = await OdfDocument.LoadFromAsync(stream);
             var template = new OdtTemplate(odt);
         }
@@ -25,10 +25,9 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Test]
         public async Task CanRenderOdtTemplate()
         {
-            OdfTemplate template;
-            using var stream = DocumentTestHelper.GetResource(Template1OdtName);
+            using var stream = GetTemplate("Odf.Template1.odt");
             var odt = await OdfDocument.LoadFromAsync(stream);
-            template = new OdtTemplate(odt);
+            var template = new OdtTemplate(odt);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()
@@ -47,10 +46,9 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Test]
         public async Task CanRenderOdt3Template()
         {
-            OdfTemplate template;
-            using var stream = DocumentTestHelper.GetResource(Template3OdtName);
+            using var stream = GetTemplate("Odf.Template3.odt");
             var odt = await OdfDocument.LoadFromAsync(stream);
-            template = new OdtTemplate(odt);
+            var template = new OdtTemplate(odt);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()

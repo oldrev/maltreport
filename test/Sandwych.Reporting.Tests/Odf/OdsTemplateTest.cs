@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Sandwych.Reporting.OpenDocument;
+using Sandwych.Reporting.Odf;
 using Sandwych.Reporting.Tests.Common;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace Sandwych.Reporting.Tests.OpenDocument
+namespace Sandwych.Reporting.Tests.Odf
 {
 
     [TestFixture]
@@ -17,7 +17,7 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Test]
         public async Task CanCompileOdsDocumentTemplate()
         {
-            using var stream = DocumentTestHelper.GetResource(Template2OdsName);
+            using var stream = GetTemplate("Odf.Template2.ods");
             var ods = await OdfDocument.LoadFromAsync(stream);
             var template = new OdsTemplate(ods);
         }
@@ -25,10 +25,9 @@ namespace Sandwych.Reporting.Tests.OpenDocument
         [Test]
         public async Task CanRenderOdsTemplate()
         {
-            OdfTemplate template;
-            using var stream = DocumentTestHelper.GetResource(Template2OdsName);
+            using var stream = GetTemplate("Odf.Template2.ods");
             var ods = await OdfDocument.LoadFromAsync(stream);
-            template = new OdsTemplate(ods);
+            var template = new OdsTemplate(ods);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()

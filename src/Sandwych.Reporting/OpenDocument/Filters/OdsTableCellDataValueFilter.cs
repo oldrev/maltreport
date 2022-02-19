@@ -4,10 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Fluid;
 using Fluid.Values;
-using Sandwych.Reporting.OpenDocument.Values;
+using Sandwych.Reporting.Odf.Values;
 using Sandwych.Reporting.Textilize;
 
-namespace Sandwych.Reporting.OpenDocument.Filters
+namespace Sandwych.Reporting.Odf.Filters
 {
     public class OdsTableCellDataValueFilter : IFluidFilter
     {

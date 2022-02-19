@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
-using Sandwych.Reporting.OpenDocument.Xml;
-using Sandwych.Reporting.OpenDocument.Filters;
+using Sandwych.Reporting.Odf.Xml;
+using Sandwych.Reporting.Odf.Filters;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.Odf
 {
     internal static class OdfCompiler
     {

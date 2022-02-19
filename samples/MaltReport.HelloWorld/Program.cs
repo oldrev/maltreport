@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Sandwych.Reporting;
-using Sandwych.Reporting.OpenDocument;
+using Sandwych.Reporting.Odf;
 using MaltReport.HelloWorld;
 
 // Prepare your data: 

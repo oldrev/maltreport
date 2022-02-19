@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.Odf
 {
     public sealed class OdfNamespaceManager : XmlNamespaceManager
     {

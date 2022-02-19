@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.Odf
 {
     public class OdtTemplate : OdfTemplate
     {

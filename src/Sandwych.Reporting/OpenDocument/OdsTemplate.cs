@@ -1,7 +1,7 @@
 using Sandwych.Reporting.Textilize;
 using System.IO;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.Odf
 {
     public class OdsTemplate : OdfTemplate
     {

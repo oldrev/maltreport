@@ -1,11 +1,11 @@
 using Fluid.Values;
-using Sandwych.Reporting.OpenDocument.Values;
+using Sandwych.Reporting.Odf.Values;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Globalization;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.Odf
 {
     public class FluidBlobValue : FluidValue
     {

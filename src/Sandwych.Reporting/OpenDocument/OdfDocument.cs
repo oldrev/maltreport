@@ -5,9 +5,9 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Sandwych.Reporting.OpenDocument.Xml;
+using Sandwych.Reporting.Odf.Xml;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.Odf
 {
     public class OdfDocument : AbstractZipDocument<OdfDocument>
     {

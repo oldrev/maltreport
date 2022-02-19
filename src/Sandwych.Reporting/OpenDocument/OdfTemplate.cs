@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Sandwych.Reporting.OpenDocument.Filters;
+using Sandwych.Reporting.Odf.Filters;
 using System.Collections.Generic;
 
-namespace Sandwych.Reporting.OpenDocument
+namespace Sandwych.Reporting.Odf
 {
     using System.Threading;
     using System.Xml;

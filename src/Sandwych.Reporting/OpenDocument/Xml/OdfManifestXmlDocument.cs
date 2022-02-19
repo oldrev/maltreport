@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml;
 
-namespace Sandwych.Reporting.OpenDocument.Xml
+namespace Sandwych.Reporting.Odf.Xml
 {
     public class OdfManifestXmlDocument : AbstractOdfXmlDocument
     {

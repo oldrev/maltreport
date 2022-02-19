@@ -4,7 +4,7 @@ using System.IO;
 using System.Text.Encodings.Web;
 using System.Globalization;
 
-namespace Sandwych.Reporting.OpenDocument.Values
+namespace Sandwych.Reporting.Odf.Values
 {
     public class OdsTableCellDataValue : FluidValue, IEquatable<OdsTableCellDataValue>
     {
