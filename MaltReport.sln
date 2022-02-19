@@ -24,9 +24,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflow", "github-workflow", "{A2022623-F7CD-4733-9848-A316A175D1A6}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandwych.Reporting.OfficeML", "src\Sandwych.Reporting.OfficeML\Sandwych.Reporting.OfficeML.csproj", "{702B09DC-763F-4B9C-87D6-277F4DAA732B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandwych.Reporting.OfficeML", "src\Sandwych.Reporting.OfficeML\Sandwych.Reporting.OfficeML.csproj", "{702B09DC-763F-4B9C-87D6-277F4DAA732B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
