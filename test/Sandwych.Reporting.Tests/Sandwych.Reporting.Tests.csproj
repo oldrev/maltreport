@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\Sandwych.Reporting.OfficeML\Sandwych.Reporting.OfficeML.csproj" />
         <ProjectReference Include="..\..\src\Sandwych.Reporting\Sandwych.Reporting.csproj" />
     </ItemGroup>
 
