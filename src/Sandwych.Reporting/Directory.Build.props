@@ -1,15 +1,22 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <PackageId>MaltReport2</PackageId>
-    <Title>MaltReport: An Universal Document Generator</Title>
-    <Description>MaltReport is an universal document generator works like Razor for HTML. MaltReport is mainly inspired by the excellent Relatorio Project.</Description>
-    <PackageTags>document;document generator;template;libreoffice;</PackageTags>
-    <VersionPrefix>3.0.1</VersionPrefix>
-    <VersionSuffix>beta</VersionSuffix>
+    <PackageId>Sandwych.Reporting</PackageId>
+    <Title>MaltReport Document Template Engine</Title>
+    <Description>MaltReport is a high performance document template engine for document generation, this core library comes with the ODT(.odt/.ods) format support.</Description>
+    <PackageTags>document;template;document template engine;odf;odt;ods;opendocument</PackageTags>
+    <!--
+    TODO FIXME
+    <PackageIcon>logo_64x64.png</PackageIcon>
+    -->
   </PropertyGroup>
 
-  <Import Project="../../build/Shared.props" />
+    <!--
+  <ItemGroup>
+    <None Include="../Assets/logo_64x64.png" Pack="true" Visible="false" PackagePath=""/>
+  </ItemGroup>
+    -->
+
+  <Import Project="../../build/Shared.props"/>
 
 </Project>
-

@@ -6,8 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4D70D47-6A83-4D41-A350-F63E4AC297FB}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Common.props = Common.props
 		LICENSE.txt = LICENSE.txt
 		MaltReport.nuspec = MaltReport.nuspec
+		NuGet.config = NuGet.config
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -28,6 +30,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflow", "github-w
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandwych.Reporting.OfficeML", "src\Sandwych.Reporting.OfficeML\Sandwych.Reporting.OfficeML.csproj", "{702B09DC-763F-4B9C-87D6-277F4DAA732B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5F9FF6CF-7685-4400-B5A4-342863EC9F62}"
+	ProjectSection(SolutionItems) = preProject
+		build\Shared.props = build\Shared.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +66,7 @@ Global
 		{9AC028D6-D5C6-4143-9BA4-7C658F9D8286} = {2E73AA99-2051-4D25-B00A-C5DA87FC0ADA}
 		{ED8D93C6-ABBF-4B68-BD8E-AECB63F593B5} = {73DA9DDC-2704-496E-B2F1-5A0EC103A7CF}
 		{A2022623-F7CD-4733-9848-A316A175D1A6} = {D4D70D47-6A83-4D41-A350-F63E4AC297FB}
+		{5F9FF6CF-7685-4400-B5A4-342863EC9F62} = {D4D70D47-6A83-4D41-A350-F63E4AC297FB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D25BEC1-29AD-4FF0-899C-FF277F65F63E}

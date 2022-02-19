@@ -58,16 +58,16 @@ namespace Sandwych.Reporting.Odf
         }
 
         /// <summary>
-        /// Removes superfluous elements around the interpolation ( {﻿{...}} )
-        ///
-        /// e.g. <text:p text:style-name="P1">{{<text:span text:style-name="T2">so</text:span>.<text:span text:style-name="T2">StringValue</text:span>}}</text:p>
-        ///      is transformed in
-        ///      <text:p text:style-name="P1">{{so.StringValue}}</text:p>
+        /// Sanitize text
         /// </summary>
         /// <param name="mainContentText"></param>
         /// <returns>Sanitized text</returns>
         private static string Sanitize(string mainContentText)
         {
+            /* Removes superfluous elements around the interpolation ( {﻿{...}} )
+             e.g. <text:p text:style-name="P1">{{<text:span text:style-name="T2">so</text:span>.<text:span text:style-name="T2">StringValue</text:span>}}</text:p>
+              is transformed in <text:p text:style-name="P1">{{so.StringValue}}</text:p>
+            */
             var doc = XDocument.Parse(mainContentText);
 
             // TODO: Is very coarse grained, can probably be refined.

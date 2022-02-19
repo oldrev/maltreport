@@ -56,7 +56,7 @@ namespace Sandwych.Reporting.Odf.Xml
         /// <summary>
         /// 添加一个文件条目
         /// </summary>
-        /// <param name="extensionName"></param>
+        /// <param name="mediaType"></param>
         /// <param name="fullPath"></param>
         public void AppendFileEntry(string mediaType, string fullPath)
         {
