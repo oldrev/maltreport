@@ -48,21 +48,21 @@ namespace Sandwych.Reporting.Odf
             this.TemplateDocument.Flush();
 
             var mainContentText = this.TemplateDocument.GetEntryTextReader(this.TemplateDocument.MainContentEntryPath).ReadToEnd();
-            var sanitizedMainContentText = Sanitize(mainContentText);
+            var sanitizedMainContentText = this.SanitizeXml(mainContentText);
 
             var parser = FluidParserHolder.Instance;
-            if (!parser.TryParse(sanitizedMainContentText, out this._mainFluidTemplate, out var error))
+            if (!parser.TryParse(sanitizedMainContentText, out _mainFluidTemplate, out var error))
             {
                 throw new SyntaxErrorException(error);
             }
         }
 
         /// <summary>
-        /// Sanitize text
+        /// Sanitize template text
         /// </summary>
         /// <param name="mainContentText"></param>
         /// <returns>Sanitized text</returns>
-        private static string Sanitize(string mainContentText)
+        private string SanitizeXml(string mainContentText)
         {
             /* Removes superfluous elements around the interpolation ( {﻿{...}} )
              e.g. <text:p text:style-name="P1">{{<text:span text:style-name="T2">so</text:span>.<text:span text:style-name="T2">StringValue</text:span>}}</text:p>
@@ -70,7 +70,7 @@ namespace Sandwych.Reporting.Odf
             */
             var doc = XDocument.Parse(mainContentText);
 
-            // TODO: Is very coarse grained, can probably be refined.
+            // TODO: The following is very coarse grained, can probably be refined.
             foreach (var element in doc.Descendants().Where(
                 x => x.Nodes().Any(y => y.NodeType == XmlNodeType.Text && ((XText)y).Value.Contains("{{"))))
             {

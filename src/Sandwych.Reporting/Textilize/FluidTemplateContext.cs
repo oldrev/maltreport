@@ -1,27 +1,19 @@
-using Fluid;
 using System.Collections.Generic;
 
 namespace Sandwych.Reporting.Textilize
 {
     public class FluidTemplateContext : Fluid.TemplateContext
     {
-
-        public FluidTemplateContext(IReadOnlyDictionary<string, object> context, bool allowUnsafe = true)
+        public FluidTemplateContext(IReadOnlyDictionary<string, object> values, TemplateOptions docTemplateOptions)
         {
             //TODO FIXME
-            if (allowUnsafe)
+            if (docTemplateOptions.AllowUnsafeAccess)
             {
-                this.Options.MemberAccessStrategy = UnsafeMemberAccessStrategy.Instance;
+                this.Options.MemberAccessStrategy = Fluid.UnsafeMemberAccessStrategy.Instance;
             }
-            foreach (var pair in context)
+            foreach (var pair in values)
             {
                 this.SetValue(pair.Key, Fluid.Values.FluidValue.Create(pair.Value, this.Options));
-                /*
-                if (pair.Value != null)
-                {
-                    this.Options.MemberAccessStrategy.Register(pair.Value.GetType());
-                }
-                */
             }
         }
     }
