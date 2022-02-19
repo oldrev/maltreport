@@ -8,13 +8,12 @@ using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting
 {
-    public abstract class AbstractTemplate<TDocument>
+    public abstract class AbstractTemplate<TDocument> : ITemplate
         where TDocument : IDocument
     {
-        private readonly TDocument _document;
         private readonly static IFluidFilter[] s_emptyFilters = new IFluidFilter[] { };
 
-        public TDocument TemplateDocument => _document;
+        public TDocument CompiledTemplateDocument { get; }
 
         public AbstractTemplate(TDocument document)
         {
@@ -23,7 +22,7 @@ namespace Sandwych.Reporting
                 throw new ArgumentOutOfRangeException(nameof(document), "The template document must not be new(empty)");
             }
 
-            _document = document;
+            this.CompiledTemplateDocument = document;
             this.PrepareTemplate();
         }
 
@@ -40,8 +39,7 @@ namespace Sandwych.Reporting
 
         protected virtual FluidTemplateContext CreateFluidTemplateContext(TDocument outputDocument, TemplateContext context)
         {
-            var ftc = new FluidTemplateContext(context.Values, context.Options);
-            ftc.CultureInfo = context.CultureInfo;
+            var ftc = new FluidTemplateContext(context);
             this.RegisterInternalFilters(outputDocument, ftc);
             return ftc;
         }

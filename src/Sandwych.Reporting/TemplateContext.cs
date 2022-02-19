@@ -15,10 +15,5 @@ namespace Sandwych.Reporting
         public IReadOnlyDictionary<string, object> Values { get;  }
 
         public TemplateOptions Options { get; }
-
-        public CultureInfo CultureInfo => this.Options.CultureInfo;
-
-        public bool AllowUnsafeAccess => this.Options.AllowUnsafeAccess;
-
     }
 }

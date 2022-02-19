@@ -25,7 +25,7 @@ namespace Sandwych.Reporting.Odf
 
         public override async Task<IDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
-            var outputDocument = await this.TemplateDocument.DuplicateAsync(ct);
+            var outputDocument = await this.CompiledTemplateDocument.DuplicateAsync(ct);
 
             var fluidContext = this.CreateFluidTemplateContext(outputDocument, context);
             using var ws = outputDocument.OpenOrCreateEntryToWrite(outputDocument.MainContentEntryPath);
@@ -43,11 +43,11 @@ namespace Sandwych.Reporting.Odf
 
         protected override void PrepareTemplate()
         {
-            this.TemplateDocument.Compile();
+            this.CompiledTemplateDocument.Compile();
 
-            this.TemplateDocument.Flush();
+            this.CompiledTemplateDocument.Flush();
 
-            var mainContentText = this.TemplateDocument.GetEntryTextReader(this.TemplateDocument.MainContentEntryPath).ReadToEnd();
+            var mainContentText = this.CompiledTemplateDocument.GetEntryTextReader(this.CompiledTemplateDocument.MainContentEntryPath).ReadToEnd();
             var sanitizedMainContentText = this.SanitizeXml(mainContentText);
 
             var parser = FluidParserHolder.Instance;

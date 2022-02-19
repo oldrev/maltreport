@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
-    public interface ITemplateCompiler<TDocument> where TDocument : IDocument
+    public abstract class AbstractTemplateCompiler<TDocument>
+        where TDocument : IDocument, new()
     {
-        ITemplate CompileAsync(IDocument doc);
+        public abstract Task<ITemplate> CompileAsync(TDocument doc, CancellationToken ct = default);
     }
 }

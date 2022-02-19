@@ -85,13 +85,13 @@ namespace Sandwych.Reporting.Odf
             foreach (XmlNode placeholder in placeholders)
             {
                 string value = ExtractTemplateExpression(placeholder);
-                if (value.StartsWith(WellknownConstants.DtlReferenceChar))
+                if (value.StartsWith("{{"))
                 {
-                    ProcessIdentifierTag(xml, placeholder, value.Substring(1));
+                    ProcessIdentifierTag(xml, placeholder, value.Trim('{', '}'));
                 }
-                else if (value.StartsWith(WellknownConstants.DtlDirectiveChar))
+                else if (value.StartsWith("{%"))
                 {
-                    var directiveNode = new DirectiveElement(xml, value.Substring(1));
+                    var directiveNode = new DirectiveElement(xml, value.Trim('{', '}', '%'));
                     directiveNode.ReduceTagByCount(placeholder);
                 }
                 else
@@ -101,17 +101,17 @@ namespace Sandwych.Reporting.Odf
             }
 
             var drawFrameElements = xml.SelectNodes("//" + OdfDocument.DrawFrameElement, xml.NamespaceManager);
-            var dtlDrawFrames = new List<XmlNode>();
+            var templateDrawFrames = new List<XmlNode>();
             foreach (XmlNode node in drawFrameElements)
             {
-                var nameAttr = node.Attributes["draw:name"];
-                if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value) && nameAttr.Value.Trim().StartsWith(WellknownConstants.DtlReferenceChar))
+                var nameAttrValue = node.Attributes["draw:name"]?.Value?.Trim();
+                if (nameAttrValue.StartsWith("{{"))
                 {
-                    dtlDrawFrames.Add(node);
+                    templateDrawFrames.Add(node);
                 }
             }
 
-            foreach (var node in dtlDrawFrames)
+            foreach (var node in templateDrawFrames)
             {
                 ProcessDrawFrameElement(template, node, xml.NamespaceManager);
             }
@@ -136,8 +136,9 @@ namespace Sandwych.Reporting.Odf
             var textAnchors = xml.GetElementsByTagName(OdfDocument.TextAnchorElement);
             foreach (XmlElement ta in textAnchors)
             {
-                var href = ta.GetAttribute("xlink:href");
-                if (href != null && href.Trim('/').Trim().StartsWith(WellknownConstants.DtlProtocolPrefix))
+                var href = ta.GetAttribute("xlink:href")?.Trim()?.Trim('/');
+                if (href != null && (href.StartsWith(WellknownConstants.TldProtocolPrefix)
+                    || href.StartsWith(WellknownConstants.TlrProtocolPrefix)))
                 {
                     yield return ta;
                 }
@@ -156,7 +157,7 @@ namespace Sandwych.Reporting.Odf
             }
             else
             {
-                var href = placeholder.Attributes["xlink:href"].Value;
+                var href = placeholder.Attributes["xlink:href"]?.Value;
                 match = HyperLinkValuePattern.Value.Match(Uri.UnescapeDataString(href));
             }
 
@@ -222,7 +223,7 @@ namespace Sandwych.Reporting.Odf
 
             var nameAttr = drawFrameNode.Attributes["draw:name"];
             var drawImageNode = drawFrameNode.SelectSingleNode("//draw:image", nsmanager);
-            var userExpr = nameAttr.Value.Trim().Substring(1);
+            var userExpr = nameAttr.Value.Trim('{', '}');
             var fluidExpr = "{{ " + userExpr + " | " + OdfImageFilter.FilterName + " }}";
             nameAttr.Value = string.Empty;
 
