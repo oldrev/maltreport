@@ -52,18 +52,18 @@ namespace Sandwych.Reporting.OfficeML
             {
                 var attr = phe.GetAttribute(WordMLDocument.DestAttribute);
                 var value = UrlUtility.UrlDecode(attr, Encoding.UTF8);
-                value = value.Substring(WellknownConstants.DtlProtocolPrefix.Length).Trim('/').Trim();
+                value = value.Substring(WellknownConstants.TlrProtocolPrefix.Length).Trim('/').Trim();
 
                 if (value.Length < 2)
                 {
                     throw new SyntaxErrorException();
                 }
 
-                if (value.Trim().StartsWith(WellknownConstants.DtlDirectiveChar))
+                if (value.Trim().StartsWith("@"))
                 {
                     this.ProcessDirectiveTag(phe, value.Substring(1));
                 }
-                else if (value.Trim().StartsWith(WellknownConstants.DtlReferenceChar))
+                else if (value.Trim().StartsWith("$"))
                 {
                     this.ProcessReferenceTag(phe, value.Substring(1));
                 }
@@ -82,19 +82,21 @@ namespace Sandwych.Reporting.OfficeML
 
         private void ProcessDirectiveTag(XmlElement placeholderNode, string value)
         {
-            var directive = new DirectiveElement(this.TemplateDocument.XmlDocument, value);
+            var directive = new DirectiveElement(
+                this.CompiledTemplateDocument.XmlDocument, value);
             directive.ReduceTagByDirective(placeholderNode);
         }
 
         private List<XmlElement> FindAllPlaceholders()
         {
             var placeholders = new List<XmlElement>();
-            var allNodes = this.TemplateDocument.XmlDocument.GetElementsByTagName(WordMLDocument.HlinkElement);
+            var allNodes = this.CompiledTemplateDocument
+                .XmlDocument.GetElementsByTagName(WordMLDocument.HlinkElement);
 
             foreach (XmlElement e in allNodes)
             {
                 var attr = e.GetAttribute(WordMLDocument.DestAttribute);
-                if (attr.StartsWith(WellknownConstants.DtlProtocolPrefix))
+                if (attr.StartsWith(WellknownConstants.TlrProtocolPrefix))
                 {
                     placeholders.Add(e);
                 }
@@ -105,7 +107,7 @@ namespace Sandwych.Reporting.OfficeML
 
         private void ProcessReferenceTag(XmlElement placeholderElement, string value)
         {
-            var xml = this.TemplateDocument.XmlDocument;
+            var xml = this.CompiledTemplateDocument.XmlDocument;
             var refEle = new ReferenceElement(xml, value);
             var rEle = xml.CreateElement("w:r", WordMLNamespaceManager.WNamespace);
             var tEle = xml.CreateElement("w:t", WordMLNamespaceManager.WNamespace);
@@ -117,12 +119,15 @@ namespace Sandwych.Reporting.OfficeML
         private List<XmlElement> MatchImagePlaceholderElements()
         {
             var placeholderElements = new List<XmlElement>();
-            var shapeElements = this.TemplateDocument.XmlDocument
-                .SelectNodes("//" + WordMLDocument.ShapeElement, this.TemplateDocument.NamespaceManager);
+            var shapeElements = this.CompiledTemplateDocument.XmlDocument
+                .SelectNodes("//" + WordMLDocument.ShapeElement, 
+                    this.CompiledTemplateDocument.NamespaceManager);
+
             foreach (XmlElement ele in shapeElements)
             {
                 var altAttr = ele.Attributes["alt"];
-                if (altAttr != null && !string.IsNullOrWhiteSpace(altAttr.Value) && altAttr.Value.Trim().StartsWith(WellknownConstants.DtlReferenceProtocolPrefix))
+                if (altAttr != null && !string.IsNullOrWhiteSpace(altAttr.Value) && altAttr.Value.Trim()
+                    .StartsWith("dtl://"))
                 {
                     placeholderElements.Add(ele.ParentNode as XmlElement);
                 }
@@ -133,11 +138,11 @@ namespace Sandwych.Reporting.OfficeML
 
         private void ProcessImagePlaceholderElement(XmlElement ele)
         {
-            var nsmanager = this.TemplateDocument.NamespaceManager;
+            var nsmanager = this.CompiledTemplateDocument.NamespaceManager;
             var shapeEle = ele.SelectSingleNode("//" + WordMLDocument.ShapeElement, nsmanager);
             var binDataEle = ele.SelectSingleNode("//" + WordMLDocument.BinDataElement, nsmanager);
             var imageDataEle = shapeEle.SelectSingleNode("//" + WordMLDocument.ImageDataElement, nsmanager);
-            var refExpr = shapeEle.Attributes["alt"].Value.Trim().Substring(WellknownConstants.DtlReferenceProtocolPrefix.Length);
+            var refExpr = shapeEle.Attributes["alt"].Value.Trim().Substring("dtl://".Length);
             var imageFormat = ImageFormatPattern.Value.Match(refExpr).Groups[1].Value;
             var id = Guid.NewGuid().ToString("N");
             var wordmlImageUrl = $"wordml://{id}.{imageFormat}";

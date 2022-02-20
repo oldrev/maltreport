@@ -31,7 +31,7 @@ namespace Sandwych.Reporting.OfficeML
         {
             var sb = new StringBuilder();
             using var writer = XmlWriter.Create(sb);
-            this.TemplateDocument.XmlDocument.WriteTo(writer);
+            this.CompiledTemplateDocument.XmlDocument.WriteTo(writer);
             writer.Flush();
             return sb.ToString();
         }

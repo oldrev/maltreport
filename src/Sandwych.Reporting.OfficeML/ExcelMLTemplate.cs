@@ -38,7 +38,7 @@ namespace Sandwych.Reporting.OfficeML
 
         private void ProcessPlaceholders()
         {
-            var xml = this.TemplateDocument.XmlDocument;
+            var xml = this.CompiledTemplateDocument.XmlDocument;
 
             var workbookNode = FindFirstChildNode(xml, "Workbook");
 
@@ -59,11 +59,11 @@ namespace Sandwych.Reporting.OfficeML
                     throw new SyntaxErrorException();
                 }
 
-                if (value.Trim().StartsWith(WellknownConstants.DtlDirectiveChar))
+                if (value.Trim().StartsWith("@"))
                 {
                     this.ProcessDirectiveTag(phe, value.Substring(1));
                 }
-                else if (value.Trim().StartsWith(WellknownConstants.DtlReferenceChar))
+                else if (value.Trim().StartsWith("$"))
                 {
                     this.ProcessReferenceTag(phe, value.Substring(1));
                 }
@@ -78,7 +78,8 @@ namespace Sandwych.Reporting.OfficeML
 
         private void ProcessDirectiveTag(XmlElement placeholderNode, string value)
         {
-            var directive = new DirectiveElement(this.TemplateDocument.XmlDocument, value);
+            var directive = new DirectiveElement(
+                this.CompiledTemplateDocument.XmlDocument, value);
             directive.ReduceTagByDirective(placeholderNode);
         }
 
@@ -94,7 +95,7 @@ namespace Sandwych.Reporting.OfficeML
                 if (e.HasAttribute(ExcelMLDocument.HRefAttribute))
                 {
                     var attr = e.GetAttribute(ExcelMLDocument.HRefAttribute);
-                    if (attr.StartsWith(WellknownConstants.DtlProtocolPrefix, StringComparison.Ordinal))
+                    if (attr.StartsWith(WellknownConstants.TlrProtocolPrefix, StringComparison.Ordinal))
                     {
                         placeholders.Add(e);
                     }
