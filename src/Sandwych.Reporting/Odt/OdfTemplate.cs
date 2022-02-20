@@ -43,6 +43,7 @@ namespace Sandwych.Reporting.Odf
 
         protected override void PrepareTemplate()
         {
+            /*
             this.CompiledTemplateDocument.Compile();
 
             this.CompiledTemplateDocument.Flush();
@@ -55,6 +56,7 @@ namespace Sandwych.Reporting.Odf
             {
                 throw new SyntaxErrorException(error);
             }
+            */
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ using Sandwych.Reporting.Odf.Filters;
 
 namespace Sandwych.Reporting.Odf
 {
-    internal static class OdfCompiler
+    internal static class OldOdfCompiler
     {
         private static readonly Lazy<Regex> PlaceHolderValuePattern =
             new Lazy<Regex>(() => new Regex(@"^<\s*(.*)\s*>$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline), true);
