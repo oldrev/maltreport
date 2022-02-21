@@ -109,7 +109,7 @@ namespace Sandwych.Reporting.Odf
             {
                 var expr = element.Value.Trim();
                 element.RemoveAll(); // Remove all children
-                element.Value = expr; // Set element's content
+                element.Add(new RawXText(expr)); // Set element's content
             }
 
         }
