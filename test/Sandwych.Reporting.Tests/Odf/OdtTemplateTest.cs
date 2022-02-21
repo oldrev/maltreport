@@ -19,7 +19,7 @@ namespace Sandwych.Reporting.Tests.Odf
         {
             using var stream = GetTemplate("Odf.Template1.odt");
             var odt = await OdfDocument.LoadFromAsync(stream);
-            var template = new OdtTemplate(odt);
+            var template = await OdfTemplateCompiler.Instance.CompileAsync(odt);
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace Sandwych.Reporting.Tests.Odf
         {
             using var stream = GetTemplate("Odf.Template1.odt");
             var odt = await OdfDocument.LoadFromAsync(stream);
-            var template = new OdtTemplate(odt);
+            var template = await OdfTemplateCompiler.Instance.CompileAsync(odt);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()
@@ -48,7 +48,7 @@ namespace Sandwych.Reporting.Tests.Odf
         {
             using var stream = GetTemplate("Odf.Template3.odt");
             var odt = await OdfDocument.LoadFromAsync(stream);
-            var template = new OdtTemplate(odt);
+            var template = await OdfTemplateCompiler.Instance.CompileAsync(odt);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()

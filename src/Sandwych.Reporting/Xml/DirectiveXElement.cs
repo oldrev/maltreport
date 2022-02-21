@@ -21,7 +21,7 @@ namespace Sandwych.Reporting.Xml
 
         public string Directive { get; }
 
-        public  static void ReduceDirectiveElements(XContainer root)
+        public  static void SanitizeDirectiveElements(XContainer root)
         {
             var directiveElements = root.Descendants(ElementName).ToArray();
             foreach (var directiveElement in directiveElements)

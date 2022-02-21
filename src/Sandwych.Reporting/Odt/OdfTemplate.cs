@@ -25,6 +25,8 @@ namespace Sandwych.Reporting.Odf
 
         public override async Task<IDocument> RenderAsync(TemplateContext context, CancellationToken ct = default)
         {
+            await this.LoadAndParseFluidTemplateAsync();
+
             var outputDocument = await this.CompiledTemplateDocument.DuplicateAsync(ct);
 
             var fluidContext = this.CreateFluidTemplateContext(outputDocument, context);
@@ -59,27 +61,16 @@ namespace Sandwych.Reporting.Odf
             */
         }
 
-        /// <summary>
-        /// Sanitize template text
-        /// </summary>
-        /// <param name="mainContentText"></param>
-        /// <returns>Sanitized text</returns>
-        private string SanitizeXml(string mainContentText)
+        private async Task LoadAndParseFluidTemplateAsync()
         {
-            /* Removes superfluous elements around the interpolation ( {﻿{...}} )
-             e.g. <text:p text:style-name="P1">{{<text:span text:style-name="T2">so</text:span>.<text:span text:style-name="T2">StringValue</text:span>}}</text:p>
-              is transformed in <text:p text:style-name="P1">{{so.StringValue}}</text:p>
-            */
-            var doc = XDocument.Parse(mainContentText);
-
-            // TODO: The following is very coarse grained, can probably be refined.
-            foreach (var element in doc.Descendants().Where(
-                x => x.Nodes().Any(y => y.NodeType == XmlNodeType.Text && ((XText)y).Value.Contains("{{"))))
+            if (_mainFluidTemplate == null)
             {
-                element.Value = element.Value;
+                var reader = this.CompiledTemplateDocument.GetEntryTextReader(OdfDocument.ContentEntryPath);
+                var mainDocumentText = await reader.ReadToEndAsync();
+                _mainFluidTemplate = FluidParserHolder.Instance.Parse(mainDocumentText);
             }
-
-            return doc.ToString();
         }
+
+
     }
 }
