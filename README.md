@@ -4,8 +4,14 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/7kj4cnl64negfdn6/branch/master?svg=true)](https://ci.appveyor.com/project/oldrev/maltreport/branch/master)
 [![Build Status](https://travis-ci.org/oldrev/maltreport.svg?branch=master)](https://travis-ci.org/oldrev/maltreport)
 
+**PLEASE NOTE**: 
+* At this very moment I'm rewriting the old library, the next coming v3.0 will be a incompatible version;
+* I'm also working on a additional commerce library for the docx/xlsx support, closed-source library for MS-Office seems fair;
+* The super old and buggy OfficeML support will be dropped, the OfficeML format is a legacy from 2003;
+* More real world unit tests, more documents;
+* Check `dev` branch to track the progress of the incoming v3 series.
 
-MaltReport is an OpenDocument/OfficeOpenXML powered reporting engine for .NET and Mono, 
+MaltReport is an OpenDocument/OfficeOpenXML powered document template engine for .NET and Mono, 
 it is inspired by the excellent [Relatorio Project](http://relatorio.openhex.org/).
 
 There is a briefly introduction in Chinese: [MaltReport2 中文使用简介](http://www.cnblogs.com/oldrev/p/maltreport2_intro.html)
