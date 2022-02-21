@@ -53,10 +53,7 @@ namespace Sandwych.Reporting.Xml
                     finished = true;
                 }
             }
-            if (!object.ReferenceEquals(reducedElement, directiveElement))
-            {
-                reducedElement.ReplaceWith(new RawXText(directiveElement.Value));
-            }
+            reducedElement.ReplaceWith(new RawXText(directiveElement.Value));
         }
     }
 }
