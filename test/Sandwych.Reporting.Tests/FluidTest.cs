@@ -80,5 +80,14 @@ namespace Sandwych.Reporting.Tests
             Assert.IsNull(template);
             TestContext.Out.WriteLine($"Parser error messages: {error}");
         }
+
+        [Test]
+        public void TestParserStatements()
+        {
+            var templateText = "fdsafdsafdsa"; //"{% if 1 > 2 %} 1 {% else %} {{ 2 }} {% endif %}";
+            var result = FluidParserHolder.Instance.TryParse(templateText, out var template, out var error);
+            Assert.IsTrue(result);
+            Assert.NotNull(template);
+        }
     }
 }

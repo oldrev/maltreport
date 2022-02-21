@@ -4,12 +4,12 @@ using System.Xml;
 
 namespace Sandwych.Reporting.Xml
 {
-    public class ReferenceElement : XmlElement
+    public class OutputXmlElement : XmlElement
     {
-        public const string ElementName = "report-reference";
+        public const string ElementName = "template-output";
         private string expression = null;
 
-        public ReferenceElement(XmlDocument doc, string exp)
+        public OutputXmlElement(XmlDocument doc, string exp)
             : base(string.Empty, ElementName, string.Empty, doc)
         {
             Debug.Assert(doc != null);

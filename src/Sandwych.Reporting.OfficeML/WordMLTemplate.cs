@@ -108,7 +108,7 @@ namespace Sandwych.Reporting.OfficeML
         private void ProcessReferenceTag(XmlElement placeholderElement, string value)
         {
             var xml = this.CompiledTemplateDocument.XmlDocument;
-            var refEle = new ReferenceElement(xml, value);
+            var refEle = new OutputXmlElement(xml, value);
             var rEle = xml.CreateElement("w:r", WordMLNamespaceManager.WNamespace);
             var tEle = xml.CreateElement("w:t", WordMLNamespaceManager.WNamespace);
             rEle.AppendChild(tEle);

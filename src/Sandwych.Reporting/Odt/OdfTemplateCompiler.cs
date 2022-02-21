@@ -22,6 +22,55 @@ namespace Sandwych.Reporting.Odf
 
             using var relsDocumentStream = compiledDoc.OpenEntryToRead(compiledDoc.MainContentEntryPath);
 
+            this.CompileHyperlinkStatements(mainDocument);
+
+            this.CompileImageNameOutputStatements(mainDocument);
+
+            this.CompileInputFieldAndPlaceholderStatements(mainDocument);
+
+            DirectiveXElement.SanitizeDirectiveElements(mainDocument);
+
+            compiledDoc.WriteTextEntry(OdfDocument.ContentEntryPath, mainDocument.ToString());
+            //  await compiledDoc.WriteXDocumentEntryAsync(DocxDocument.MainDocumentPath, mainDocument, ct);
+
+            await compiledDoc.FlushAsync();
+
+            return new OdtTemplate(compiledDoc);
+        }
+
+        private void CompileInputFieldAndPlaceholderStatements(NSAwaredXDocument mainDocument)
+        {
+            XNamespace text = mainDocument.NSManager.LookupNamespace("text");
+            var textDescriptionAttr = text + "description";
+
+            var textPlaceholders = mainDocument.NSAwaredXPathSelectElements("//text:placeholder")
+                .Where(e =>
+                {
+                    var expr = e.Attribute(textDescriptionAttr)?.Value.Trim();
+                    return !string.IsNullOrEmpty(expr) && expr.StartsWith("{{") && expr.EndsWith("}}");
+                }).ToArray();
+
+            foreach (var textPlaceholder in textPlaceholders)
+            {
+                textPlaceholder.ReplaceWith(new RawXText(textPlaceholder.Attribute(textDescriptionAttr).Value));
+            }
+
+            var textInputs = mainDocument.NSAwaredXPathSelectElements("//text:text-input")
+                .Where(e =>
+                {
+                    var expr = e.Attribute(textDescriptionAttr)?.Value.Trim();
+                    return !string.IsNullOrEmpty(expr) && expr.StartsWith("{%") && expr.EndsWith("%}");
+                }).ToArray();
+
+            foreach (var textInput in textInputs)
+            {
+                var expr = textInput.Attribute(textDescriptionAttr).Value.Trim();
+                textInput.ReplaceWith(new DirectiveXElement(expr));
+            }
+        }
+
+        private void CompileHyperlinkStatements(NSAwaredXDocument mainDocument)
+        {
             XNamespace text = mainDocument.NSManager.LookupNamespace("text");
             XNamespace xlink = mainDocument.NSManager.LookupNamespace("xlink");
             var xlinkHrefAttr = xlink + "href";
@@ -39,7 +88,7 @@ namespace Sandwych.Reporting.Odf
                 var href = e.Attribute(xlinkHrefAttr)?.Value;
                 var expr = Utils.UrlUtility.UrlDecode(href.Substring(6), Encoding.UTF8).TrimEnd('/');
 
-                e.ReplaceWith(new RawXText(expr));
+                e.ReplaceWith(new RawXText("{{" + expr + "}}"));
             }
 
             foreach (var e in tldLinks)
@@ -49,69 +98,39 @@ namespace Sandwych.Reporting.Odf
 
                 e.ReplaceWith(new DirectiveXElement(expr));
             }
-
-            DirectiveXElement.SanitizeDirectiveElements(mainDocument);
-
-            this.ProcessImageReferences(mainDocument);
-
-            this.SanitizeReferenceElements(mainDocument);
-
-            compiledDoc.WriteTextEntry(OdfDocument.ContentEntryPath, mainDocument.ToString());
-            //  await compiledDoc.WriteXDocumentEntryAsync(DocxDocument.MainDocumentPath, mainDocument, ct);
-
-            await compiledDoc.FlushAsync();
-
-            return new OdtTemplate(compiledDoc);
         }
 
-        private void ProcessImageReferences(NSAwaredXDocument mainDocument)
+        private void CompileImageNameOutputStatements(NSAwaredXDocument mainDocument)
         {
             // Process Image tags
             // TODO FIXME
             XNamespace draw = mainDocument.NSManager.LookupNamespace("draw");
             XNamespace xlink = mainDocument.NSManager.LookupNamespace("xlink");
+            XNamespace svg = mainDocument.NSManager.LookupNamespace("svg");
             var xlinkHrefAttr = xlink + "href";
 
             var drawFrames = mainDocument.NSAwaredXPathSelectElements("//draw:frame").ToArray();
             foreach (var drawFrame in drawFrames)
             {
+                var svgDesc = drawFrame.Elements(svg + "desc").SingleOrDefault();
+                var expr = svgDesc?.Value?.Trim();
                 var drawImage = drawFrame.Descendants(draw + "image").SingleOrDefault();
-                var drawNameValue = drawImage?.Attribute(draw + "name")?.Value?.Trim();
-                if (drawImage != null
-                    && !string.IsNullOrEmpty(drawNameValue)
-                    && drawNameValue.StartsWith("{{")
-                    && drawNameValue.EndsWith("}}"))
+                if (svgDesc != null && !string.IsNullOrEmpty(expr) && expr.StartsWith("{{") && expr.EndsWith("}}"))
                 {
                     // Repack the user expression
-                    var userExpr = drawNameValue.Trim('{', '}');
+                    var userExpr = expr.Trim('{', '}');
                     var fluidExpr = "{{ " + userExpr + " | " + OdfImageFilter.FilterName + " }}";
 
-                    drawImage.ReplaceWith(new RawXText(fluidExpr));
+                    if(drawImage != null)
+                    {
+                        drawImage.Remove();
+                    }
+
+                    svgDesc.ReplaceWith(new RawXText(fluidExpr));
+
                     // TODO remove the placeholder's image
                 }
             }
-        }
-
-        /// <summary>
-        /// Sanitize template text
-        /// </summary>
-        private void SanitizeReferenceElements(NSAwaredXDocument doc)
-        {
-            /* Removes superfluous elements around the interpolation ( {﻿{...}} )
-             e.g. <text:p text:style-name="P1">{{<text:span text:style-name="T2">so</text:span>.<text:span text:style-name="T2">StringValue</text:span>}}</text:p>
-              is transformed in <text:p text:style-name="P1">{{so.StringValue}}</text:p>
-            */
-
-            // TODO: The following is very coarse grained, can probably be refined.
-            var elements = doc.Descendants()
-                .Where(x => x.Nodes().Any(x => (x as XText)?.Value?.Trim()?.StartsWith("{{") ?? false));
-            foreach (var element in elements)
-            {
-                var expr = element.Value.Trim();
-                element.RemoveAll(); // Remove all children
-                element.Add(new RawXText(expr)); // Set element's content
-            }
-
         }
 
     }

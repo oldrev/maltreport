@@ -31,7 +31,7 @@ var context = new TemplateContext(data);
 
 // Load document template:
 var templateDocument = await OdfDocument.LoadFromAsync("EmployeesTemplate.odt");
-var template = new OdtTemplate(templateDocument);
+var template = await OdfTemplateCompiler.Instance.CompileAsync(templateDocument);
 
 // Rendering step
 var result = await template.RenderAsync(context);

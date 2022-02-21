@@ -141,6 +141,10 @@ namespace Sandwych.Reporting
 
         public Stream OpenEntryToRead(string entryPath)
         {
+            if(!this.EntryExists(entryPath))
+            {
+                throw new FileNotFoundException(entryPath);
+            }
             return new MemoryStream(this.GetEntryBuffer(entryPath));
         }
 

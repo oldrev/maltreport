@@ -186,7 +186,7 @@ namespace Sandwych.Reporting.Odf
             Debug.Assert(placeholder != null);
             Debug.Assert(!string.IsNullOrEmpty(value));
 
-            var ie = new ReferenceElement(xml, value);
+            var ie = new OutputXmlElement(xml, value);
 
             if (placeholder.Name == OdfDocument.TextPlaceholderElement)
             {
@@ -198,7 +198,7 @@ namespace Sandwych.Reporting.Odf
             }
         }
 
-        private static void ProcessPlaceHolderElement(XmlNode placeholder, ReferenceElement ie)
+        private static void ProcessPlaceHolderElement(XmlNode placeholder, OutputXmlElement ie)
         {
             var placeholderType = placeholder.Attributes[OdfDocument.TextPlaceholderTypeAttribute]
                 .InnerText.Trim().ToLowerInvariant();

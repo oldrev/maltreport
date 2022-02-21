@@ -16,7 +16,15 @@ namespace Sandwych.Reporting.Xml
         public DirectiveXElement(string directive) : base(ElementName)
         {
             this.Directive = directive;
-            this.Add(new RawXText("{% " + directive + " %}"));
+
+            if (directive.Trim().StartsWith("{%"))
+            {
+                this.Add(new RawXText(directive));
+            }
+            else
+            {
+                this.Add(new RawXText("{% " + directive + " %}"));
+            }
         }
 
         public string Directive { get; }
