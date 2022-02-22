@@ -11,7 +11,6 @@
 
     <ItemGroup>
         <EmbeddedResource Include="Resources\Assets\JpegImage.jpeg" />
-        <EmbeddedResource Include="Resources\Templates\OfficeML\Template1.doc.xml" />
         <EmbeddedResource Include="Resources\Templates\Odf\Template1.odt" />
         <EmbeddedResource Include="Resources\Templates\Odf\Template2.ods" />
         <EmbeddedResource Include="Resources\Templates\Odf\Template3.odt" />
@@ -30,7 +29,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Sandwych.Reporting.OfficeML\Sandwych.Reporting.OfficeML.csproj" />
         <ProjectReference Include="..\..\src\Sandwych.Reporting\Sandwych.Reporting.csproj" />
     </ItemGroup>
 

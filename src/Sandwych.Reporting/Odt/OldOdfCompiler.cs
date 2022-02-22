@@ -138,7 +138,7 @@ namespace Sandwych.Reporting.Odf
             {
                 var href = ta.GetAttribute("xlink:href")?.Trim()?.Trim('/');
                 if (href != null && (href.StartsWith(WellknownConstants.TldProtocolPrefix)
-                    || href.StartsWith(WellknownConstants.TlrProtocolPrefix)))
+                    || href.StartsWith(WellknownConstants.TloProtocolPrefix)))
                 {
                     yield return ta;
                 }

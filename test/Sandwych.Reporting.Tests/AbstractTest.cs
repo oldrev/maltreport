@@ -9,13 +9,12 @@ namespace Sandwych.Reporting.Tests
 {
     public abstract class AbstractTest
     {
-        public string TempPath { get; private set; }
+        public static string TempDirPath { get; } = Path.Combine(Path.GetTempPath(), "MaltReportTest");
 
         [SetUp]
         protected void SetUp() {
-            this.TempPath = Path.Combine(Path.GetTempPath(), "MaltReportTest");
-            if(!Directory.Exists(this.TempPath)) {
-                Directory.CreateDirectory(this.TempPath);
+            if(!Directory.Exists(TempDirPath)) {
+                Directory.CreateDirectory(TempDirPath);
             }
         }
 

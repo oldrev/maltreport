@@ -75,15 +75,15 @@ namespace Sandwych.Reporting.Odf
             XNamespace xlink = mainDocument.NSManager.LookupNamespace("xlink");
             var xlinkHrefAttr = xlink + "href";
 
-            var tlrLinks = mainDocument.NSAwaredXPathSelectElements("//text:a")
-                .Where(e => e.Attribute(xlinkHrefAttr)?.Value?.StartsWith(WellknownConstants.TlrProtocolPrefix) ?? false)
+            var tloLinks = mainDocument.NSAwaredXPathSelectElements("//text:a")
+                .Where(e => e.Attribute(xlinkHrefAttr)?.Value?.StartsWith(WellknownConstants.TloProtocolPrefix) ?? false)
                 .ToArray();
 
             var tldLinks = mainDocument.NSAwaredXPathSelectElements("//text:a")
                 .Where(e => e.Attribute(xlinkHrefAttr)?.Value?.StartsWith(WellknownConstants.TldProtocolPrefix) ?? false)
                 .ToArray();
 
-            foreach (var e in tlrLinks)
+            foreach (var e in tloLinks)
             {
                 var href = e.Attribute(xlinkHrefAttr)?.Value;
                 var expr = Utils.UrlUtility.UrlDecode(href.Substring(6), Encoding.UTF8).TrimEnd('/');

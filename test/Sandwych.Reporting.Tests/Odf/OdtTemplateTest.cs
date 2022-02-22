@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Xml.Linq;
+using Sandwych.Reporting.Xml;
 
 namespace Sandwych.Reporting.Tests.Odf
 {
@@ -43,6 +44,8 @@ namespace Sandwych.Reporting.Tests.Odf
 
             var xdoc = await result.ReadXDocumentEntryAsync("content.xml");
             Assert.AreEqual(dataSet.SimpleObject.StringValue, xdoc.Root.Value);
+
+            await result.SaveAsync(Path.Combine(TempDirPath, "Template3-rendered.odt"));
         }
 
         [Test]
@@ -61,11 +64,19 @@ namespace Sandwych.Reporting.Tests.Odf
             var context = new TemplateContext(values);
 
             var result = await template.RenderAsync(context) as IZipDocument;
-            using var fs = File.Create("d:\\tmp\\out1.odt");
-            await result.SaveAsync(fs);
 
             var xdoc = await result.ReadXDocumentEntryAsync("content.xml");
-            XNamespace tableNS = xdoc.NSManager.LookupNamespace("table");
+            var tableNS = xdoc.NSManager.GetNamespace("table");
+            var officeNS = xdoc.NSManager.GetNamespace("office");
+            var textNS = xdoc.NSManager.GetNamespace("text");
+
+            // Test output
+            {
+                var officeText = xdoc.Root.Descendants(officeNS + "text");
+                var firstList = officeText.Elements(textNS + "list").First();
+                Assert.AreEqual("String: " + dataSet.SimpleObject.StringValue, firstList.Elements().ElementAt(0).Value);
+                Assert.AreEqual("Integer: " + dataSet.SimpleObject.IntegerValue, firstList.Elements().ElementAt(1).Value);
+            }
 
             // Test table1
             {
@@ -90,6 +101,7 @@ namespace Sandwych.Reporting.Tests.Odf
                     Assert.AreEqual(dataSet.Table1.Rows[irow].TimeSpan, TimeSpan.Parse(cols[6].Value));
                 }
             }
+            await result.SaveAsync(Path.Combine(TempDirPath, "Template1-rendered.odt"));
 
         }
 

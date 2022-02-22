@@ -6,7 +6,7 @@ namespace Sandwych.Reporting
 {
     public static class WellknownConstants
     {
-        public const string TlrProtocolPrefix = "tlr://";
+        public const string TloProtocolPrefix = "tlo://";
         public const string TldProtocolPrefix = "tld://";
     }
 }

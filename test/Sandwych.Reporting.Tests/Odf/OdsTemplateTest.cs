@@ -39,7 +39,7 @@ namespace Sandwych.Reporting.Tests.Odf
 
             var result = await template.RenderAsync(context);
 
-            await result.SaveAsync(Path.Combine(this.TempPath, "ods-out.ods"));
+            await result.SaveAsync(Path.Combine(TempDirPath, "ods-out.ods"));
         }
 
     }
