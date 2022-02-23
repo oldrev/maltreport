@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -15,16 +16,12 @@ namespace Sandwych.Reporting.Xml
 
         public DirectiveXElement(string directive) : base(ElementName)
         {
-            this.Directive = directive;
+            this.Directive = directive?.Trim() ?? throw new ArgumentNullException(nameof(directive));
+            if(!this.Directive.StartsWith("{%") || !this.Directive.EndsWith("%}") ){
+                throw new SyntaxErrorException(directive);
+            }
 
-            if (directive.Trim().StartsWith("{%"))
-            {
-                this.Add(new RawXText(directive));
-            }
-            else
-            {
-                this.Add(new RawXText("{% " + directive + " %}"));
-            }
+            this.Add(new RawXText(directive));
         }
 
         public string Directive { get; }

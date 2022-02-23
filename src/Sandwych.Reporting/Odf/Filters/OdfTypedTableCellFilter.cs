@@ -9,18 +9,18 @@ using Sandwych.Reporting.Textilize;
 
 namespace Sandwych.Reporting.Odf.Filters
 {
-    public class OdsTableCellDataValueFilter : IFluidFilter
+    public class OdfTypedTableCellFilter : IFluidFilter
     {
-        public string Name => "_rtl_ods_table_cell_datavalue";
+        public const string FilterName = "__ODF_Filters_TypedTableCell";
+
+        public string Name => FilterName;
 
         public ValueTask<FluidValue> InvokeAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
         {
-            //TODO check arguments
-            var cellType = arguments.At(0);
-            var formatType = arguments.At(1);
+            var styleNameAttr = arguments.At(0).ToStringValue().ToString();
 
-
-            return new ValueTask<FluidValue>(new OdsTableCellDataValue("TODO", null));
+            return new ValueTask<FluidValue>(new OdfTypedTableCellValue(input, styleNameAttr));
         }
+
     }
 }

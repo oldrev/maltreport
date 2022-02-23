@@ -19,9 +19,7 @@ namespace Sandwych.Reporting.Xml
 
         public override void WriteTo(System.Xml.XmlWriter writer)
         {
-            writer.WriteRaw(@"{{ ");
             writer.WriteRaw(this.Value);
-            writer.WriteRaw(@" }}");
         }
     }
 }

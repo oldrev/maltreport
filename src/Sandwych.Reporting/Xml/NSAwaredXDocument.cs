@@ -41,5 +41,9 @@ namespace Sandwych.Reporting.Xml
 
         public XElement NSAwaredXPathSelectElement(string xpath) =>
             this.Document.XPathSelectElement(xpath, this.NSManager);
+
+        public XName GetFullName(string ns, string name) => this.GetNamespace(ns) + name;
+
+        public XNamespace GetNamespace(string ns) => XNamespace.Get(this.NSManager.LookupNamespace(ns));
     }
 }

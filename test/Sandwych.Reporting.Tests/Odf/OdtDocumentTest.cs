@@ -15,7 +15,6 @@ namespace Sandwych.Reporting.Tests.Odf
             using var stream = GetTemplate("Odf.Template1.odt");
             var odt = await OdfDocument.LoadFromAsync(stream);
             var template = new OdtTemplate(odt);
-
         }
 
 

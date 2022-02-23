@@ -11,7 +11,7 @@ namespace Sandwych.Reporting.Odf.Filters
     {
         private readonly OdfDocument _document;
 
-        public const string FilterName = "__odf-image-filter";
+        public const string FilterName = "__ODF_Filters_Image";
 
         public string Name => FilterName;
 

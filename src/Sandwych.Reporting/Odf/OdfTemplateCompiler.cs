@@ -28,14 +28,51 @@ namespace Sandwych.Reporting.Odf
 
             this.CompileInputFieldAndPlaceholderStatements(mainDocument);
 
-            DirectiveXElement.SanitizeDirectiveElements(mainDocument);
+            var officeBodyElement = mainDocument.NSAwaredXPathSelectElement("/office:document-content/office:body");
+            var officeBodyType = officeBodyElement.Elements().First().Name.LocalName;
 
-            compiledDoc.WriteTextEntry(OdfDocument.ContentEntryPath, mainDocument.ToString());
-            //  await compiledDoc.WriteXDocumentEntryAsync(DocxDocument.MainDocumentPath, mainDocument, ct);
+            // Check is a .ODS file
+            if (officeBodyType == "spreadsheet")
+            {
+                this.CompileOdsSpecified(mainDocument);
+            }
+
+            DirectiveXElement.SanitizeDirectiveElements(mainDocument);
+            var mainDocumentText = mainDocument.ToString();
+
+            compiledDoc.WriteTextEntry(OdfDocument.ContentEntryPath, mainDocumentText);
 
             await compiledDoc.FlushAsync();
 
-            return new OdtTemplate(compiledDoc);
+            return officeBodyType switch
+            {
+                "spreadsheet" =>  new OdsTemplate(compiledDoc),
+                "text" =>  new OdtTemplate(compiledDoc),
+                _ => throw new NotSupportedException($"Not supported document type: {officeBodyType}"),
+            };
+
+        }
+
+        private void CompileOdsSpecified(NSAwaredXDocument mainDocument)
+        {
+            var officeValueName = mainDocument.GetFullName("office", "value");
+            var officeValueTypeName = mainDocument.GetFullName("office", "value-type");
+            var calcextValueTypeName = mainDocument.GetFullName("calcext", "value-type");
+            var tableStyleNameAttr = mainDocument.GetFullName("table", "style-name");
+
+            var tableCellName = mainDocument.GetFullName("table", "table-cell");
+            var tableCells = mainDocument.Root
+                .Descendants(tableCellName)
+                .Where(tc => tc.Value?.Trim()?.StartsWith("{{") ?? false)
+                .ToArray();
+            foreach (var cell in tableCells)
+            {
+                var rawUserExpr = cell.Value.Trim();
+                var userExpr = rawUserExpr.Trim('{', '}').Trim();
+                var tableStyleName = cell.Attribute(tableStyleNameAttr)?.Value ?? string.Empty;
+                var filteredExpr = $" {{{{ {userExpr} | {OdfTypedTableCellFilter.FilterName}: '{tableStyleName}' }}}}\n";
+                cell.ReplaceWith(new RawXText(filteredExpr));
+            }
         }
 
         private void CompileInputFieldAndPlaceholderStatements(NSAwaredXDocument mainDocument)
@@ -88,7 +125,7 @@ namespace Sandwych.Reporting.Odf
                 var href = e.Attribute(xlinkHrefAttr)?.Value;
                 var expr = Utils.UrlUtility.UrlDecode(href.Substring(6), Encoding.UTF8).TrimEnd('/');
 
-                e.ReplaceWith(new RawXText("{{" + expr + "}}"));
+                e.ReplaceWith(new RawXText("{{ " + expr + " }}"));
             }
 
             foreach (var e in tldLinks)
@@ -96,7 +133,7 @@ namespace Sandwych.Reporting.Odf
                 var href = e.Attribute(xlinkHrefAttr)?.Value;
                 var expr = Utils.UrlUtility.UrlDecode(href.Substring(6), Encoding.UTF8).TrimEnd('/');
 
-                e.ReplaceWith(new DirectiveXElement(expr));
+                e.ReplaceWith(new DirectiveXElement("{% " + expr + " %}"));
             }
         }
 
@@ -119,9 +156,9 @@ namespace Sandwych.Reporting.Odf
                 {
                     // Repack the user expression
                     var userExpr = expr.Trim('{', '}');
-                    var fluidExpr = "{{ " + userExpr + " | " + OdfImageFilter.FilterName + " }}";
+                    var fluidExpr = $"{{{{ {userExpr} | {OdfImageFilter.FilterName} }}}}";
 
-                    if(drawImage != null)
+                    if (drawImage != null)
                     {
                         drawImage.Remove();
                     }

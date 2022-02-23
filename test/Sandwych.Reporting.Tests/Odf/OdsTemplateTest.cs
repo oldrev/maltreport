@@ -12,14 +12,13 @@ namespace Sandwych.Reporting.Tests.Odf
     [TestFixture]
     public class OdsTemplateTest : AbstractTest
     {
-        private const string Template2OdsName = "Sandwych.Reporting.Tests.OpenDocument.Templates.Template2.ods";
 
         [Test]
         public async Task CanCompileOdsDocumentTemplate()
         {
             using var stream = GetTemplate("Odf.Template2.ods");
             var ods = await OdfDocument.LoadFromAsync(stream);
-            var template = new OdsTemplate(ods);
+            var template = await OdfTemplateCompiler.Instance.CompileAsync(ods);
         }
 
         [Test]
@@ -27,7 +26,7 @@ namespace Sandwych.Reporting.Tests.Odf
         {
             using var stream = GetTemplate("Odf.Template2.ods");
             var ods = await OdfDocument.LoadFromAsync(stream);
-            var template = new OdsTemplate(ods);
+            var template = await OdfTemplateCompiler.Instance.CompileAsync(ods);
 
             var dataSet = new TestingDataSet();
             var values = new Dictionary<string, object>()

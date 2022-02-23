@@ -66,9 +66,9 @@ namespace Sandwych.Reporting.Tests.Odf
             var result = await template.RenderAsync(context) as IZipDocument;
 
             var xdoc = await result.ReadXDocumentEntryAsync("content.xml");
-            var tableNS = xdoc.NSManager.GetNamespace("table");
-            var officeNS = xdoc.NSManager.GetNamespace("office");
-            var textNS = xdoc.NSManager.GetNamespace("text");
+            var tableNS = xdoc.GetNamespace("table");
+            var officeNS = xdoc.GetNamespace("office");
+            var textNS = xdoc.GetNamespace("text");
 
             // Test output
             {

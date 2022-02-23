@@ -82,6 +82,24 @@ namespace Sandwych.Reporting.Tests
         }
 
         [Test]
+        public void TestCaptureTag()
+        {
+            var templateText =
+                "{% assign favorite_food = 'pizza' %}\n" +
+                "{% assign age = 35 %}\n" +
+                "{% capture about_me %}\n" +
+                "I am {{ age }} and my favorite food is {{ favorite_food }}.\n" +
+                "{% endcapture %}\n" +
+                "{{ about_me }}";
+
+            var parsedOk = FluidParserHolder.Instance.TryParse(templateText, out var template, out var error);
+            Assert.IsTrue(parsedOk);
+            var result = template.Render().Trim();
+            Assert.AreEqual("I am 35 and my favorite food is pizza.", result);
+        }
+
+
+        [Test]
         public void TestParserStatements()
         {
             var templateText = "fdsafdsafdsa"; //"{% if 1 > 2 %} 1 {% else %} {{ 2 }} {% endif %}";
