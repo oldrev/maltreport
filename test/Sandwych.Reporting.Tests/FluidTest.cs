@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Fluid;
 using Fluid.Ast;
 using Fluid.Parser;
+using Fluid.Values;
 using NUnit.Framework;
 
 namespace Sandwych.Reporting.Tests
@@ -106,6 +107,28 @@ namespace Sandwych.Reporting.Tests
             var result = FluidParserHolder.Instance.TryParse(templateText, out var template, out var error);
             Assert.IsTrue(result);
             Assert.NotNull(template);
+        }
+ 
+
+        [Test]
+        public async Task TestFilterArguments()
+        {
+            static ValueTask<FluidValue> AddXYFilter(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
+            {
+                var a = input.ToNumberValue();
+                var x = arguments["x"].ToNumberValue();
+                var y = arguments["y"].ToNumberValue();
+
+                return FluidValue.Create(a + x + y, context.Options);
+            }
+
+            var ctx = new Fluid.TemplateContext(new { @base = 7, a = 1, b = 2 });
+            ctx.Options.Filters.AddFilter("add", (input, arguments, context) => AddXYFilter(input, arguments, context));
+            var templateText = "{{ base | add: x: a, y: b }}";
+            var result = FluidParserHolder.Instance.TryParse(templateText, out var template, out var error);
+            Assert.IsTrue(result);
+            var output = await template.RenderAsync(ctx);
+            Assert.AreEqual("10", output);
         }
     }
 }

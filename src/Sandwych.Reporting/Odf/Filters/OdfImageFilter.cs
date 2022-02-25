@@ -22,7 +22,7 @@ namespace Sandwych.Reporting.Odf.Filters
 
         public ValueTask<FluidValue> InvokeAsync(FluidValue input, FilterArguments arguments, Fluid.TemplateContext context)
         {
-            var blob = input.ToObjectValue() as ImageBlob;
+            var blob = input.ToObjectValue() as Blob;
             if (blob == null)
             {
                 throw new NotSupportedException($"The property of your image must be a 'ImageBlob' type");

@@ -29,12 +29,13 @@ namespace Sandwych.Reporting.Tests.Odf
             var template = await OdfTemplateCompiler.Instance.CompileAsync(ods);
 
             var dataSet = new TestingDataSet();
-            var values = new Dictionary<string, object>()
+            var values = new 
             {
-                { "table1", dataSet.Table1 },
-                { "so", dataSet.SimpleObject },
+                table1 = dataSet.Table1,
+                so = dataSet.SimpleObject,
             };
             var context = new TemplateContext(values);
+            context.Options.AllowUnsafeAccess = true;
 
             var result = await template.RenderAsync(context);
 

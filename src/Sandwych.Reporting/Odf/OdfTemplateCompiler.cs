@@ -48,7 +48,7 @@ namespace Sandwych.Reporting.Odf
             {
                 "spreadsheet" =>  new OdsTemplate(compiledDoc),
                 "text" =>  new OdtTemplate(compiledDoc),
-                _ => throw new NotSupportedException($"Not supported document type: {officeBodyType}"),
+                _ => throw new NotSupportedException($"Not supported ODF document type: {officeBodyType}"),
             };
 
         }
@@ -70,7 +70,7 @@ namespace Sandwych.Reporting.Odf
                 var rawUserExpr = cell.Value.Trim();
                 var userExpr = rawUserExpr.Trim('{', '}').Trim();
                 var tableStyleName = cell.Attribute(tableStyleNameAttr)?.Value ?? string.Empty;
-                var filteredExpr = $" {{{{ {userExpr} | {OdfTypedTableCellFilter.FilterName}: '{tableStyleName}' }}}}\n";
+                var filteredExpr = $" {{{{ {userExpr} | {OdfInternalTypedTableCellFilter.FilterName}: '{tableStyleName}' }}}}\n";
                 cell.ReplaceWith(new RawXText(filteredExpr));
             }
         }

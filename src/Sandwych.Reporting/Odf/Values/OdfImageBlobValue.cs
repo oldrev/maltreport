@@ -15,37 +15,40 @@ namespace Sandwych.Reporting.Odf.Values
             this.DocumentBlobEntry = entry;
         }
 
-        public override FluidValues Type => throw new NotImplementedException();
+        public override FluidValues Type => FluidValues.Object;
 
         public override bool Equals(FluidValue other)
         {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+
             if (other is OdfImageBlobValue otherImageValue)
             {
-                return otherImageValue.DocumentBlobEntry.Equals(this.DocumentBlobEntry.Blob);
+                this.Equals(otherImageValue);
             }
 
             return false;
         }
 
-        public override bool ToBooleanValue()
-        {
-            return true;
-        }
+        public bool Equals(OdfImageBlobValue other) => other.DocumentBlobEntry.Equals(this.DocumentBlobEntry.Blob);
 
-        public override decimal ToNumberValue()
-        {
-            return 0;
-        }
+        public override int GetHashCode() =>
+            this.DocumentBlobEntry.GetHashCode();
 
-        public override object ToObjectValue()
-        {
-            return this.DocumentBlobEntry.Blob;
-        }
+        public override bool ToBooleanValue() => true;
 
-        public override string ToStringValue()
-        {
-            return string.Empty;
-        }
+        public override decimal ToNumberValue() => 0;
+
+        public override object ToObjectValue() => this.DocumentBlobEntry;
+
+        public override string ToStringValue() => this.DocumentBlobEntry.ToString();
 
         public override void WriteTo(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {

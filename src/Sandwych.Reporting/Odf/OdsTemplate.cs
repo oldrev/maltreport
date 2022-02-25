@@ -16,7 +16,8 @@ namespace Sandwych.Reporting.Odf
         protected override IEnumerable<IFluidFilter> GetInternalFiltersToRegister(OdfDocument document)
         {
             return base.GetInternalFiltersToRegister(document)
-                .Append(new OdfTypedTableCellFilter());
+                .Append(new OdfUserTypedTableCellFilter())
+                .Append(new OdfInternalTypedTableCellFilter());
         }
     }
 }

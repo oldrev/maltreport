@@ -10,24 +10,21 @@ using MaltReport.HelloWorld;
 var desktopDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 var outputFile = Path.Combine(desktopDir, "generated.odt");
 
-var employees = new Employee[]
+var model = new
 {
-    new Employee{ Name = "Micheal Scott", JobTitle = "Regional Manager" },
-    new Employee{ Name = "Pam Beesly", JobTitle = "Office Administrator" },
-    new Employee{ Name = "Jim Halpert", JobTitle = "Salesman" },
-    new Employee{ Name = "Dwight Schrute", JobTitle = "Assistant to the Regional Manager" },
-    new Employee{ Name = "Andy Bernard", JobTitle = "Salesman" },
+    employees = new Employee[] 
+    {
+        new Employee { Name = "Micheal Scott",  JobTitle = "Regional Manager" },
+        new Employee { Name = "Pam Beesly",     JobTitle = "Office Administrator" },
+        new Employee { Name = "Jim Halpert",    JobTitle = "Salesman" },
+        new Employee { Name = "Dwight Schrute", JobTitle = "Assistant to the Regional Manager" },
+        new Employee { Name = "Andy Bernard",   JobTitle = "Salesman" },
+    },
+    myImage = await Blob.LoadAsync("Image.jpeg"),
 };
 
-var myImage = new ImageBlob("jpeg", await File.ReadAllBytesAsync("Image.jpeg"));
-
-var data = new Dictionary<string, object>()
-{
-    { "employees", employees },
-    { "myImage", myImage },
-};
-
-var context = new TemplateContext(data);
+var context = new TemplateContext(model);
+context.AllowMembersAccessTo(typeof(Employee));
 
 // Load document template:
 var templateDocument = await OdfDocument.LoadFromAsync("EmployeesTemplate.odt");

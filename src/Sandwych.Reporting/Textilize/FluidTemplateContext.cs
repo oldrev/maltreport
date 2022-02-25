@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Fluid;
 
 namespace Sandwych.Reporting.Textilize
 {
     public class FluidTemplateContext : Fluid.TemplateContext
     {
-        public FluidTemplateContext(TemplateContext docTempCtx)
+        public FluidTemplateContext(TemplateContext docTempCtx) :
+            base(model: docTempCtx.Model, allowModelMembers: docTempCtx.AllowModelMembers)
         {
             this.Options.TimeZone = docTempCtx.Options.TimeZone;
             this.Options.MaxRecursion = docTempCtx.Options.MaxRecursion;
@@ -27,14 +29,17 @@ namespace Sandwych.Reporting.Textilize
             this.Captured = fluidOptions.Captured;
             this.Now = fluidOptions.Now;
 
-            //TODO FIXME
             if (docTempCtx.Options.AllowUnsafeAccess)
             {
                 this.Options.MemberAccessStrategy = Fluid.UnsafeMemberAccessStrategy.Instance;
             }
-            foreach (var pair in docTempCtx.Values)
+            else
             {
-                this.SetValue(pair.Key, Fluid.Values.FluidValue.Create(pair.Value, this.Options));
+                foreach (var t in docTempCtx.TypeMembersAllowList)
+                {
+                    this.Options.MemberAccessStrategy.Register(t);
+                }
+                this.Options.MemberAccessStrategy.Register<Blob>();
             }
         }
     }

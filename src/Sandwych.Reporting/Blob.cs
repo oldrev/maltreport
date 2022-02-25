@@ -1,5 +1,8 @@
 using System;
+using System.IO;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Sandwych.Reporting
 {
@@ -14,9 +17,9 @@ namespace Sandwych.Reporting
     }
 
     /// <summary>
-    /// Blob in zipped document
+    /// Blob in document
     /// </summary>
-    public abstract class Blob : IBlob
+    public class Blob : IBlob
     {
         private readonly byte[] _blobBuffer;
         private readonly string _entryNameInDocument;
@@ -64,16 +67,36 @@ namespace Sandwych.Reporting
 
         public string FileName => _entryNameInDocument;
 
-        public bool Equals(IBlob obj)
+        public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj))
+            if(obj == null)
+            {
+                return false;
+            }
+
+            if(ReferenceEquals(this, obj))
             {
                 return true;
             }
 
+            if(obj is IBlob blob)
+            {
+                return this.Equals(blob);
+            }
+
+            return false;
+        }
+
+        public bool Equals(IBlob obj)
+        {
             if (obj == null)
             {
                 return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
             }
 
             if (this.Id == obj.Id)
@@ -85,5 +108,28 @@ namespace Sandwych.Reporting
         }
 
         public override int GetHashCode() => this.Id.GetHashCode();
+
+        public async static Task<Blob> LoadAsync(string filePath, CancellationToken cancellationToken = default)
+        {
+            using var fs = File.OpenRead(filePath);
+            var buf = new byte[fs.Length];
+            var nread = await fs.ReadAsync(buf, 0, (int)fs.Length, cancellationToken);
+            if (nread != (int)fs.Length)
+            {
+                throw new IOException();
+            }
+            return new Blob(Path.GetExtension(filePath).TrimStart('.'), buf);
+        }
+
+        public async static Task<Blob> LoadAsync(Stream inStream, string extensionName, CancellationToken cancellationToken = default)
+        {
+            using var ms = new MemoryStream();
+#if NETSTANDARD && NETSTANDARD2_0
+            await inStream.CopyToAsync(ms);
+#else
+            await inStream.CopyToAsync(ms, cancellationToken);
+#endif
+            return new Blob(extensionName, ms.ToArray());
+        }
     }
 }

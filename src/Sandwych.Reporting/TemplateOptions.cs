@@ -9,12 +9,12 @@ namespace Sandwych.Reporting
     {
         public static TemplateOptions Default = new();
 
-        public bool AllowUnsafeAccess { get; set; } = true;
+        public bool AllowUnsafeAccess { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the maximum number of steps a script can execute. Leave to 0 for unlimited.
         /// </summary>
-        public int MaxSteps { get; set; }
+        public int MaxSteps { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the <see cref="CultureInfo"/> instance used to render locale values like dates and numbers.

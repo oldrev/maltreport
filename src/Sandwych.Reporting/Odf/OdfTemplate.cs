@@ -41,7 +41,6 @@ namespace Sandwych.Reporting.Odf
         protected override IEnumerable<IFluidFilter> GetInternalFiltersToRegister(OdfDocument document)
         {
             yield return new OdfImageFilter(document);
-            yield return new OdfTypedValueFilter();
         }
 
         protected override void PrepareTemplate()

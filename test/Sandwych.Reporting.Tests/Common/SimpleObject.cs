@@ -15,7 +15,7 @@ namespace Sandwych.Reporting.Tests.Common
             using var resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(PngImagePath);
             var buf = new byte[resStream.Length];
             resStream.Read(buf, 0, buf.Length);
-            this.JpegImage = new ImageBlob("jpg", buf);
+            this.JpegImage = new Blob("jpg", buf);
         }
 
 
@@ -27,7 +27,7 @@ namespace Sandwych.Reporting.Tests.Common
 
         public decimal DecimalValue => 3.14M;
 
-        public ImageBlob JpegImage { get; private set; }
+        public Blob JpegImage { get; private set; }
     }
 
 }
