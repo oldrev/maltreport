@@ -4,15 +4,15 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Xml;
 using Fluid.Values;
+using Sandwych.Reporting.Textilize.Values;
 
 namespace Sandwych.Reporting.Odf.Values
 {
-    public abstract class OdfTableCellValue : FluidValue
+    public abstract class OdfTableCellValue : XmlOutputValue
     {
         public override FluidValues Type => this.Value.Type;
-
-        public FluidValue Value { get; }
 
         private readonly Dictionary<string, string> _attributes = new Dictionary<string, string>();
 
@@ -20,9 +20,8 @@ namespace Sandwych.Reporting.Odf.Values
 
         public abstract string ValueType { get; }
 
-        public OdfTableCellValue(FluidValue value)
+        public OdfTableCellValue(FluidValue value) : base(value)
         {
-            this.Value = value;
         }
 
         public void AddAttribute(string attribute, string value)
@@ -63,41 +62,33 @@ namespace Sandwych.Reporting.Odf.Values
 
         public override string ToStringValue() => this.Value.ToStringValue();
 
-        public override void WriteTo(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        protected override void WriteTo(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
-            writer.Write("<table:table-cell ");
-
+            writer.WriteStartElement("table-cell", "table");
             // write attributes
             foreach (var kp in _attributes)
             {
-                writer.Write(" ");
-                writer.Write(kp.Key);
-                writer.Write("=");
-                writer.Write("\"");
-                writer.Write(kp.Value);
-                writer.Write("\" ");
+                var names = kp.Key.Split(':');
+                writer.WriteAttributeString(names[1], names[0], kp.Value);
             }
 
-            writer.Write(" office:value-type=\"");
-            writer.Write(this.ValueType);
-            writer.Write("\" ");
+            writer.WriteAttributeString("value-type", "office", this.ValueType);
 
-            writer.Write(" calcext:value-type=\"");
-            writer.Write(this.ValueType);
-            writer.Write("\" ");
+            writer.WriteAttributeString("value-type", "calcext", this.ValueType);
 
-            this.WriteValueAndTypeAttributes(writer, encoder, cultureInfo);
+            this.WriteTableCellAttributes(writer, encoder, cultureInfo);
 
-            writer.Write(" >");
+            writer.WriteStartElement("text", "p");
 
-            writer.Write("<text:p>");
-            this.Value.WriteTo(writer, encoder, cultureInfo);
-            writer.Write("</text:p>");
+            this.WriteTableCellText(writer, encoder, cultureInfo);
 
-            writer.Write("</table:table-cell>");
+            writer.WriteEndElement();
+
+            writer.WriteEndElement();
         }
 
-        protected abstract void WriteValueAndTypeAttributes(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo);
+        protected abstract void WriteTableCellAttributes(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo);
+        protected abstract void WriteTableCellText(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo);
 
         public override int GetHashCode() => this.Value.GetHashCode();
     }
@@ -113,11 +104,34 @@ namespace Sandwych.Reporting.Odf.Values
 
         public override string ValueType => OdfValueType;
 
-        protected override void WriteValueAndTypeAttributes(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        protected override void WriteTableCellAttributes(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
-            writer.Write(" office:value=\"");
-            this.Value.WriteTo(writer, encoder, cultureInfo);
-            writer.Write("\" ");
+        }
+
+        protected override void WriteTableCellText(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            writer.WriteString(this.Value.ToStringValue().ToString());
+        }
+    }
+
+    public class OdfBooleanTableCellValue : OdfTableCellValue
+    {
+        public const string OdfValueType = "boolean";
+
+        public OdfBooleanTableCellValue(FluidValue value) : base(value)
+        {
+        }
+
+        public override string ValueType => OdfValueType;
+
+        protected override void WriteTableCellAttributes(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            writer.WriteAttributeString("boolean-value", "office", this.Value.ToStringValue().ToString());
+        }
+
+        protected override void WriteTableCellText(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            writer.WriteString(this.Value.ToBooleanValue().ToString(cultureInfo));
         }
     }
 
@@ -131,11 +145,14 @@ namespace Sandwych.Reporting.Odf.Values
 
         public override string ValueType => OdfValueType;
 
-        protected override void WriteValueAndTypeAttributes(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        protected override void WriteTableCellAttributes(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
-            writer.Write(" office:value=\"");
-            this.Value.WriteTo(writer, encoder, cultureInfo);
-            writer.Write("\" ");
+            writer.WriteAttributeString("value", "office", this.Value.ToStringValue().ToString());
+        }
+
+        protected override void WriteTableCellText(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            writer.WriteString(this.Value.ToStringValue().ToString());
         }
     }
 
@@ -149,11 +166,15 @@ namespace Sandwych.Reporting.Odf.Values
 
         public override string ValueType => OdfValueType;
 
-        protected override void WriteValueAndTypeAttributes(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        protected override void WriteTableCellAttributes(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
-            writer.Write(" office:value=\"");
-            this.Value.WriteTo(writer, encoder, cultureInfo);
-            writer.Write("\" ");
+            writer.WriteAttributeString("value", "office", this.Value.ToStringValue().ToString());
+        }
+
+        protected override void WriteTableCellText(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            var percentage = this.Value.ToNumberValue() * 100;
+            writer.WriteString(percentage.ToString() + '%');
         }
     }
 
@@ -161,22 +182,54 @@ namespace Sandwych.Reporting.Odf.Values
     {
         public const string OdfValueType = "time";
 
-        public OdfTimeTableCellValue(DateTimeOffset value) : base(FluidValue.Create(value))
+        public DateTimeOffset DateTimeValue { get; }
+
+        public OdfTimeTableCellValue(DateTimeOffset value) : base(EmptyValue.Instance)
         {
+            this.DateTimeValue = value;
         }
 
         public override string ValueType => OdfValueType;
 
-        protected override void WriteValueAndTypeAttributes(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        protected override void WriteTableCellAttributes(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
-            if(!this.Value.TryGetDateTimeInput(null, out var dt))
-            {
-                throw new IOException($"Can not parse the input time value: '{this.Value.ToStringValue()}'");
-            }
-
-            writer.Write($" office:time-value=\"PT{dt.Hour}H{}M13S");
-            this.Value.WriteTo(writer, encoder, cultureInfo);
-            writer.Write("\" ");
+            var dt = this.DateTimeValue;
+            var formattedTime = $"PT{dt.Hour}H{dt.Minute}M{dt.Second}S";
+            writer.WriteAttributeString("time-value", "office", formattedTime);
         }
+
+        protected override void WriteTableCellText(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            var readableTimeText = this.DateTimeValue.ToString(cultureInfo);
+            writer.WriteString(readableTimeText);
+        }
+
+    }
+
+    public class OdfDateTableCellValue : OdfTableCellValue
+    {
+        public const string OdfValueType = "date";
+
+        public DateTimeOffset DateTimeValue { get; }
+
+        public OdfDateTableCellValue(DateTimeOffset value) : base(EmptyValue.Instance)
+        {
+            this.DateTimeValue = value;
+        }
+
+        public override string ValueType => OdfValueType;
+
+        protected override void WriteTableCellAttributes(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            var formattedDate = this.DateTimeValue.ToString("yyyy-M-dTH:m:s.FFFK", cultureInfo);
+            writer.WriteAttributeString("date-value", "office", formattedDate);
+        }
+
+        protected override void WriteTableCellText(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        {
+            var readableTimeText = this.DateTimeValue.ToString(cultureInfo);
+            writer.WriteString(readableTimeText);
+        }
+
     }
 }

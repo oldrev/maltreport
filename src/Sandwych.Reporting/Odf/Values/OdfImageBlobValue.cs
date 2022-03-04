@@ -3,14 +3,16 @@ using System;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Globalization;
+using Sandwych.Reporting.Textilize.Values;
+using System.Xml;
 
 namespace Sandwych.Reporting.Odf.Values
 {
-    public class OdfImageBlobValue : FluidValue
+    public class OdfImageBlobValue : XmlOutputValue
     {
         public DocumentBlobEntry DocumentBlobEntry { get; }
 
-        public OdfImageBlobValue(DocumentBlobEntry entry)
+        public OdfImageBlobValue(FluidValue input, DocumentBlobEntry entry) : base(input)
         {
             this.DocumentBlobEntry = entry;
         }
@@ -50,11 +52,15 @@ namespace Sandwych.Reporting.Odf.Values
 
         public override string ToStringValue() => this.DocumentBlobEntry.ToString();
 
-        public override void WriteTo(TextWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
+        protected override void WriteTo(XmlWriter writer, TextEncoder encoder, CultureInfo cultureInfo)
         {
             var imagePath = this.DocumentBlobEntry.EntryPath;
-            writer.Write(
-                $"<draw:image xlink:href=\"{imagePath}\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\" />");
+            writer.WriteStartElement("image", "draw");
+            writer.WriteAttributeString("href", "xlink", imagePath);
+            writer.WriteAttributeString("type", "xlink", "simple");
+            writer.WriteAttributeString("show", "xlink", "embed");
+            writer.WriteAttributeString("actuate", "xlink", "onLoad");
+            writer.WriteEndElement();
         }
     }
 }

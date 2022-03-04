@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +10,7 @@ namespace Sandwych.Reporting.Tests.Common
         public int Integer { get; set; }
         public decimal Decimal { get; set; }
         public double Double { get; set; }
+        public bool Boolean { get; set; }
         public DateTime DateTime { get; set; }
         public DateTimeOffset DateTimeOffset { get; set; }
         public TimeSpan TimeSpan { get; set; }

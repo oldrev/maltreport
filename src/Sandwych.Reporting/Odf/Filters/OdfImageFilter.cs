@@ -30,7 +30,7 @@ namespace Sandwych.Reporting.Odf.Filters
 
             var blobEntry = _document.AddOrGetImageEntry(blob);
 
-            return new ValueTask<FluidValue>(new OdfImageBlobValue(blobEntry));
+            return new ValueTask<FluidValue>(new OdfImageBlobValue(input, blobEntry));
         }
 
     }
