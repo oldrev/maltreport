@@ -161,7 +161,7 @@ namespace Sandwych.Reporting.Odf.Values
     {
         public const string OdfValueType = "time";
 
-        public OdfTimeTableCellValue(DateTimeOffset value) : base(FluidValue.Create(value))
+        public OdfTimeTableCellValue(FluidValue value, Fluid.TemplateContext context) : base(FluidValue.Create(value, context.Options))
         {
         }
 
@@ -174,7 +174,8 @@ namespace Sandwych.Reporting.Odf.Values
                 throw new IOException($"Can not parse the input time value: '{this.Value.ToStringValue()}'");
             }
 
-            writer.Write($" office:time-value=\"PT{dt.Hour}H{}M13S");
+            // PT21H42M02.164S
+            writer.Write($" office:time-value=\"PT{dt.Hour}H{dt.Minute}M{dt.Second}.{dt.Millisecond}S");
             this.Value.WriteTo(writer, encoder, cultureInfo);
             writer.Write("\" ");
         }
