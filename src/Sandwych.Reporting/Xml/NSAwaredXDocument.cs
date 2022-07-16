@@ -30,7 +30,7 @@ namespace Sandwych.Reporting.Xml
 #if NET5_0_OR_GREATER || NETCOREAPP3_1_OR_GREATER || NETSTANDARD2_1_OR_GREATER
             return new NSAwaredXDocument(await XDocument.LoadAsync(inStream, LoadOptions.None, ct));
 #else
-            var xdoc = await Task.Run(() => XDocument.Load(inStream, LoadOptions.None))
+            var xdoc = await Task.Factory.StartNew(() => XDocument.Load(inStream, LoadOptions.None))
                 .ConfigureAwait(false);
             return new NSAwaredXDocument(xdoc);
 #endif

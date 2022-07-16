@@ -79,7 +79,7 @@ namespace Sandwych.Reporting
 #if NET5_0_OR_GREATER || NETCOREAPP3_1_OR_GREATER || NETSTANDARD2_1_OR_GREATER
             await xdoc.SaveAsync(inStream, SaveOptions.None, ct);
 #else
-            await Task.Run(() => xdoc.Save(inStream, SaveOptions.None)).ConfigureAwait(false);
+            await Task.Factory.StartNew(() => xdoc.Save(inStream, SaveOptions.None)).ConfigureAwait(false);
 #endif
             await inStream.FlushAsync();
         }

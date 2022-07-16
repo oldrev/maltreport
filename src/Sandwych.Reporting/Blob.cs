@@ -127,7 +127,7 @@ namespace Sandwych.Reporting
 #if NETSTANDARD && NETSTANDARD2_0
             await inStream.CopyToAsync(ms);
 #else
-            await inStream.CopyToAsync(ms, cancellationToken);
+            await inStream.CopyToAsync(ms, 4 * 1024, cancellationToken);
 #endif
             return new Blob(extensionName, ms.ToArray());
         }

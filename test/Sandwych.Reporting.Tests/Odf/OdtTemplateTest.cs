@@ -66,6 +66,10 @@ namespace Sandwych.Reporting.Tests.Odf
 
             var result = await template.RenderAsync(context) as IZipDocument;
 
+            using var inStream = result.OpenEntryToRead("content.xml");
+            using var fs = File.Create("c:\\tmp\\1.xml");
+            await inStream.CopyToAsync(fs);
+
             var xdoc = await result.ReadXDocumentEntryAsync("content.xml");
             var tableNS = xdoc.GetNamespace("table");
             var officeNS = xdoc.GetNamespace("office");

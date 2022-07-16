@@ -39,8 +39,16 @@ namespace Sandwych.Reporting.Odf
 
             DirectiveXElement.SanitizeDirectiveElements(mainDocument);
             var mainDocumentText = mainDocument.ToString();
+            using var mainDocumentStream = compiledDoc.OpenOrCreateEntryToWrite(OdfDocument.ContentEntryPath);
 
-            compiledDoc.WriteTextEntry(OdfDocument.ContentEntryPath, mainDocumentText);
+#if NET5_0_OR_GREATER || NETCOREAPP3_1_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+            await mainDocument.SaveAsync(mainDocumentStream, SaveOptions.None, ct);
+#else
+            await Task.Factory.StartNew(() =>
+            {
+                mainDocument.Save(mainDocumentStream);
+            }).ConfigureAwait(false);
+#endif
 
             await compiledDoc.FlushAsync();
 
